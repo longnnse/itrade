@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/initialize/theme.dart';
-import 'home_controller.dart';
+import 'history_controller.dart';
 
-class HomePage extends GetView<HomeController> {
-  static const String routeName = '/HomePage';
+class HistoryPage extends GetView<HistoryController> {
+  static const String routeName = '/HistoryPage';
   final Widget? leading;
-  const HomePage({
+  const HistoryPage({
     Key? key,
     this.leading,
   }) : super(key: key);
@@ -16,7 +16,6 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: kBackground,
-        body: Text('Trang chủ')
-    );
+        body: Text('Lịch sử'));
   }
 }

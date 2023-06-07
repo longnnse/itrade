@@ -1,15 +1,20 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
+import 'package:i_trade/src/presentation/pages/history/history_page.dart';
+import 'package:i_trade/src/presentation/pages/home/home_page.dart';
+import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
 
-import '../../widgets/floating_action_button.dart';
+import '../information/information_page.dart';
 
 class DashboardController extends GetxController {
   final RxBool isLoading = false.obs;
+  RxString appBarTitle = 'Trang chủ'.obs;
   RxString lastSelected = 'TAB: 0'.obs;
   RxDouble itemCount = 20.0.obs;
   Rx<Icon> icon = const Icon(Icons.home, size: 30.0,).obs;
+  final pages = <String>[HomePage.routeName, ManagePage.routeName, HistoryPage.routeName, ChatPage.routeName, InformationPage.routeName];
+
   @override
   void onInit() {
     super.onInit();
@@ -24,7 +29,32 @@ class DashboardController extends GetxController {
     index == 1 ? const Icon(Icons.dashboard, size: 30.0) :
     index == 2 ? const Icon(Icons.history, size: 30.0) :
     index == 3 ? const Icon(Icons.chat, size: 30.0) : const Icon(Icons.person, size: 30.0));
+    appBarTitle.call(index == 0 ? 'Trang chủ' :
+    index == 1 ? 'Quản lý' :
+    index == 2 ? 'Lịch sử' :
+    index == 3 ? 'Trao đổi' : 'Cá nhân');
   }
 
+  Widget changePage() {
+    Widget content = Container();
+    switch(lastSelected.value){
+      case 'TAB: 0':
+        content = const HomePage();
+        break;
+      case 'TAB: 1':
+        content = const ManagePage();
+        break;
+      case 'TAB: 2':
+        content = const HistoryPage();
+        break;
+      case 'TAB: 3':
+        content = const ChatPage();
+        break;
+      case 'TAB: 4':
+        content = const InformationPage();
+        break;
 
+    }
+    return content;
+  }
 }

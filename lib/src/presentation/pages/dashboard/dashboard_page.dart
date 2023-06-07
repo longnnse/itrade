@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
-import 'package:i_trade/src/presentation/pages/dashboard/widgets/dashboard_shimmer_widget.dart';
 import 'package:i_trade/src/presentation/widgets/FABBottomAppBar.dart';
 import 'package:i_trade/src/presentation/widgets/appbar_customize.dart';
 import 'package:i_trade/src/presentation/widgets/floating_action_button.dart';
@@ -19,11 +18,11 @@ class DashboardPage extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-      appBar: AppbarCustomize.buildAppbar(
+      appBar: controller.lastSelected.value != 'TAB: 4' ? AppbarCustomize.buildAppbar(
         context: context,
-        title: 'Trang chủ',
+        title: controller.appBarTitle.value,
         isUseOnlyBack: false
-      ),
+      ) : null,
       floatingActionButtonLocation: CenterDockedFloatingActionButtonLocation(controller.itemCount.value),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -47,21 +46,15 @@ class DashboardPage extends GetView<DashboardController> {
             FABBottomAppBarItem(iconData: Icons.person, text: 'Cá nhân'),
           ],
           backgroundColor: kBackgroundBottomBar,
-          color: Colors.red,
+          color: kPrimaryLightColor,
           selectedColor: kPrimaryLightColor,
           notchedShape: const CircularNotchedRectangle(),
           onTabSelected: controller.selectedTab
       ),
       body: Obx(
-            () {
-          if (controller.isLoading.value) {
-            return const DashboarShimmerWidget(
-              columnCount: 3,
-            );
-          }
-          return Container();
-        },
+          () => controller.changePage()
       ),
     ));
   }
+
 }

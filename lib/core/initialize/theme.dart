@@ -211,11 +211,11 @@ const kDividerColor = Color(0xFFF4F6FA);
 const kTextFieldLightColor = Color(0xFFeff3f4);
 const kCardLightColor = Color(0xFFf5f8fe);
 const kBackground = Color(0xFFD9D9D9);
-const kBackgroundBottomBar = Color(0xFFebf1f1);
+const kBackgroundBottomBar = Color(0xFFF4F6FA);
 
 // Text Colors
 const kTextColorPrimaryLight = Color(0xFF030F2D);
-const kTextColor = Colors.black;
+const kTextColor = Colors.white;
 const kTextColorBody = Colors.black87;
 const kTextColorGrey = Color(0xFFB6B5BA);
 

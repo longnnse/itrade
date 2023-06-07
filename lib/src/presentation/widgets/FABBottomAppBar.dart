@@ -72,7 +72,6 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     required int index,
     required ValueChanged<int> onPressed,
   }) {
-    Color color = _selectedIndex == index ? widget.selectedColor : widget.color;
     return Expanded(
       child: SizedBox(
         height: widget.height,
@@ -96,7 +95,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                 _selectedIndex != index ? Text(
                   item.text,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                ) : const SizedBox()
+                ) : const SizedBox(),
+
               ],
             ),
           ),

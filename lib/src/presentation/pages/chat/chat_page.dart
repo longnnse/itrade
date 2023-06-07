@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/initialize/theme.dart';
 
-import '../../../../core/initialize/theme.dart';
-import 'home_controller.dart';
+import 'chat_controller.dart';
 
-class HomePage extends GetView<HomeController> {
-  static const String routeName = '/HomePage';
+
+class ChatPage extends GetView<ChatController> {
+  static const String routeName = '/ChatPage';
   final Widget? leading;
-  const HomePage({
+  const ChatPage({
     Key? key,
     this.leading,
   }) : super(key: key);
@@ -16,7 +17,6 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: kBackground,
-        body: Text('Trang chủ')
-    );
+        body: Text('Trao đổi'));
   }
 }

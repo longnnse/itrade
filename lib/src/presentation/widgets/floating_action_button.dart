@@ -7,7 +7,6 @@ class CenterDockedFloatingActionButtonLocation extends _DockedFloatingActionButt
 
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
-    print(itemCount);
     final double fabX = (scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width) / itemCount;
     return Offset(fabX, getDockedY(scaffoldGeometry));
   }
@@ -41,7 +40,7 @@ abstract class _DockedFloatingActionButtonLocation extends FloatingActionButtonL
       safeMargin = fabHeight / 2.0 + kFloatingActionButtonMargin;
     }
 
-    double fabY = contentBottom - fabHeight / 2.0 - safeMargin;
+    double fabY = contentBottom - fabHeight / 2.5 - safeMargin;
     // The FAB should sit with a margin between it and the snack bar.
     if (snackBarHeight > 0.0) {
       fabY = math.min(fabY, contentBottom - snackBarHeight - fabHeight - kFloatingActionButtonMargin);

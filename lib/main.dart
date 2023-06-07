@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
@@ -68,6 +69,8 @@ class PressPage extends StatefulWidget {
 class _PressPageState extends State<PressPage> {
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     Get.put(DashboardController());
     super.initState();
   }
