@@ -21,7 +21,17 @@ class DashboardPage extends GetView<DashboardController> {
       appBar: controller.lastSelected.value != 'TAB: 4' ? AppbarCustomize.buildAppbar(
         context: context,
         title: controller.appBarTitle.value,
-        isUseOnlyBack: false
+        isUseOnlyBack: false,
+        actionRights: [
+          IconButton(
+            onPressed: (){},
+            icon: const Icon(
+              Icons.notifications,
+              color: Colors.white,
+              size: 25.0,
+            )
+          )
+        ]
       ) : null,
       floatingActionButtonLocation: CenterDockedFloatingActionButtonLocation(controller.itemCount.value),
       floatingActionButton: FloatingActionButton(

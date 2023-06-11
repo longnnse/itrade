@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/src/domain/enums/enums.dart';
+import 'package:i_trade/src/presentation/pages/change_password/change_password_page.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../login/login_page.dart';
+import '../upload_post/upload_post_page.dart';
 import 'information_controller.dart';
+import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.dart';
 
 class InformationPage extends GetView<InformationController> {
   static const String routeName = '/InformationPage';
@@ -25,7 +30,7 @@ class InformationPage extends GetView<InformationController> {
                   Stack(
                     children: [
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.35,
+                        height: MediaQuery.of(context).size.height * 0.36,
                         child: Stack(
                           children: [
                             Container(
@@ -50,9 +55,9 @@ class InformationPage extends GetView<InformationController> {
                                   const SizedBox(height: 10.0,),
                                   Row(
                                     children: [
-                                      _buildIconButton(context: context, iconData: Icons.edit),
-                                      _buildIconButton(context: context, iconData: Icons.camera_alt),
-                                      _buildIconButton(context: context, iconData: Icons.lock),
+                                      _buildIconButton(context: context, iconData: Icons.edit, profileEnums: ProfileEnums.edit),
+                                      _buildIconButton(context: context, iconData: Icons.camera_alt, profileEnums: ProfileEnums.camera),
+                                      _buildIconButton(context: context, iconData: Icons.lock, profileEnums: ProfileEnums.lock),
                                     ],
                                   ),
                                 ],
@@ -77,7 +82,7 @@ class InformationPage extends GetView<InformationController> {
                       Positioned(
                         top: MediaQuery.of(context).size.height * 0.18,
                         left: 20.0,
-                        right: 40.0,
+                        right: 20.0,
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Row(
@@ -153,7 +158,7 @@ class InformationPage extends GetView<InformationController> {
                             color: kBackgroundBottomBar,
                           ),
                           child: GestureDetector(
-                            onTap: (){},
+                            onTap: () => Get.toNamed(UploadPostPage.routeName),
                             child: Container(
                               width: 40.0,
                               height: 40.0,
@@ -201,15 +206,27 @@ class InformationPage extends GetView<InformationController> {
               color: kBackground,
             ),
 
-            height: 30.0,
+            height: 5.0,
           )
         ],
       ));
   }
 
-  Widget _buildIconButton({required BuildContext context, required IconData iconData}){
+  Widget _buildIconButton({required BuildContext context, required IconData iconData, required ProfileEnums profileEnums}){
     return GestureDetector(
-      onTap: (){},
+      onTap: () {
+        switch (profileEnums){
+          case ProfileEnums.edit:
+            Get.toNamed(EditProfilePage.routeName);
+            break;
+          case ProfileEnums.camera:
+            Get.toNamed(EditProfilePage.routeName);
+            break;
+          case ProfileEnums.lock:
+            Get.toNamed(ChangePasswordPage.routeName);
+            break;
+        }
+      },
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -247,13 +264,13 @@ class InformationPage extends GetView<InformationController> {
                 child: Icon(
                     iconData,
                     color: Colors.white,
-                    size: 25.0
+                    size: 20.0
                 ),
               ),
               const SizedBox(width: 10.0,),
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
               )
             ],
           ),
@@ -263,7 +280,7 @@ class InformationPage extends GetView<InformationController> {
             child: const Icon(
                 Icons.arrow_forward_ios,
                 color: kPrimaryLightColor,
-                size: 30.0
+                size: 25.0
             ),
           ),
         ],
@@ -273,7 +290,7 @@ class InformationPage extends GetView<InformationController> {
 
   Widget _buildButton(BuildContext context){
     return GestureDetector(
-      onTap: (){},
+      onTap: () => Get.toNamed(LoginPage.routeName),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),

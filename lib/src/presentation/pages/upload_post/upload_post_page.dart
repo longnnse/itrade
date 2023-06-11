@@ -1,0 +1,427 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
+import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
+import 'package:i_trade/src/presentation/widgets/appbar_customize.dart';
+
+import '../../../../core/initialize/theme.dart';
+
+
+class UploadPostPage extends GetView<UploadPostController> {
+  static const String routeName = '/UploadPostPage';
+  final Widget? leading;
+  const UploadPostPage({
+    Key? key,
+    this.leading,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppbarCustomize.buildAppbar(
+        context: context,
+        title: 'Đăng bài',
+        isUseOnlyBack: true,
+      ),
+        backgroundColor: kBackground,
+        body: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: kBackgroundBottomBar,
+          ),
+          margin: const EdgeInsets.all(10.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInfoUpload(context),
+                  _buildTraderInfo(context),
+                  _buildUploadPicture(context),
+                  _buildButtonUpload(context)
+                ],
+              ),
+            )
+        ));
+    }
+  Widget _buildInfoUpload(BuildContext context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              '1. Thông tin bài đăng',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0,),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() => DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Row(
+                      children: const [
+                        Icon(
+                          Icons.list,
+                          size: 16,
+                          color: Colors.yellow,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Chọn danh mục',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.yellow,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    items: controller.items
+                        .map((item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: kTextColorBody,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ))
+                        .toList(),
+                    value: controller.selectedValue.value,
+                    onChanged: (value) {
+                      controller.selectedValue.call(value as String);
+
+                    },
+                    buttonStyleData: ButtonStyleData(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.only(left: 14, right: 14),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: Colors.black26,
+                        ),
+                        color: kBackgroundBottomBar,
+                      ),
+                      elevation: 2,
+                    ),
+                    iconStyleData: const IconStyleData(
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        size: 30.0,
+                      ),
+                      iconSize: 14,
+                      iconEnabledColor: kPrimaryLightColor,
+                      iconDisabledColor: Colors.grey,
+                    ),
+                    dropdownStyleData: DropdownStyleData(
+                        maxHeight: 200,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        padding: null,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: kBackgroundBottomBar,
+                        ),
+                        elevation: 8,
+                        offset: const Offset(0, 0),
+                        scrollbarTheme: ScrollbarThemeData(
+                          radius: const Radius.circular(40),
+                          thickness: MaterialStateProperty.all(6),
+                          thumbVisibility: MaterialStateProperty.all(true),
+                        )),
+                    menuItemStyleData: const MenuItemStyleData(
+                      height: 40,
+                      padding: EdgeInsets.only(left: 14, right: 14),
+                    ),
+                  ),
+                )),
+                const SizedBox(height: 10.0,),
+                RichText(
+                  text: TextSpan(
+                    text: 'Tình trạng',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '*',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: kSecondaryRed, fontWeight: FontWeight.w900)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10.0,),
+                Obx(() => Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => controller.isNew.call(false),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color:  controller.isNew.value == false ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Đã sử dụng',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                             color: controller.isNew.value == false ? kPrimaryLightColor : kTextColorBody,
+                            fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10.0,),
+                    GestureDetector(
+                      onTap: () => controller.isNew.call(true),
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: controller.isNew.value == true ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Mới',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: controller.isNew.value == true ? kPrimaryLightColor : kTextColorBody,
+                            fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+                _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number),
+                _buildTextFormField(context: context, title: 'Tiêu đề', maxLine: 1),
+                _buildTextFormField(context: context, title: 'Mô tả sản phẩm', maxLine: 5),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTraderInfo(BuildContext context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              '2. Về người trao đổi',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() => Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => controller.isPro.call(false),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color:  controller.isPro.value == false ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Cá nhân',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: controller.isPro.value == false ? kPrimaryLightColor : kTextColorBody,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10.0,),
+                    GestureDetector(
+                      onTap: () => controller.isPro.call(true),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: controller.isPro.value == true ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Bán chuyên',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: controller.isPro.value == true ? kPrimaryLightColor : kTextColorBody,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+                _buildTextFormField(context: context, title: 'Địa chỉ', maxLine: 1),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUploadPicture(BuildContext context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              '3. Đăng hình sản phẩm',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                      color: kPrimaryLightColor,
+                      style: BorderStyle.solid
+                    ),
+                    color: kBackground
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                        child: const Icon(
+                            Icons.camera_alt,
+                            color: kPrimaryLightColor,
+                            size: 50.0
+                        ),
+                      ),
+                      Text(
+                        'Đăng từ 01 tới 06 hình',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, color: kTextColorGrey),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtonUpload(BuildContext context){
+    return Container(
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Tôi muốn cho miễn phí',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Obx(() => ShaderMask(
+                blendMode: BlendMode.srcIn,
+                shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                child: IconButton(
+                    onPressed: () => controller.isFree.call(controller.isFree.value == false ? true : false),
+                    icon: Icon(
+                      controller.isFree.value == false ? Icons.check_box_outline_blank : Icons.check_box,
+                      size: 32.0,
+                    )
+                ),
+              ))
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.all(13.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: kDefaultGradient
+            ),
+            child: Text(
+              'Đăng',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextFormField({required BuildContext context, required String title, required int maxLine, TextInputType textInputType = TextInputType.text}){
+    return  Container(
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+      margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+            color: kBackground
+        ),
+        color: kBackgroundBottomBar,
+        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+      ),
+      child: TextFormField(
+        //initialValue: number.toString(),
+        //controller: blocQLDTTNMT.keySearchTextEditingController,
+        keyboardType: textInputType,
+        maxLines: maxLine,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            contentPadding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+            disabledBorder: InputBorder.none,
+            hintText: '$title...',
+            hintStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: kTextColorGrey)),
+        onChanged: (value) {},
+        onFieldSubmitted: (value) {},
+      ),
+    );
+  }
+}

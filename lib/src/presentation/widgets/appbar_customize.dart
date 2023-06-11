@@ -41,56 +41,55 @@ class AppbarCustomize {
         elevation: 2.0,
         child: Container(
           decoration:
-          BoxDecoration(
+          const BoxDecoration(
             gradient: kDefaultGradient
           ),
           child: Column(
             children: [
               SizedBox(height: systemBarHeight),
-              Container(
+              SizedBox(
                 height: _heightAppbar,
                 child: (child != null)
                     ? child
                     : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
+                    isUseOnlyBack
+                        ? Container(
                       width: leadingWidth,
                       padding: const EdgeInsets.only(left: 5.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: !isUseOnlyBack
-                            ? _actionLefts
-                            : <Widget>[
-                          IconButton(
-                              onPressed: () =>
-                                  Navigator.pop(context),
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.white,
-                              ))
-                        ].toList(),
+                        children: <Widget>[
+                                IconButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context),
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.white,
+                                    ))
+                              ].toList(),
                       ),
-                    ),
+                    ) : const SizedBox(),
                     Expanded(
-                      child: Text(title,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                              color: kTextFieldLightColor)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text(title,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                color: kTextFieldLightColor)),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Container(
-                        //width: 60.0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: _actionRights,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: _actionRights,
                       ),
                     ),
                   ],

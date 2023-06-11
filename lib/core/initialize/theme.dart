@@ -211,14 +211,15 @@ const kDividerColor = Color(0xFFF4F6FA);
 const kTextFieldLightColor = Color(0xFFeff3f4);
 const kCardLightColor = Color(0xFFf5f8fe);
 const kBackground = Color(0xFFD9D9D9);
+const kBackgroundTextField = Color(0xFFEDEEE9);
 const kBackgroundBottomBar = Color(0xFFF4F6FA);
 
 // Text Colors
 const kTextColorPrimaryLight = Color(0xFF030F2D);
 const kTextColor = Colors.white;
 const kTextColorBody = Colors.black87;
-const kTextColorGrey = Color(0xFFB6B5BA);
-
+const kTextColorGrey = Color(0xFF5A5A5A);
+const kTextColorGrey2 = Color(0xFF8E9199);
 //Secondary Colors
 const kSecondaryRed = Color(0xFFeb717c);
 const kSecondaryBlue = Color(0xFF00899E);
@@ -231,8 +232,9 @@ const kDefaultBorderRadius = 12.0;
 const kShadowColor = Color.fromRGBO(149, 157, 165, 0.2);
 const kDefaultBoxShadow = BoxShadow(
   color: kShadowColor,
-  offset: Offset(0, 8),
-  blurRadius: 24,
+  offset: Offset(2, 3),
+  blurRadius: 2,
+  spreadRadius: 1
 );
 
 const kDefaultGradient = LinearGradient(

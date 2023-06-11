@@ -13,7 +13,6 @@ class DashboardController extends GetxController {
   RxString lastSelected = 'TAB: 0'.obs;
   RxDouble itemCount = 20.0.obs;
   Rx<Icon> icon = const Icon(Icons.home, size: 30.0,).obs;
-  final pages = <String>[HomePage.routeName, ManagePage.routeName, HistoryPage.routeName, ChatPage.routeName, InformationPage.routeName];
 
   @override
   void onInit() {
