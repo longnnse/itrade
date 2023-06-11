@@ -13,6 +13,10 @@ import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart'
 import 'package:i_trade/src/presentation/pages/home/widgets/product_list.dart';
 import 'package:i_trade/src/presentation/pages/information/information_controller.dart';
 import 'package:i_trade/src/presentation/pages/information/information_page.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_pham_page.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/iTrade_policy_page.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_page.dart';
 import 'package:i_trade/src/presentation/pages/login/login_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
@@ -142,6 +146,46 @@ class ITradeRouterConfigs {
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => HomeController());
+        },
+      ),
+    ),
+    GetPage(
+      name: ITradePolicyPage.routeName,
+      page: () => const ITradePolicyPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => InformationController());
+        },
+      ),
+    ),
+    GetPage(
+      name: BaoCaoViPhamPage.routeName,
+      page: () => const BaoCaoViPhamPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => InformationController());
+        },
+      ),
+    ),
+    GetPage(
+      name: ViCuaToiPage.routeName,
+      page: () => const ViCuaToiPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => InformationController());
+        },
+      ),
+    ),
+    GetPage(
+      name: MyFeedbackPage.routeName,
+      page: () => const MyFeedbackPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => InformationController());
         },
       ),
     ),

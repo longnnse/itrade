@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
@@ -9,6 +10,8 @@ import '../upload_post/upload_post_page.dart';
 import 'information_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.dart';
 
+import 'widgets/iTrade_policy_page.dart';
+
 class InformationPage extends GetView<InformationController> {
   static const String routeName = '/InformationPage';
   final Widget? leading;
@@ -19,6 +22,7 @@ class InformationPage extends GetView<InformationController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(InformationController());
     return Scaffold(
       backgroundColor: kBackgroundBottomBar,
       body: Column(
@@ -177,13 +181,13 @@ class InformationPage extends GetView<InformationController> {
                       )
                     ],
                   ),
-                  _buildButtonFunc(context: context, iconData: Icons.question_mark, title: 'Hướng dẫn sử dụng'),
-                  _buildButtonFunc(context: context, iconData: Icons.menu_book, title: 'Điều khoản sử dụng'),
-                  _buildButtonFunc(context: context, iconData: Icons.security, title: 'Chính sách bảo mật'),
-                  _buildButtonFunc(context: context, iconData: Icons.info_outline, title: 'Thông tin ứng dụng'),
-                  _buildButtonFunc(context: context, iconData: Icons.wallet, title: 'Ví của tôi'),
-                  _buildButtonFunc(context: context, iconData: Icons.report_outlined, title: 'Báo cáo vi phạm'),
-                  _buildButtonFunc(context: context, iconData: Icons.feedback_outlined, title: 'Đánh giá từ tôi'),
+                  _buildButtonFunc(context: context, iconData: Icons.question_mark, title: 'Hướng dẫn sử dụng', iTradePolicy: ITradePolicy.huongDanSuDung),
+                  _buildButtonFunc(context: context, iconData: Icons.menu_book, title: 'Điều khoản sử dụng', iTradePolicy: ITradePolicy.dieuKhoanSuDung),
+                  _buildButtonFunc(context: context, iconData: Icons.security, title: 'Chính sách bảo mật', iTradePolicy: ITradePolicy.chinhSachBaoMat),
+                  _buildButtonFunc(context: context, iconData: Icons.info_outline, title: 'Thông tin ứng dụng', iTradePolicy: ITradePolicy.thongTinUngDung),
+                  _buildButtonFunc(context: context, iconData: Icons.wallet, title: 'Ví của tôi', iTradePolicy: ITradePolicy.viCuaToi),
+                  _buildButtonFunc(context: context, iconData: Icons.report_outlined, title: 'Báo cáo vi phạm', iTradePolicy: ITradePolicy.baoCaoViPham),
+                  _buildButtonFunc(context: context, iconData: Icons.feedback_outlined, title: 'Đánh giá từ tôi', iTradePolicy: ITradePolicy.danhGiaTuToi),
                   _buildButton(context),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -214,19 +218,7 @@ class InformationPage extends GetView<InformationController> {
 
   Widget _buildIconButton({required BuildContext context, required IconData iconData, required ProfileEnums profileEnums}){
     return GestureDetector(
-      onTap: () {
-        switch (profileEnums){
-          case ProfileEnums.edit:
-            Get.toNamed(EditProfilePage.routeName);
-            break;
-          case ProfileEnums.camera:
-            Get.toNamed(EditProfilePage.routeName);
-            break;
-          case ProfileEnums.lock:
-            Get.toNamed(ChangePasswordPage.routeName);
-            break;
-        }
-      },
+      onTap: () => controller.goProfle(profileEnums),
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -247,43 +239,48 @@ class InformationPage extends GetView<InformationController> {
     );
   }
 
-  Widget _buildButtonFunc({required BuildContext context, required IconData iconData, required String title}){
-    return Container(
-      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: kDefaultGradient
+  Widget _buildButtonFunc({required BuildContext context, required IconData iconData, required String title, required ITradePolicy iTradePolicy}){
+    return GestureDetector(
+      onTap: () {
+        controller.updateTitle(iTradePolicy);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    gradient: kDefaultGradient
+                  ),
+                  child: Icon(
+                      iconData,
+                      color: Colors.white,
+                      size: 20.0
+                  ),
                 ),
-                child: Icon(
-                    iconData,
-                    color: Colors.white,
-                    size: 20.0
-                ),
-              ),
-              const SizedBox(width: 10.0,),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-              )
-            ],
-          ),
-          ShaderMask(
-            blendMode: BlendMode.srcIn,
-            shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-            child: const Icon(
-                Icons.arrow_forward_ios,
-                color: kPrimaryLightColor,
-                size: 25.0
+                const SizedBox(width: 10.0,),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                )
+              ],
             ),
-          ),
-        ],
+            ShaderMask(
+              blendMode: BlendMode.srcIn,
+              shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+              child: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: kPrimaryLightColor,
+                  size: 25.0
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
