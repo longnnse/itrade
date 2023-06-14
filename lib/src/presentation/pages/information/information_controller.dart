@@ -11,6 +11,8 @@ import 'widgets/iTrade_policy_page.dart';
 class InformationController extends GetxController {
   RxString title = ''.obs;
   RxBool isBuyer = true.obs;
+  RxBool isShow = true.obs;
+  RxBool isMore = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +20,10 @@ class InformationController extends GetxController {
 
   void updateStatus(bool isChange){
     isBuyer.call(isChange == true ? true : false);
+  }
+
+  void updateStatusProfileTab(bool isChange){
+    isShow.call(isChange == true ? true : false);
   }
 
   void updateTitle(ITradePolicy policy){

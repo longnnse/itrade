@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_history_page.dart';
 
 import '../../../../core/initialize/theme.dart';
 
@@ -38,6 +39,7 @@ class ManagePage extends GetView<ManageController> {
                             ),
                           ),
                           GestureDetector(
+                            onTap: () => Get.toNamed(ManageHistoryPage.routeName),
                             child: Container(
                               margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                               padding: const EdgeInsets.all(8.0),

@@ -16,8 +16,10 @@ import 'package:i_trade/src/presentation/pages/information/information_page.dart
 import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_pham_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/iTrade_policy_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_page.dart';
 import 'package:i_trade/src/presentation/pages/login/login_page.dart';
+import 'package:i_trade/src/presentation/pages/login/widget/register_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
@@ -26,6 +28,7 @@ import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart
 import '../../src/presentation/pages/change_password/change_password_page.dart';
 import '../../src/presentation/pages/dashboard/dashboard_page.dart';
 import '../../src/presentation/pages/login/login_controller.dart';
+import '../../src/presentation/pages/manage/widgets/manage_history_page.dart';
 
 class ITradeRouterConfigs {
   static final List<GetPage> routes = [
@@ -52,6 +55,16 @@ class ITradeRouterConfigs {
     GetPage(
       name: ManagePage.routeName,
       page: () => const ManagePage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => ManageController());
+        },
+      ),
+    ),
+    GetPage(
+      name: ManageHistoryPage.routeName,
+      page: () => const ManageHistoryPage(),
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
@@ -92,6 +105,16 @@ class ITradeRouterConfigs {
     GetPage(
       name: LoginPage.routeName,
       page: () => const LoginPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => LoginController());
+        },
+      ),
+    ),
+    GetPage(
+      name: RegisterPage.routeName,
+      page: () => const RegisterPage(),
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
@@ -182,6 +205,16 @@ class ITradeRouterConfigs {
     GetPage(
       name: MyFeedbackPage.routeName,
       page: () => const MyFeedbackPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => InformationController());
+        },
+      ),
+    ),
+    GetPage(
+      name: MyProfilePage.routeName,
+      page: () => const MyProfilePage(),
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());

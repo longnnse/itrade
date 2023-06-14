@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
 import 'package:i_trade/src/presentation/pages/change_password/change_password_page.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
 
 import '../../../../core/initialize/theme.dart';
 import '../login/login_page.dart';
@@ -87,66 +88,69 @@ class InformationPage extends GetView<InformationController> {
                         top: MediaQuery.of(context).size.height * 0.18,
                         left: 20.0,
                         right: 20.0,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                width: 140.0,
-                                height: 140.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(70.0),
-                                  color: kBackgroundBottomBar,
-                                ),
-                                child: Container(
+                        child: GestureDetector(
+                          onTap: () => Get.toNamed(MyProfilePage.routeName),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  width: 140.0,
+                                  height: 140.0,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(60.0),
-                                    boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                                    borderRadius: BorderRadius.circular(70.0),
+                                    color: kBackgroundBottomBar,
                                   ),
-                                  child: const CircleAvatar(
-                                    radius: 60.0,
-                                    backgroundImage:
-                                    NetworkImage('https://kpopping.com/documents/1a/3/YongYong-fullBodyPicture.webp?v=7c2a3'),
-                                    backgroundColor: Colors.transparent,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(60.0),
+                                      boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                                    ),
+                                    child: const CircleAvatar(
+                                      radius: 60.0,
+                                      backgroundImage:
+                                      NetworkImage('https://kpopping.com/documents/1a/3/YongYong-fullBodyPicture.webp?v=7c2a3'),
+                                      backgroundColor: Colors.transparent,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 30.0,),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.email,
-                                        color: kTextColorGrey,
-                                      ),
-                                      const SizedBox(width: 5.0,),
-                                      Text(
-                                        'longnl@fpt.edu.vn',
-                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5.0,),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.phone,
-                                        color: kTextColorGrey,
-                                      ),
-                                      const SizedBox(width: 5.0,),
-                                      Text(
-                                        '0123456789',
-                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 30.0,),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.email,
+                                          color: kTextColorGrey,
+                                        ),
+                                        const SizedBox(width: 5.0,),
+                                        Text(
+                                          'longnl@fpt.edu.vn',
+                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5.0,),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.phone,
+                                          color: kTextColorGrey,
+                                        ),
+                                        const SizedBox(width: 5.0,),
+                                        Text(
+                                          '0123456789',
+                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
