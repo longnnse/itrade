@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
-import 'package:i_trade/src/presentation/pages/history/history_page.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
+import 'package:i_trade/src/presentation/pages/search/search_page.dart';
 
 import '../information/information_page.dart';
 
@@ -26,11 +26,11 @@ class DashboardController extends GetxController {
     index == 3 ? 1.35 : 1.05);
     icon.call(index == 0 ? const Icon(Icons.home, size: 30.0) :
     index == 1 ? const Icon(Icons.dashboard, size: 30.0) :
-    index == 2 ? const Icon(Icons.history, size: 30.0) :
+    index == 2 ? const Icon(Icons.search, size: 30.0) :
     index == 3 ? const Icon(Icons.chat, size: 30.0) : const Icon(Icons.person, size: 30.0));
     appBarTitle.call(index == 0 ? 'Trang chủ' :
     index == 1 ? 'Quản lý' :
-    index == 2 ? 'Lịch sử' :
+    index == 2 ? 'Tìm kiếm' :
     index == 3 ? 'Trao đổi' : 'Cá nhân');
   }
 
@@ -44,7 +44,7 @@ class DashboardController extends GetxController {
         content = const ManagePage();
         break;
       case 'TAB: 2':
-        content = const HistoryPage();
+        content = const SearchPage();
         break;
       case 'TAB: 3':
         content = const ChatPage();

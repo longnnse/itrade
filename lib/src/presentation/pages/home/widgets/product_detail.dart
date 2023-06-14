@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
 
 import '../../../../../core/initialize/theme.dart';
 import '../../../widgets/appbar_customize.dart';
@@ -427,19 +428,22 @@ class ProductDetailPage extends GetView<HomeController> {
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 5.0, right: 10.0),
-                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: kPrimaryLightColor,
-                          width: 2.0
+                    GestureDetector(
+                      onTap: () => Get.toNamed(MyProfilePage.routeName),
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 5.0, right: 10.0),
+                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: kPrimaryLightColor,
+                            width: 2.0
+                          ),
+                          borderRadius: BorderRadius.circular(5.0)
                         ),
-                        borderRadius: BorderRadius.circular(5.0)
-                      ),
-                      child: Text(
-                        'Xem trang',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                        child: Text(
+                          'Xem trang',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                        ),
                       ),
                     )
                   ],

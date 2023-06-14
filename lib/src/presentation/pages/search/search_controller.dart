@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class HistoryController extends GetxController {
+class SearchController extends GetxController {
 
   @override
   void onInit() {

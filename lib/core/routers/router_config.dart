@@ -5,8 +5,6 @@ import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.dart';
-import 'package:i_trade/src/presentation/pages/history/history_controller.dart';
-import 'package:i_trade/src/presentation/pages/history/history_page.dart';
 import 'package:i_trade/src/presentation/pages/home/home_controller.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart';
@@ -22,6 +20,8 @@ import 'package:i_trade/src/presentation/pages/login/login_page.dart';
 import 'package:i_trade/src/presentation/pages/login/widget/register_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
+import 'package:i_trade/src/presentation/pages/search/search_controller.dart';
+import 'package:i_trade/src/presentation/pages/search/search_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart';
 
@@ -73,12 +73,12 @@ class ITradeRouterConfigs {
       ),
     ),
     GetPage(
-      name: HistoryPage.routeName,
-      page: () => const HistoryPage(),
+      name: SearchPage.routeName,
+      page: () => const SearchPage(),
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.lazyPut(() => HistoryController());
+          Get.lazyPut(() => SearchController());
         },
       ),
     ),
