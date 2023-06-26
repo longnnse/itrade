@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/search/search_controller.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/initialize/theme.dart';
 import '../home/widgets/product_detail.dart';
@@ -15,6 +16,7 @@ class SearchPage extends GetView<SearchController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SearchController());
     return Scaffold(
         backgroundColor: kBackground,
         body: Column(
@@ -81,26 +83,29 @@ class SearchPage extends GetView<SearchController> {
           const SizedBox(height: 5.0,),
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: kBackground,
-                    width: 1.5
+              GestureDetector(
+                onTap: () => _buildModelBottomFilter(context),
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: kBackground,
+                      width: 1.5
+                    ),
+                    borderRadius: BorderRadius.circular(5.0)
                   ),
-                  borderRadius: BorderRadius.circular(5.0)
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.filter_alt_outlined,
-                      size: 20.0,
-                    ),
-                    Text(
-                      'Lọc',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.filter_alt_outlined,
+                        size: 20.0,
+                      ),
+                      Text(
+                        'Lọc',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 10.0,),
@@ -309,5 +314,128 @@ class SearchPage extends GetView<SearchController> {
       ),
     );
   }
-  
+
+  void _buildModelBottomFilter(BuildContext context){
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: kBackground))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(
+                            Icons.close,
+                            color: kTextColorGrey,
+                            size: 30.0,
+                          )),
+                      Text(
+                        'Lọc kết quả',
+                        style: Theme.of(context).textTheme.titleLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Bỏ lọc',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: kBackground))),
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            'Danh mục',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            'Thời trang',
+                            style: Theme.of(context).textTheme.titleSmall!.copyWith(color: kPrimaryLightColor),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        onPressed: (){},
+                        icon: const Icon(
+                          Icons.arrow_forward_ios,
+                          color: kTextColorGrey,
+                          size: 20.0,
+                        )
+                      )
+                    ],
+                  ),
+                ),
+               Obx(() =>  Container(
+                   decoration: const BoxDecoration(
+                       border: Border(
+                           bottom: BorderSide(color: kBackground))),
+                   padding: const EdgeInsets.all(10.0),
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       RichText(
+                         text: TextSpan(
+                           text: 'Giá từ ',
+                           style: Theme.of(context).textTheme.titleMedium,
+                           children: <TextSpan>[
+                             TextSpan(
+                                 text: '${controller.formatNum.format(controller.currentRangeValues.value.start.round())} đ',
+                                 style: Theme.of(context)
+                                     .textTheme
+                                     .titleMedium!
+                                     .copyWith(fontWeight: FontWeight.w500)),
+                             TextSpan(
+                                 text: ' đến ',
+                                 style: Theme.of(context)
+                                     .textTheme
+                                     .titleMedium),
+                             TextSpan(
+                                 text: '${controller.formatNum.format(controller.currentRangeValues.value.end.round())} đ',
+                                 style: Theme.of(context)
+                                     .textTheme
+                                     .titleMedium!
+                                     .copyWith(fontWeight: FontWeight.w500)),
+                           ],
+                         ),
+                       ),
+                       RangeSlider(
+                         values: controller.currentRangeValues.value,
+                         max: 30000000,
+                         divisions: 300,
+                         // labels: RangeLabels(
+                         //   controller.currentRangeValues.value.start.round().toString(),
+                         //   controller.currentRangeValues.value.end.round().toString(),
+                         // ),
+                         onChanged: (RangeValues values) {
+                           controller.currentRangeValues.call(values);
+                         },
+                       )
+                     ],
+                   )
+               ),),
+
+              ],
+            ),
+          );
+        });
+  }
 }

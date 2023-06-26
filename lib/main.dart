@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,10 +11,21 @@ import 'core/config/module_config.dart';
 import 'core/initialize/global_binding.dart';
 import 'core/initialize/theme.dart';
 import 'core/routers/router_config.dart';
+import 'core/utils/app_settings.dart';
 
-void main() {
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
+void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   Get.put<ITradeModuleConfig>(ITradeModuleConfig());
+  await AppSettings.innitAppSetting();
   // VIFBase.I.init(
   //   dialog: VIFDialog(),
   //   downloader: VIFDownloader(),

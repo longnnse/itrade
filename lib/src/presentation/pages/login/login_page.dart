@@ -54,7 +54,15 @@ class LoginPage extends GetView<LoginController> {
                   ),
                 ),
               ),
-            )
+            ),
+            Obx(() => controller.isLoading.value == true ?
+              Positioned(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: kBackground.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
+              )) : const SizedBox())
           ],
         ));
   }
@@ -85,7 +93,7 @@ class LoginPage extends GetView<LoginController> {
         Positioned(
           top: MediaQuery.of(context).padding.top,
           child: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, true),
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Colors.white,
@@ -124,17 +132,21 @@ class LoginPage extends GetView<LoginController> {
             ),
           ),
           Expanded(
-            child: TextFormField(
+            child: Obx(() => TextFormField(
               //initialValue: number.toString(),
-              //controller: blocQLDTTNMT.keySearchTextEditingController,
+              obscureText: !controller.isShow.value,
+              controller: isPassword == false ? controller.emailController : controller.passwordController,
               decoration: InputDecoration(
                   suffixIcon: isPassword == true ? ShaderMask(
                     blendMode: BlendMode.srcIn,
                     shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                    child: const Icon(
-                        Icons.visibility,
-                        color: kPrimaryLightColor ,
-                        size: 25.0
+                    child: GestureDetector(
+                      onTap: () => controller.showPass(controller.isShow.value),
+                      child: Icon(
+                          controller.isShow.value == false ? Icons.visibility_off : Icons.visibility,
+                          color: kPrimaryLightColor ,
+                          size: 25.0
+                      ),
                     ),
                   ) : null,
                   border: InputBorder.none,
@@ -143,14 +155,14 @@ class LoginPage extends GetView<LoginController> {
                   errorBorder: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: isPassword == true ? 15.0 : 10.0, bottom: isPassword == false ? 10.0 : 0.0),
                   disabledBorder: InputBorder.none,
-                  hintText: isPassword == false ? 'Username...' : 'Password...',
+                  hintText: isPassword == false ? 'Email...' : 'Password...',
                   hintStyle: Theme.of(context)
                       .textTheme
                       .titleMedium!
                       .copyWith(color: kTextColorGrey)),
               onChanged: (value) {},
               onFieldSubmitted: (value) {},
-            ),
+            )),
           ),
         ],
       ),
@@ -160,18 +172,21 @@ class LoginPage extends GetView<LoginController> {
   Widget _buildButton(BuildContext context){
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(13.0),
-          margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: kDefaultGradient
-          ),
-          child: Text(
-            'Đăng nhập',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
+        GestureDetector(
+          onTap: () => controller.postLogin(email: controller.emailController.text, password: controller.passwordController.text, context: context),
+          child: Container(
+            padding: const EdgeInsets.all(13.0),
+            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: kDefaultGradient
+            ),
+            child: Text(
+              'Đăng nhập',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         const SizedBox(height: 5.0,),

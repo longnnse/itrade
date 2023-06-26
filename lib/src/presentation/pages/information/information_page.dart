@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
 import 'package:i_trade/src/presentation/pages/change_password/change_password_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
@@ -24,6 +25,7 @@ class InformationPage extends GetView<InformationController> {
   @override
   Widget build(BuildContext context) {
     Get.put(InformationController());
+    controller.checkInfoUser();
     return Scaffold(
       backgroundColor: kBackgroundBottomBar,
       body: Column(
@@ -45,16 +47,16 @@ class InformationPage extends GetView<InformationController> {
                                   gradient: kDefaultGradient
                               ),
                               padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20.0, left: 20.0, right: 10.0),
-                              child: Column(
+                              child: Obx(() => Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Nguyễn Ngọc Long',
+                                    controller.fullName.value,
                                     style: Theme.of(context).textTheme.titleLarge!.copyWith(color: kTextFieldLightColor),
                                   ),
                                   const SizedBox(height: 5.0,),
                                   Text(
-                                    'Trader nghiệp dư',
+                                      controller.aud.value,
                                     style: Theme.of(context).textTheme.titleSmall!.copyWith(color: kTextFieldLightColor),
                                   ),
                                   const SizedBox(height: 10.0,),
@@ -66,7 +68,7 @@ class InformationPage extends GetView<InformationController> {
                                     ],
                                   ),
                                 ],
-                              ),
+                              )),
                             ),
                             Padding(
                               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
@@ -108,47 +110,49 @@ class InformationPage extends GetView<InformationController> {
                                       borderRadius: BorderRadius.circular(60.0),
                                       boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
                                     ),
-                                    child: const CircleAvatar(
+                                    child: Obx(() => CircleAvatar(
                                       radius: 60.0,
                                       backgroundImage:
-                                      NetworkImage('https://kpopping.com/documents/1a/3/YongYong-fullBodyPicture.webp?v=7c2a3'),
+                                      NetworkImage(controller.urlLink.value),
                                       backgroundColor: Colors.transparent,
-                                    ),
+                                    )),
                                   ),
                                 ),
-                                Column(
+                                Obx(() => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(height: 30.0,),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.email,
-                                          color: kTextColorGrey,
-                                        ),
-                                        const SizedBox(width: 5.0,),
-                                        Text(
-                                          'longnl@fpt.edu.vn',
-                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
+                                    if(controller.email.value != '')
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.email,
+                                            color: kTextColorGrey,
+                                          ),
+                                          const SizedBox(width: 5.0,),
+                                          Text(
+                                            controller.email.value,
+                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
+                                          )
+                                        ],
+                                      ),
                                     const SizedBox(height: 5.0,),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.phone,
-                                          color: kTextColorGrey,
-                                        ),
-                                        const SizedBox(width: 5.0,),
-                                        Text(
-                                          '0123456789',
-                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    )
+                                    if(controller.phoneNumber.value != '')
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.phone,
+                                            color: kTextColorGrey,
+                                          ),
+                                          const SizedBox(width: 5.0,),
+                                          Text(
+                                            controller.phoneNumber.value,
+                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
+                                          )
+                                        ],
+                                      )
                                   ],
-                                )
+                                ))
                               ],
                             ),
                           ),
@@ -290,23 +294,23 @@ class InformationPage extends GetView<InformationController> {
   }
 
   Widget _buildButton(BuildContext context){
-    return GestureDetector(
-      onTap: () => Get.toNamed(LoginPage.routeName),
+    return Obx(() => GestureDetector(
+      onTap: () => controller.onButtonClick(),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
         margin: const EdgeInsets.only(top: 20.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          gradient: kDefaultGradient
+            borderRadius: BorderRadius.circular(10.0),
+            gradient: kDefaultGradient
         ),
         child: Text(
-          'Đăng xuất',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: kTextColor),
-          textAlign: TextAlign.center,
-        ),
+          controller.buttonTxt.value,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: kTextColor),
+        textAlign: TextAlign.center,
       ),
-    );
+     ),
+    ));
   }
 }
 
