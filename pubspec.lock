@@ -53,8 +53,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: "07e9f836e78ceb209c0ce493d4df32fedc0ad807"
+      ref: dev
+      resolved-ref: fe0729514ca3bf914d490ae526058819dd9e71d3
       url: "https://git.vietinfo.tech:8443/flutter_package_project/core_http.git"
     source: git
     version: "0.0.1"
