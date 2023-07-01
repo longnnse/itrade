@@ -46,3 +46,32 @@ class LoginRepositories implements LoginService {
     }
   }
 }
+// final url =
+//     '${_thongKeModuleConfig.baseUrlCongViec}/thong-ke/tinh-trang-cong-viec-theo-phong-ban';
+// final Map<String, dynamic> queryParameters = {
+//   'TuNgay': param.tuNgay,
+//   'DenNgay': param.denNgay,
+// };
+// if (param.phongBanIds != null) {
+// queryParameters.putIfAbsent('PhongBanIds', () => param.phongBanIds);
+// }
+// final res = await _coreHttp.get(url, queryParameters: queryParameters);
+// if (res != null) {
+// final data = res
+//     .map<TinhTrangCongViecModel>(
+// (e) => TinhTrangCongViecModel.fromJson(e))
+//     .toList();
+// return Right(data ?? []);
+// }
+// return Left(ErrorObject.mapFailureToErrorObject(
+// failure: const DataParsingFailure()));
+// } on ServerException {
+// return Left(ErrorObject.mapFailureToErrorObject(
+// failure: const ServerFailure(),
+// title: 'Thông báo',
+// mess: 'Có lỗi xảy ra hoặc không tìm thấy thông tin'));
+// } on NoConnectionException {
+// return Left(ErrorObject.mapFailureToErrorObject(
+// failure: const NoConnectionFailure()));
+// }
+// }
