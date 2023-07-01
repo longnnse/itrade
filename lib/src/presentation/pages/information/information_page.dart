@@ -37,7 +37,7 @@ class InformationPage extends GetView<InformationController> {
                   Stack(
                     children: [
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.36,
+                        height: MediaQuery.of(context).size.height * 0.4,
                         child: Stack(
                           children: [
                             Container(
@@ -87,7 +87,7 @@ class InformationPage extends GetView<InformationController> {
                         ),
                       ),
                       Positioned(
-                        top: MediaQuery.of(context).size.height * 0.18,
+                        top: MediaQuery.of(context).size.height * 0.2,
                         left: 20.0,
                         right: 20.0,
                         child: GestureDetector(

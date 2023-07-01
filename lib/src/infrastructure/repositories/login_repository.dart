@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/models/login_model.dart';
+import 'package:i_trade/src/domain/models/params/register_account_param.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 
 
@@ -40,6 +41,43 @@ class LoginRepositories implements LoginService {
           failure: const ServerFailure(),
           title: 'Thông báo',
           mess: 'Có lỗi xảy ra hoặc không tìm thấy thông tin'));
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, RegisterAccountParam>> postRegister({required RegisterAccountParam param}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/User/Register';
+
+      final Map<String, dynamic> queryParameters = {
+        'userName': param.userName,
+        'password': param.password,
+        'email': param.email,
+        'firstName': param.firstName,
+        'lastName': param.lastName,
+        'address': param.address,
+        'phoneNumber': param.phoneNumber,
+        'age': param.age,
+        'idenficationNumber': param.idenficationNumber
+      };
+
+      final res = await _coreHttp.post(url, queryParameters);
+
+      if (res != null) {
+        final data = RegisterAccountParam.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo',
+          mess: 'Sai thông tin nhập, vui lòng kiểm tra lại số CMND/CCCD, email hoặc SDT')
+      );
     } on NoConnectionException {
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const NoConnectionFailure()));

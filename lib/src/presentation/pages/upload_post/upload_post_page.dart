@@ -209,9 +209,67 @@ class UploadPostPage extends GetView<UploadPostController> {
                     ),
                   ],
                 )),
-                _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number),
-                _buildTextFormField(context: context, title: 'Tiêu đề', maxLine: 1),
-                _buildTextFormField(context: context, title: 'Mô tả sản phẩm', maxLine: 5),
+                const SizedBox(height: 10.0,),
+                RichText(
+                  text: TextSpan(
+                    text: 'Mong muốn',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '*',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: kSecondaryRed, fontWeight: FontWeight.w900)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10.0,),
+                Obx(() => Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => controller.isSell.call(false),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color:  controller.isSell.value == false ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Trao đổi',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: controller.isSell.value == false ? kPrimaryLightColor : kTextColorBody,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10.0,),
+                    GestureDetector(
+                      onTap: () => controller.isSell.call(true),
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Bán',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+                _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number, textController: controller.priceController),
+                _buildTextFormField(context: context, title: 'Tiêu đề', maxLine: 1, textController: controller.titleController),
+                _buildTextFormField(context: context, title: 'Mô tả sản phẩm', maxLine: 5, textController: controller.contentController),
               ],
             ),
           )
@@ -282,7 +340,7 @@ class UploadPostPage extends GetView<UploadPostController> {
                     ),
                   ],
                 )),
-                _buildTextFormField(context: context, title: 'Địa chỉ', maxLine: 1),
+                _buildTextFormField(context: context, title: 'Địa chỉ', maxLine: 1, textController: controller.addressController),
               ],
             ),
           )
@@ -372,17 +430,20 @@ class UploadPostPage extends GetView<UploadPostController> {
               ))
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(13.0),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: kDefaultGradient
-            ),
-            child: Text(
-              'Đăng',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
+          GestureDetector(
+            onTap: () => controller.postUploadProduct(context: context),
+            child: Container(
+              padding: const EdgeInsets.all(13.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: kDefaultGradient
+              ),
+              child: Text(
+                'Đăng',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ],
@@ -390,7 +451,10 @@ class UploadPostPage extends GetView<UploadPostController> {
     );
   }
 
-  Widget _buildTextFormField({required BuildContext context, required String title, required int maxLine, TextInputType textInputType = TextInputType.text}){
+  Widget _buildTextFormField({required BuildContext context,
+    required String title, required int maxLine,
+    TextInputType textInputType = TextInputType.text,
+    required TextEditingController textController}){
     return  Container(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
@@ -404,7 +468,7 @@ class UploadPostPage extends GetView<UploadPostController> {
       ),
       child: TextFormField(
         //initialValue: number.toString(),
-        //controller: blocQLDTTNMT.keySearchTextEditingController,
+        controller: textController,
         keyboardType: textInputType,
         maxLines: maxLine,
         decoration: InputDecoration(

@@ -205,6 +205,23 @@ class LoginPage extends GetView<LoginController> {
               )
             ],
           ),
+        ),
+        const SizedBox(height: 5.0,),
+        GestureDetector(
+          onTap: () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Quên mật khẩu?',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+              ),
+              Text(
+                'Lấy lại',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+              )
+            ],
+          ),
         )
       ],
     );

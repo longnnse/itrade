@@ -25,47 +25,57 @@ class RegisterPage extends GetView<LoginController> {
         backgroundColor: kBackgroundBottomBar,
         body: Stack(
           children: [
-            Column(
-              children: [
-                const SizedBox(height: 10.0),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  width: 140.0,
-                  height: 140.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70.0),
-                    color: kBackgroundBottomBar,
-                  ),
-                  child: Container(
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10.0),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    width: 140.0,
+                    height: 140.0,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60.0),
-                      boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                      borderRadius: BorderRadius.circular(70.0),
+                      color: kBackgroundBottomBar,
                     ),
-                    child: const CircleAvatar(
-                      radius: 60.0,
-                      backgroundImage:
-                      NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDK4gXyt3wzCyT9ekbDsR-thEKFtWuQoFraQ&usqp=CAU'),
-                      backgroundColor: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60.0),
+                        boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                      ),
+                      child: const CircleAvatar(
+                        radius: 60.0,
+                        backgroundImage:
+                        NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDK4gXyt3wzCyT9ekbDsR-thEKFtWuQoFraQ&usqp=CAU'),
+                        backgroundColor: Colors.transparent,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10.0),
-                _buildInput(context: context, title: 'Username', iconData: Icons.person),
-                _buildInput(context: context, title: 'Họ và tên', iconData: Icons.person),
-                _buildInput(context: context, title: 'Email', iconData: Icons.mail),
-                _buildInput(context: context, title: 'Số điện thoại', iconData: Icons.phone),
-                _buildInput(context: context, title: 'Địa chỉ', iconData: Icons.location_on),
-                _buildInput(context: context, title: 'CMND/CCCD', iconData: Icons.contact_mail),
-                _buildInput(context: context, isPassword: true, title: 'Password', iconData: Icons.lock),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                _buildButton(context)
-              ],
+                  const SizedBox(height: 10.0),
+                  _buildInput(context: context, title: 'Username', iconData: Icons.person, textController: controller.usernameController),
+                  _buildInput(context: context, title: 'Họ', iconData: Icons.person, textController: controller.firstNameController),
+                  _buildInput(context: context, title: 'Tên', iconData: Icons.person, textController: controller.lastNameController),
+                  _buildInput(context: context, title: 'Tuổi', iconData: Icons.calendar_month, textController: controller.ageController),
+                  _buildInput(context: context, title: 'Email', iconData: Icons.mail, textController: controller.emailController),
+                  _buildInput(context: context, title: 'Số điện thoại', iconData: Icons.phone, textController: controller.phoneController),
+                  _buildInput(context: context, title: 'Địa chỉ', iconData: Icons.location_on, textController: controller.addressController),
+                  _buildInput(context: context, title: 'CMND/CCCD', iconData: Icons.contact_mail, textController: controller.idenficationNumberController),
+                  _buildInput(context: context, isPassword: true, title: 'Password', iconData: Icons.lock, textController: controller.passwordController),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  _buildButton(context)
+                ],
+              ),
             ),
           ],
         ));
   }
 
-  Widget _buildInput({required BuildContext context, bool isPassword = false, required String title, required IconData iconData}){
+  Widget _buildInput({
+    required BuildContext context,
+    bool isPassword = false,
+    required String title,
+    required IconData iconData,
+    required TextEditingController textController
+  }){
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -95,7 +105,7 @@ class RegisterPage extends GetView<LoginController> {
           Expanded(
             child: TextFormField(
               //initialValue: number.toString(),
-              //controller: blocQLDTTNMT.keySearchTextEditingController,
+              controller: textController,
               decoration: InputDecoration(
                   suffixIcon: isPassword == true ? ShaderMask(
                     blendMode: BlendMode.srcIn,
@@ -129,18 +139,21 @@ class RegisterPage extends GetView<LoginController> {
   Widget _buildButton(BuildContext context){
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(13.0),
-          margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: kDefaultGradient
-          ),
-          child: Text(
-            'Đăng ký',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
+        GestureDetector(
+          onTap: () => controller.postRegister(context: context),
+          child: Container(
+            padding: const EdgeInsets.all(13.0),
+            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: kDefaultGradient
+            ),
+            child: Text(
+              'Đăng ký',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         const SizedBox(height: 5.0,),
@@ -159,7 +172,8 @@ class RegisterPage extends GetView<LoginController> {
               )
             ],
           ),
-        )
+        ),
+        const SizedBox(height: 20.0,),
       ],
     );
   }
