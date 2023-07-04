@@ -1,7 +1,9 @@
 import 'package:core_http/core_http.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/src/domain/services/home_service.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 import 'package:i_trade/src/domain/services/upload_product_service.dart';
+import 'package:i_trade/src/infrastructure/repositories/home_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/login_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/upload_product_repository.dart';
 import 'package:i_trade/src/presentation/pages/change_password/chang_password_controller.dart';
@@ -52,7 +54,8 @@ class ITradeRouterConfigs {
       page: () => const HomePage(),
       binding: BindingsBuilder(
             () {
-          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<HomeService>(HomeRepositories());
           Get.lazyPut(() => HomeController());
         },
       ),

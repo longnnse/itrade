@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/utils/format_datetime.dart';
+import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
+import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart';
 
 import '../../../../../core/initialize/theme.dart';
 import '../../../widgets/appbar_customize.dart';
@@ -16,6 +19,7 @@ class ProductDetailPage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.getPostByID(id: controller.idPost.value);
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
             context: context,
@@ -23,93 +27,107 @@ class ProductDetailPage extends GetView<HomeController> {
             isUseOnlyBack: true,
         ),
         backgroundColor: kBackground,
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildHeader(context),
-                  _buildDetail(context),
-                  _buildSpecifications(context),
-                  _buildProfile(context),
-                  _buildOtherItem(context: context),
-                  _buildOtherItem(context: context, isSimilar: true),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.07,)
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: kBackground,
-                      width: 2.0
-                    )
+        body: Obx(() {
+          if (controller.isLoadingData.value) {
+            return const Center(child:  CircularProgressIndicator());
+          }
+          if(controller.productByIDModel.value != null) {
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildHeader(context, controller.productByIDModel.value!),
+                      _buildDetail(context, controller.productByIDModel.value!),
+                      _buildSpecifications(context, controller.productByIDModel.value!),
+                      _buildProfile(context, controller.productByIDModel.value!),
+                      _buildOtherItem(context: context),
+                      _buildOtherItem(context: context, isSimilar: true),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.07,)
+                    ],
                   ),
-                  color: kBackgroundBottomBar
                 ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ShaderMask(
-                            blendMode: BlendMode.srcIn,
-                            shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                            child: const Icon(
-                                Icons.message,
-                                color: kPrimaryLightColor,
-                                size: 25.0
+                Positioned(
+                  bottom: 0.0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            top: BorderSide(
+                                color: kBackground,
+                                width: 2.0
+                            )
+                        ),
+                        color: kBackgroundBottomBar
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ShaderMask(
+                                blendMode: BlendMode.srcIn,
+                                shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                                child: const Icon(
+                                    Icons.message,
+                                    color: kPrimaryLightColor,
+                                    size: 25.0
+                                ),
+                              ),
+                              const SizedBox(width: 5.0,),
+                              Text(
+                                'Nhắn tin',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                              )
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: const BoxDecoration(
+                                gradient: kDefaultGradient
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                    Icons.call,
+                                    color: kTextColor,
+                                    size: 25.0
+                                ),
+                                const SizedBox(width: 5.0,),
+                                Text(
+                                  'Gọi điện',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+                                )
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 5.0,),
-                          Text(
-                            'Nhắn tin',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: const BoxDecoration(
-                          gradient: kDefaultGradient
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                                Icons.call,
-                                color: kTextColor,
-                                size: 25.0
-                            ),
-                            const SizedBox(width: 5.0,),
-                            Text(
-                              'Gọi điện',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        )
+                  ),
+                )
+              ],
+            );
+          } else {
+            return Center(
+                child: Text(
+                  'Không có dữ liệu',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                )
+            );
+          }
+        })
     );
   }
 
-  Widget _buildHeader(BuildContext context){
+  Widget _buildHeader(BuildContext context, Data content){
     return Container(
       color: kBackgroundBottomBar,
       width: MediaQuery.of(context).size.width,
@@ -154,17 +172,42 @@ class ProductDetailPage extends GetView<HomeController> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    'Cần bán Rick Owen',
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        child: Text(
+                          content.title,
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                    if(content.type == 'Trade')
+                      GestureDetector(
+                        onTap: () => Get.toNamed(UploadPostPage.routeName),
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 5.0, right: 10.0),
+                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: kPrimaryLightColor,
+                                  width: 2.0
+                              ),
+                              borderRadius: BorderRadius.circular(5.0)
+                          ),
+                          child: Text(
+                            'Trao đổi',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      )
+                  ],
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    '9,500,000 VND',
+                    content.price.toString().split('.').first,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -182,7 +225,7 @@ class ProductDetailPage extends GetView<HomeController> {
                     ),
                     const SizedBox(width: 5.0,),
                     Text(
-                      'Vinhome Grand Park, S201',
+                      content.user.address,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
                     )
                   ],
@@ -201,7 +244,7 @@ class ProductDetailPage extends GetView<HomeController> {
                     ),
                     const SizedBox(width: 5.0,),
                     Text(
-                      'Đã đăng được 1 giờ trước',
+                      '${FormatDateTime.getHourFormat(content.dateUpdated)} ${FormatDateTime.getDateFormat(content.dateUpdated)}',
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
                     )
                   ],
@@ -243,7 +286,7 @@ class ProductDetailPage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildDetail(BuildContext context){
+  Widget _buildDetail(BuildContext context, Data content){
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       color: kBackgroundBottomBar,
@@ -265,7 +308,7 @@ class ProductDetailPage extends GetView<HomeController> {
                 Obx(() => Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Text(
-                    'Sản phẩm real, size 42 (RO trên 1 size so với bình thường)',
+                    content.content,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
                     maxLines: controller.isMore.value == false ? 2 : 20,
                   ),
@@ -273,10 +316,54 @@ class ProductDetailPage extends GetView<HomeController> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Text(
-                    'Liên hệ ngay: 0987654321',
+                    'Liên hệ ngay: ${content.user.phoneNumber}',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w400),
                   ),
                 ),
+                Obx(() {
+                  if(controller.isMore.value == true){
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Loại sản phẩm: ',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                              children: <TextSpan>[
+                                for(var cont in content.postCategories)...[
+                                  TextSpan(
+                                      text: cont.category.name,
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w400)),
+                                  TextSpan(
+                                      text: ', ',
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w400)),
+                                ]
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Mong muốn: ',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: content.type,
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w400)),
+                              ],
+                            ),
+                          ),
+                        )
+
+                      ],
+                    );
+                  }
+                  return const SizedBox();
+                })
               ],
             ),
           ),
@@ -311,7 +398,7 @@ class ProductDetailPage extends GetView<HomeController> {
     );
   }
   
-  Widget _buildSpecifications(BuildContext context){
+  Widget _buildSpecifications(BuildContext context, Data content){
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       color: kBackgroundBottomBar,
@@ -343,11 +430,24 @@ class ProductDetailPage extends GetView<HomeController> {
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
                           ),
                         ),
+
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
-                          child: Text(
-                            'Loại: Thời trang/Giày',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Loại: ',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                              children: <TextSpan>[
+                                for(var cont in content.postCategories)...[
+                                  TextSpan(
+                                    text: cont.category.name,
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),),
+                                  TextSpan(
+                                    text: ', ',
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),),
+                                ]
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -384,7 +484,7 @@ class ProductDetailPage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildProfile(BuildContext context){
+  Widget _buildProfile(BuildContext context, Data content){
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -424,7 +524,7 @@ class ProductDetailPage extends GetView<HomeController> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Nguyễn Ngọc Long',
+                        '${content.user.firstName} ${content.user.lastName}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),

@@ -18,6 +18,10 @@ class UploadPostPage extends GetView<UploadPostController> {
 
   @override
   Widget build(BuildContext context) {
+    if(controller.isFirst.value == true){
+      controller.getCategories(pageIndex: 1, pageSize: 10);
+    }
+
     return Scaffold(
       appBar: AppbarCustomize.buildAppbar(
         context: context,
@@ -63,94 +67,101 @@ class UploadPostPage extends GetView<UploadPostController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(() => DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    hint: Row(
-                      children: const [
-                        Icon(
-                          Icons.list,
-                          size: 16,
-                          color: Colors.yellow,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Chọn danh mục',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.yellow,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(
+                      child: CircularProgressIndicator()
+                    );
+                  }
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: Row(
+                        children: const [
+                          Icon(
+                            Icons.list,
+                            size: 16,
+                            color: Colors.yellow,
                           ),
-                        ),
-                      ],
-                    ),
-                    items: controller.items
-                        .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: kTextColorBody,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Chọn danh mục',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.yellow,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                    ))
-                        .toList(),
-                    value: controller.selectedValue.value,
-                    onChanged: (value) {
-                      controller.selectedValue.call(value as String);
+                      items: controller.items
+                          .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: kTextColorBody,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ))
+                          .toList(),
+                      value: controller.selectedValue.value,
+                      onChanged: (value) {
+                        controller.selectedValue.call(value as String);
 
-                    },
-                    buttonStyleData: ButtonStyleData(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.only(left: 14, right: 14),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: Colors.black26,
-                        ),
-                        color: kBackgroundBottomBar,
-                      ),
-                      elevation: 2,
-                    ),
-                    iconStyleData: const IconStyleData(
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 30.0,
-                      ),
-                      iconSize: 14,
-                      iconEnabledColor: kPrimaryLightColor,
-                      iconDisabledColor: Colors.grey,
-                    ),
-                    dropdownStyleData: DropdownStyleData(
-                        maxHeight: 200,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        padding: null,
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.only(left: 14, right: 14),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: Colors.black26,
+                          ),
                           color: kBackgroundBottomBar,
                         ),
-                        elevation: 8,
-                        offset: const Offset(0, 0),
-                        scrollbarTheme: ScrollbarThemeData(
-                          radius: const Radius.circular(40),
-                          thickness: MaterialStateProperty.all(6),
-                          thumbVisibility: MaterialStateProperty.all(true),
-                        )),
-                    menuItemStyleData: const MenuItemStyleData(
-                      height: 40,
-                      padding: EdgeInsets.only(left: 14, right: 14),
+                        elevation: 2,
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 30.0,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: kPrimaryLightColor,
+                        iconDisabledColor: Colors.grey,
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: null,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: kBackgroundBottomBar,
+                          ),
+                          elevation: 8,
+                          offset: const Offset(0, 0),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: MaterialStateProperty.all(6),
+                            thumbVisibility: MaterialStateProperty.all(true),
+                          )),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 14, right: 14),
+                      ),
                     ),
-                  ),
-                )),
+                  );
+                }),
                 const SizedBox(height: 10.0,),
                 RichText(
                   text: TextSpan(
@@ -363,41 +374,44 @@ class UploadPostPage extends GetView<UploadPostController> {
               style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                      color: kPrimaryLightColor,
-                      style: BorderStyle.solid
-                    ),
-                    color: kBackground
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      ShaderMask(
-                        blendMode: BlendMode.srcIn,
-                        shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                        child: const Icon(
-                            Icons.camera_alt,
-                            color: kPrimaryLightColor,
-                            size: 50.0
-                        ),
+          GestureDetector(
+            onTap: () => controller.mediaSelection(index: 1, context: context),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+                        color: kPrimaryLightColor,
+                        style: BorderStyle.solid
                       ),
-                      Text(
-                        'Đăng từ 01 tới 06 hình',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, color: kTextColorGrey),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                      color: kBackground
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        ShaderMask(
+                          blendMode: BlendMode.srcIn,
+                          shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                          child: const Icon(
+                              Icons.camera_alt,
+                              color: kPrimaryLightColor,
+                              size: 50.0
+                          ),
+                        ),
+                        Text(
+                          'Đăng từ 01 tới 06 hình',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, color: kTextColorGrey),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],

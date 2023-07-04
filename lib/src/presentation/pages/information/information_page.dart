@@ -170,7 +170,7 @@ class InformationPage extends GetView<InformationController> {
                             color: kBackgroundBottomBar,
                           ),
                           child: GestureDetector(
-                            onTap: () => Get.toNamed(UploadPostPage.routeName),
+                            onTap: () => controller.goPostProduct(),
                             child: Container(
                               width: 40.0,
                               height: 40.0,

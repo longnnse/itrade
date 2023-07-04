@@ -4,10 +4,12 @@ import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_ph
 import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_page.dart';
 
+import '../../../../core/initialize/theme.dart';
 import '../../../../core/utils/app_settings.dart';
 import '../change_password/change_password_page.dart';
 import '../edit_profile/edit_profile_page.dart';
 import '../login/login_page.dart';
+import '../upload_post/upload_post_page.dart';
 import 'widgets/iTrade_policy_page.dart';
 
 class InformationController extends GetxController {
@@ -56,9 +58,16 @@ class InformationController extends GetxController {
       checkInfoUser();
     }
   }
-  Future<void> logOut() async {
 
+  void goPostProduct(){
+    if(AppSettings.getValue(KeyAppSetting.isDangNhap) == true){
+      Get.toNamed(UploadPostPage.routeName);
+    }else{
+      Get.snackbar('Thông báo', 'Vui lòng đăng nhập để đăng bài', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
   }
+
+
 
   void updateTitle(ITradePolicy policy){
     switch (policy){

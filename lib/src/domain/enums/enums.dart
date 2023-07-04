@@ -1,9 +1,5 @@
-enum ProfileEnums {
-  edit,
-  camera,
-  lock
-}
-
+enum ProfileEnums { edit, camera, lock }
+enum MediaLoaiChucNangDinhKem { camera, album, video, file }
 enum ITradePolicy {
   huongDanSuDung,
   dieuKhoanSuDung,
@@ -13,3 +9,4 @@ enum ITradePolicy {
   baoCaoViPham,
   danhGiaTuToi
 }
+

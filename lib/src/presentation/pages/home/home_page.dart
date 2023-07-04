@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/utils/format_datetime.dart';
+import 'package:i_trade/src/domain/models/product_model.dart';
+import 'package:i_trade/src/presentation/pages/home/widgets/home_category_shimmer_widget.dart';
+import 'package:i_trade/src/presentation/pages/home/widgets/home_product_shimmer_widget.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_list.dart';
 
@@ -16,6 +20,9 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
+    controller.getCategories(pageIndex: 1, pageSize: 10);
+    controller.getPosts(pageIndex: 1, pageSize: 10);
     return Scaffold(
         backgroundColor: kBackgroundBottomBar,
         body: Column(
@@ -32,25 +39,35 @@ class HomePage extends GetView<HomeController> {
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+                        padding: const EdgeInsets.only(top: 10.0),
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildItemButton(context: context, title: 'Đồ điện tử'),
-                                _buildItemButton(context: context, title: 'Quần/áo'),
-                                _buildItemButton(context: context, title: 'Phụ kiện'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildItemButton(context: context, title: 'Gia dụng'),
-                                _buildItemButton(context: context, title: 'Sách'),
-                                _buildItemButton(context: context, title: 'Miễn phí'),
-                              ],
-                            )
+                            Obx(() {
+                              if (controller.isLoading.value) {
+                                return const HomeCategoryShimmerWidget(
+                                  columnCount: 3,
+                                );
+                              }
+                              if(controller.categoryList.value!.isNotEmpty) {
+                                return GridView.count(
+                                    shrinkWrap: true,
+                                    primary: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 0,
+                                    mainAxisSpacing: 0,
+                                    children: List.generate(controller.categoryList.value!.length, (index) {
+                                      return _buildItemButton(context: context, title: controller.categoryList.value![index].name);
+                                    }));
+                              } else {
+                                return Center(
+                                    child: Text(
+                                      'Không có dữ liệu',
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                                    )
+                                );
+                              }
+                            }),
                           ],
                         ),
                       ),
@@ -59,7 +76,24 @@ class HomePage extends GetView<HomeController> {
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 10.0,),
-                      _buildItemGridView(context: context)
+                      Obx(() {
+                        if (controller.isLoadingProduct.value) {
+                          return const HomeProductShimmerWidget(
+                            columnCount: 2,
+                          );
+                        }
+                        if(controller.productModel.value != null) {
+                          return _buildItemGridView(context: context, productModel: controller.productModel.value!);
+                        } else {
+                          return Center(
+                              child: Text(
+                                'Không có dữ liệu',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                              )
+                          );
+                        }
+                      }),
+
                     ],
                   ),
                 ),
@@ -92,23 +126,26 @@ class HomePage extends GetView<HomeController> {
           Container(
             width: MediaQuery.of(context).size.width * 0.2,
             height: MediaQuery.of(context).size.width * 0.2,
-            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+            margin: const EdgeInsets.only(bottom: 10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
               color: kBackground
             ),
           ),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget _buildItemGridView({required BuildContext context}){
+  Widget _buildItemGridView({required BuildContext context, required ProductModel productModel}){
     return GridView.count(
       primary: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -117,9 +154,9 @@ class HomePage extends GetView<HomeController> {
       mainAxisSpacing: 10,
       crossAxisCount: 2,
       children: <Widget>[
-        for(int i = 0; i < 10; i++)
+        for(var cont in productModel.data)
           GestureDetector(
-            onTap: () => Get.toNamed(ProductDetailPage.routeName),
+            onTap: () => controller.goDetail(id: cont.id),
             child: Padding(
               padding: const EdgeInsets.all(0),
               child: Column(
@@ -136,52 +173,53 @@ class HomePage extends GetView<HomeController> {
                         ),
                       ),
                       Positioned(
-                        right: 10.0,
-                        top: 10.0,
-                        child: Stack(
-                          children: [
-                            const Icon(
-                              Icons.camera_alt,
-                              size: 30.0,
-                              color: Colors.grey,
-                            ),
-                            Positioned(
-                              child: SizedBox(
-                                width: 30.0,
-                                height: 30.0,
-                                child: Center(
-                                  child: Container(
-                                    width: 15.0,
-                                    height: 15.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      color: Colors.white,
-                                    ),
-                                    child: Text(
-                                      '6',
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                      textAlign: TextAlign.center,
+                          right: 10.0,
+                          top: 10.0,
+                          child: Stack(
+                            children: [
+                              const Icon(
+                                Icons.camera_alt,
+                                size: 30.0,
+                                color: Colors.grey,
+                              ),
+                              Positioned(
+                                child: SizedBox(
+                                  width: 30.0,
+                                  height: 30.0,
+                                  child: Center(
+                                    child: Container(
+                                      width: 15.0,
+                                      height: 15.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        color: Colors.white,
+                                      ),
+                                      child: Text(
+                                        cont.resources.length.toString(),
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
-                        )
+                              )
+                            ],
+                          )
                       ),
                     ],
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Text(
-                      'Cần bán Rick Owen',
+                      cont.title,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                     ),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Text(
-                      '9,500,000 VND',
+                      '${cont.price.toString().split('.').first} đ',
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -194,14 +232,14 @@ class HomePage extends GetView<HomeController> {
                           blendMode: BlendMode.srcIn,
                           shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
                           child: const Icon(
-                              Icons.person,
+                              Icons.date_range,
                               color: kPrimaryLightColor,
                               size: 15.0
                           ),
                         ),
                         Flexible(
                           child: Text(
-                            '2 giờ trước - Tp.Hồ Chí Minh',
+                            '${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
@@ -211,7 +249,7 @@ class HomePage extends GetView<HomeController> {
                 ],
               ),
             ),
-          ),
+          )
       ],
     );
   }

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/models/params/upload_product_param.dart';
 import 'package:i_trade/src/domain/services/upload_product_service.dart';
-
+import 'package:image_picker/image_picker.dart';
+import '../../../../core/initialize/core_images.dart';
 import '../../../../core/initialize/theme.dart';
+import '../../../domain/enums/enums.dart';
+import '../../../domain/models/category_model.dart';
 
 class UploadPostController extends GetxController {
   final TextEditingController priceController = TextEditingController();
@@ -13,22 +16,15 @@ class UploadPostController extends GetxController {
   final TextEditingController contentController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
-  RxList<String>  items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
-  ].obs;
-  RxString selectedValue = 'Item1'.obs;
+  RxList<String>  items = ['Chọn danh mục'].obs;
+  RxString selectedValue = 'Chọn danh mục'.obs;
   RxBool isNew = false.obs;
   RxBool isPro = false.obs;
   RxBool isFree = false.obs;
   RxBool isSell = false.obs;
+  final ImagePicker picker = ImagePicker();
   final RxBool isLoading = false.obs;
+  final RxBool isFirst = true.obs;
   final UploadProductService _uploadProductService = Get.find();
   @override
   void onInit() {
@@ -86,6 +82,180 @@ class UploadPostController extends GetxController {
           Navigator.pop(context, true);
         },
       );
+    }
+  }
+
+  Future<void> getCategories({required int pageIndex,required int pageSize}) async {
+    //TODO use test
+    isLoading.call(true);
+    final Either<ErrorObject, List<CategoryModel>> res = await _uploadProductService.getCategories(pageSize: pageSize, pageIndex: pageIndex);
+
+    res.fold(
+          (failure) {
+        isLoading.call(false);
+      },
+          (value) async {
+         for(var cont in value){
+           items.add(cont.name);
+         }
+        isLoading.call(false);
+        isFirst.call(false);
+      },
+    );
+  }
+
+
+  Future mediaSelection({required int index, required BuildContext context}) async {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
+        context: context,
+        builder: (BuildContext ct) {
+          return SizedBox(
+            height: MediaQuery.of(ct).size.shortestSide < 600 ? 200 : 350.0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Chọn chức năng',
+                  style: Theme.of(ct).textTheme.titleLarge!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Visibility(
+                        visible: true,
+                        child: InkWell(
+                          onTap: () => showMediaSelection(
+                              index: index,
+                              context: context,
+                              loaiChucNang: MediaLoaiChucNangDinhKem.camera),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 5.0),
+                                child: Image.asset(
+                                  CoreImages.mbs_camera,
+                                  height: 65.0,
+                                  width: 65.0,
+                                ),
+                              ),
+                              Text(
+                                'Chụp hình',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: true,
+                        child: InkWell(
+                          onTap: () => showMediaSelection(
+                              index: index,
+                              context: context,
+                              loaiChucNang: MediaLoaiChucNangDinhKem.album),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 5.0),
+                                child: Image.asset(
+                                  CoreImages.mbs_albumn,
+                                  height: 65.0,
+                                  width: 65.0,
+                                ),
+                              ),
+                              Text(
+                                'Bộ sưu tập',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  void showMediaSelection(
+      {required int index,
+        required  BuildContext context,
+        required MediaLoaiChucNangDinhKem loaiChucNang}) async {
+    String pathFile = '';
+
+    // FlushbarDatasource flushbar = FlushbarResponse();
+
+    print('vao chon lay hinh tu camera hoac gallery');
+    switch (loaiChucNang) {
+
+    /// Lấy hình từ camera
+      case MediaLoaiChucNangDinhKem.camera:
+        PickedFile? pickedFile = await ImagePicker()
+            .getImage(source: ImageSource.camera, imageQuality: 50);
+        Navigator.pop(context);
+
+        if (pickedFile != null) {
+          pathFile = pickedFile.path;
+        } else {
+          final LostData response = await picker.getLostData();
+
+          if (response.isEmpty) {
+            break;
+          }
+
+          if (response.file != null) {
+            pathFile = pickedFile!.path;
+          }
+        }
+
+        break;
+
+    ///Lấy hình từ Album
+      case MediaLoaiChucNangDinhKem.album:
+        PickedFile? pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+        Navigator.pop(context);
+
+        if (pickedFile != null) {
+          pathFile = pickedFile.path;
+        } else {
+          final LostData response = await picker.getLostData();
+          if (response.isEmpty) {
+            break;
+          }
+          if (response.file != null) {
+            pathFile = pickedFile!.path;
+          }
+        }
+        break;
+      case MediaLoaiChucNangDinhKem.video:
+        // TODO: Handle this case.
+        break;
+      case MediaLoaiChucNangDinhKem.file:
+        // TODO: Handle this case.
+        break;
+    }
+
+    if (pathFile == '') return;
+
+    try {
+      var filename = pathFile.split('/').last;
+      var typeFile = pathFile.split('.').last;
+
+
+    } on Exception catch (ex) {
+      print("lỗi $ex");
     }
   }
 
