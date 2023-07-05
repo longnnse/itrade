@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/home_category_shimmer_widget.dart';
@@ -22,7 +23,7 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     controller.getCategories(pageIndex: 1, pageSize: 10);
-    controller.getPosts(pageIndex: 1, pageSize: 10);
+    controller.getPosts(pageIndex: 1, pageSize: 20);
     return Scaffold(
         backgroundColor: kBackgroundBottomBar,
         body: Column(
@@ -115,7 +116,7 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildItemButton({required BuildContext context, required String title}){
+  Widget _buildItemButton({required BuildContext context, required String title, re}){
     return GestureDetector(
       onTap: () {
         //controller.title.call(title);
@@ -171,6 +172,10 @@ class HomePage extends GetView<HomeController> {
                             borderRadius: BorderRadius.circular(5.0),
                             color: kBackground
                         ),
+                        child: cont.resources.isNotEmpty ? Image.network(
+                          CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
+                          fit: BoxFit.fill
+                        ) : const SizedBox(),
                       ),
                       Positioned(
                           right: 10.0,

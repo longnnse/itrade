@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import '../../../../../core/initialize/theme.dart';
 import '../../../widgets/appbar_customize.dart';
+import '../../information/widgets/bao_cao_vi_pham_page.dart';
 
 
 class ManageHistoryPage extends GetView<ManageController> {
@@ -20,6 +21,16 @@ class ManageHistoryPage extends GetView<ManageController> {
           context: context,
           title: 'Quản lý lịch sử',
           isUseOnlyBack: true,
+          actionRights: [
+            IconButton(
+                onPressed: () => Get.toNamed(BaoCaoViPhamPage.routeName),
+                icon: const Icon(
+                  Icons.report,
+                  color: Colors.white,
+                  size: 25.0,
+                )
+            )
+          ]
         ),
         backgroundColor: kBackgroundBottomBar,
         body: SingleChildScrollView(

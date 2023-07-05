@@ -1,3 +1,5 @@
+import 'package:i_trade/src/domain/models/params/file_param.dart';
+
 class UploadProductParam {
   late String title;
   late String content;
@@ -8,7 +10,7 @@ class UploadProductParam {
   late bool isUsed;
   late bool isFree;
   late bool isProfessional;
-  late List<String> files;
+  late List<FileParam> files;
 
   UploadProductParam(
       {required this.title,

@@ -5,6 +5,7 @@ import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart';
 
+import '../../../../../core/initialize/core_url.dart';
 import '../../../../../core/initialize/theme.dart';
 import '../../../widgets/appbar_customize.dart';
 import '../home_controller.dart';
@@ -135,10 +136,15 @@ class ProductDetailPage extends GetView<HomeController> {
         children: [
           Stack(
             children: [
-              Container(
+              Obx(() => Container(
                 color: kBackground,
                 height: MediaQuery.of(context).size.height * 0.25,
-              ),
+                width: MediaQuery.of(context).size.width,
+                child: content.resources.isNotEmpty ? Image.network(
+                    CoreUrl.baseImageURL + content.resources[controller.countImage.value].id + content.resources[controller.countImage.value].extension,
+                    fit: BoxFit.fill
+                ) : const SizedBox(),
+              )),
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.1,
                 left: 10.0,
@@ -149,17 +155,27 @@ class ProductDetailPage extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: (){},
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
+                        onPressed: () => controller.nextImage(
+                            controller.countImage.value > 0 ?
+                            controller.countImage.value - 1 :
+                            controller.countImage.value
+                        ),
+                        icon: Icon(
+                          Icons.arrow_circle_left_rounded,
                           size: 25.0,
+                          color: Colors.black.withOpacity(0.7),
                         )
                       ),
                       IconButton(
-                          onPressed: (){},
-                          icon: const Icon(
-                              Icons.arrow_forward_ios,
+                          onPressed: () => controller.nextImage(
+                              controller.countImage.value < (content.resources.length - 1) ?
+                              controller.countImage.value + 1 :
+                              controller.countImage.value
+                          ),
+                          icon: Icon(
+                              Icons.arrow_circle_right_rounded,
                             size: 25.0,
+                            color: Colors.black.withOpacity(0.7),
                           )
                       ),
                     ],

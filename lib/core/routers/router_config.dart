@@ -32,6 +32,8 @@ import 'package:i_trade/src/presentation/pages/search/search_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart';
 
+import '../../src/domain/services/manage_service.dart';
+import '../../src/infrastructure/repositories/manage_repository.dart';
 import '../../src/presentation/pages/change_password/change_password_page.dart';
 import '../../src/presentation/pages/dashboard/dashboard_page.dart';
 import '../../src/presentation/pages/login/login_controller.dart';
@@ -65,7 +67,8 @@ class ITradeRouterConfigs {
       page: () => const ManagePage(),
       binding: BindingsBuilder(
             () {
-          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<ManageService>(ManageRepositories());
           Get.lazyPut(() => ManageController());
         },
       ),

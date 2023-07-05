@@ -12,6 +12,7 @@ class HomeController extends GetxController{
   RxString title = ''.obs;
   RxString idPost = ''.obs;
   RxBool isMore = false.obs;
+  RxInt countImage = 0.obs;
   final RxBool isLoading = false.obs;
   final RxBool isLoadingProduct = false.obs;
   final RxBool isLoadingData = false.obs;
@@ -25,6 +26,10 @@ class HomeController extends GetxController{
   @override
   void onInit() {
     super.onInit();
+  }
+
+  void nextImage(int count){
+    countImage.call(count);
   }
 
   void goDetail({required String id}){

@@ -4,6 +4,7 @@ import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
 import 'package:i_trade/src/presentation/pages/search/search_page.dart';
+import 'package:intl/intl.dart';
 
 import '../information/information_page.dart';
 
@@ -13,7 +14,8 @@ class DashboardController extends GetxController {
   RxString lastSelected = 'TAB: 0'.obs;
   RxDouble itemCount = 20.0.obs;
   Rx<Icon> icon = const Icon(Icons.home, size: 30.0,).obs;
-
+  Rx<RangeValues> currentRangeValues = const RangeValues(0, 30000000).obs;
+  var formatNum = NumberFormat.simpleCurrency(locale: 'vi-VN', decimalDigits: 0);
   @override
   void onInit() {
     super.onInit();

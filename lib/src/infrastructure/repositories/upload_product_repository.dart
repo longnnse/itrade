@@ -5,19 +5,18 @@ import 'package:core_http/core_http.dart';
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/initialize/core_url.dart';
-import 'package:i_trade/core/utils/app_settings.dart';
-import 'package:i_trade/src/domain/models/params/register_account_param.dart';
 import 'package:i_trade/src/domain/models/params/upload_product_param.dart';
 import 'package:i_trade/src/domain/services/upload_product_service.dart';
 
 import '../../domain/models/category_model.dart';
+import '../../domain/models/product_model.dart';
 
 
 class UploadProdcutRepositories implements UploadProductService {
   final CoreHttp _coreHttp = Get.find();
 
   @override
-  Future<Either<ErrorObject, UploadProductParam>> postUploadProduct({required UploadProductParam param}) async {
+  Future<Either<ErrorObject, Data>> postUploadProduct({required UploadProductParam param}) async {
     try {
       const url = '${CoreUrl.baseURL}/Post';
 
@@ -27,10 +26,11 @@ class UploadProdcutRepositories implements UploadProductService {
         'IsTrade': param.isTrade,
         'IsSell': param.isSell,
         'isUsed': param.isUsed,
-        'CategoryName': param.categoryName,
-        'price': param.price,
         'isProfessional': param.isProfessional,
         'isFree': param.isFree,
+        'CategoryName': param.categoryName,
+        'price': param.price,
+
         'Files': param.files
       };
 
@@ -45,7 +45,7 @@ class UploadProdcutRepositories implements UploadProductService {
               'xhY2VfU3lzdGVtIn0.1GC0fNz0RUw4SMKM-gwkxBrN1e2SSOdB-CDr75_ibd0'});
 
       if (res != null) {
-        final data = UploadProductParam.fromJson(res);
+        final data = Data.fromJson(res);
         return Right(data);
       }
       return Left(ErrorObject.mapFailureToErrorObject(

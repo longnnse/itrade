@@ -9,6 +9,7 @@ import '../../../../core/initialize/core_images.dart';
 import '../../../../core/initialize/theme.dart';
 import '../../../domain/enums/enums.dart';
 import '../../../domain/models/category_model.dart';
+import '../../../domain/models/product_model.dart';
 
 class UploadPostController extends GetxController {
   final TextEditingController priceController = TextEditingController();
@@ -34,6 +35,10 @@ class UploadPostController extends GetxController {
   Future<void> postUploadProduct({required BuildContext context}) async {
     //TODO use test
     bool isValid = true;
+    if(selectedValue.value == 'Chọn danh mục'){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng chọn danh mục', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
     if(priceController.text == ''){
       isValid = false;
       Get.snackbar('Thông báo', 'Vui lòng nhập giá tiền', backgroundColor: kSecondaryRed, colorText: kTextColor);
@@ -65,7 +70,7 @@ class UploadPostController extends GetxController {
           files: [],
       );
       isLoading.call(true);
-      final Either<ErrorObject, UploadProductParam> res = await _uploadProductService.postUploadProduct(param: param);
+      final Either<ErrorObject, Data> res = await _uploadProductService.postUploadProduct(param: param);
 
       res.fold(
             (failure) {

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/utils/format_datetime.dart';
+import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_history_page.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_product_shimmer_widget.dart';
 
+import '../../../../core/initialize/core_url.dart';
 import '../../../../core/initialize/theme.dart';
 
 
@@ -16,6 +20,8 @@ class ManagePage extends GetView<ManageController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ManageController());
+    controller.getPersonalPosts();
     return Scaffold(
         backgroundColor: kBackground,
         body: Column(
@@ -59,8 +65,29 @@ class ManagePage extends GetView<ManageController> {
                         ],
                       ),
                     ),
-                    for(int i = 0; i < 2; i++)
-                      _buildItem(context: context),
+                    Obx(() {
+                      if (controller.isLoading.value) {
+                        return const ManageProductShimmerWidget(
+                          columnCount: 1,
+                        );
+                      }
+                      if(controller.productList.value!.isNotEmpty) {
+                        return Column(
+                          children: [
+                            for(var cont in controller.productList.value!)
+                              _buildItem(context: context, model: cont)
+                          ],
+                        );
+                      } else {
+                        return Center(
+                            child: Text(
+                              'Không có dữ liệu',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                            )
+                        );
+                      }
+                    })
+
                   ],
                 ),
               )
@@ -80,7 +107,7 @@ class ManagePage extends GetView<ManageController> {
         ));
   }
 
-  Widget _buildItem({required BuildContext context}){
+  Widget _buildItem({required BuildContext context, required Data model}){
     return Container(
       width: MediaQuery.of(context).size.width,
       color: kBackgroundBottomBar,
@@ -102,6 +129,10 @@ class ManagePage extends GetView<ManageController> {
                           borderRadius: BorderRadius.circular(5.0),
                           color: kBackground
                       ),
+                      child: model.resources.isNotEmpty ? Image.network(
+                          CoreUrl.baseImageURL + model.resources[0].id + model.resources[0].extension,
+                          fit: BoxFit.fill
+                      ) : const SizedBox(),
                     ),
                     Positioned(
                         right: 10.0,
@@ -126,7 +157,7 @@ class ManagePage extends GetView<ManageController> {
                                       color: Colors.white,
                                     ),
                                     child: Text(
-                                      '6',
+                                      model.resources.length.toString(),
                                       style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
                                       textAlign: TextAlign.center,
                                     ),
@@ -148,17 +179,17 @@ class ManagePage extends GetView<ManageController> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Cần bán Rick Owen',
+                          model.title,
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(height: 5.0,),
                         Text(
-                          '9,500,000 VND',
+                          '${model.price.toString().split('.').first} đ',
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 5.0,),
                         Text(
-                          'Đã đăng 04:55 08/05/2023',
+                          'Đã đăng ${FormatDateTime.getHourFormat(model.dateUpdated)} ${FormatDateTime.getDateFormat(model.dateUpdated)}',
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
                         )
                       ],
