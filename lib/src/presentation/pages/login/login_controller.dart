@@ -53,7 +53,7 @@ class LoginController extends GetxController {
           emailController.clear();
           passwordController.clear();
           userEntity.call(UserEntity.fromJson(Jwt.parseJwt(loginModel.value!.accessToken)));
-          await AppSettings.saveSharePrefByUser(userEntity.value!);
+          await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken);
           isLoading.call(false);
           Navigator.pop(context, true);
         },

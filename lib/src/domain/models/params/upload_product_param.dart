@@ -3,37 +3,31 @@ import 'package:i_trade/src/domain/models/params/file_param.dart';
 class UploadProductParam {
   late String title;
   late String content;
-  late String categoryName;
+  late String location;
   late double price;
-  late bool isTrade;
-  late bool isSell;
   late bool isUsed;
-  late bool isFree;
-  late bool isProfessional;
+  late String type;
   late List<FileParam> files;
+  late List<String> categoryIds;
 
   UploadProductParam(
       {required this.title,
         required this.content,
-        required this.categoryName,
+        required this.location,
         required this.price,
-        required this.isTrade,
-        required this.isSell,
         required this.isUsed,
-        required this.isFree,
-        required this.isProfessional,
-        required this.files});
+        required this.type,
+        required this.files,
+        required this.categoryIds});
 
   UploadProductParam.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    content = json['content'];
-    categoryName = json['categoryName'];
-    price = json['price'];
-    isTrade = json['isTrade'];
-    isSell = json['isSell'];
-    isUsed = json['isUsed'];
-    isFree = json['isFree'];
-    isProfessional = json['isProfessional'];
-    files = json['files'];
+    title = json['Title'];
+    content = json['Content'];
+    location = json['Location'];
+    price = json['Price'];
+    isUsed = json['IsUsed'];
+    type = json['Type'];
+    files = json['Files'];
+    categoryIds = json['CategoryIds'];
   }
 }

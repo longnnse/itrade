@@ -136,15 +136,19 @@ class ProductDetailPage extends GetView<HomeController> {
         children: [
           Stack(
             children: [
-              Obx(() => Container(
+              content.resources.isNotEmpty ? Obx(() => Container(
                 color: kBackground,
                 height: MediaQuery.of(context).size.height * 0.25,
                 width: MediaQuery.of(context).size.width,
-                child: content.resources.isNotEmpty ? Image.network(
+                child: Image.network(
                     CoreUrl.baseImageURL + content.resources[controller.countImage.value].id + content.resources[controller.countImage.value].extension,
                     fit: BoxFit.fill
-                ) : const SizedBox(),
-              )),
+                ),
+              ))  : Container(
+                color: kBackground,
+                height: MediaQuery.of(context).size.height * 0.25,
+                width: MediaQuery.of(context).size.width,
+              ),
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.1,
                 left: 10.0,

@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 import 'package:i_trade/src/presentation/widgets/appbar_customize.dart';
@@ -103,7 +108,7 @@ class UploadPostPage extends GetView<UploadPostController> {
                           .map((item) => DropdownMenuItem<String>(
                         value: item,
                         child: Text(
-                          item,
+                          item.split("@").first,
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -361,6 +366,8 @@ class UploadPostPage extends GetView<UploadPostController> {
   }
 
   Widget _buildUploadPicture(BuildContext context){
+    int indexListMedia = 0;
+
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(10.0),
@@ -413,7 +420,97 @@ class UploadPostPage extends GetView<UploadPostController> {
                 ],
               ),
             ),
-          )
+          ),
+          Obx(() {
+            return controller.mediaModels.value.isNotEmpty ? Container(
+              height: 80,
+              margin: const EdgeInsets.only(
+                  left: 16.0, right: 16.0, top: 16.0),
+              child: Obx(() => ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.mediaModels.value.length,
+                itemBuilder: (context, index) {
+                  indexListMedia = controller.mediaModels.value != null
+                      ? controller.mediaModels.value.length
+                      : 0;
+
+                  return InkWell(
+                    onTap: () {
+                    },
+                    child: Container(
+                        margin: const EdgeInsets.only(right: 10.0),
+                        height: 70,
+                        width: ((MediaQuery.of(context).size.width -
+                            (16 * 2) -
+                            (10 * 2)) /
+                            3),
+                        child: controller.mediaModels.value[index].isLoading !=
+                            true
+                            ? Stack(
+                          children: [
+                            Image.file(
+                              File(controller.mediaModels.value[index].pathFile!),
+                              fit: BoxFit.cover,
+                              height: 70,
+                              width:
+                              ((MediaQuery.of(context)
+                                  .size
+                                  .width -
+                                  (16 * 2) -
+                                  (10 * 2)) /
+                                  3),
+                            ),
+                            Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment
+                                  .center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => controller.deleteImage(index),
+                                      child: Container(
+                                        height: 35,
+                                        width: 35,
+                                        decoration:
+                                        const BoxDecoration(
+                                          shape: BoxShape
+                                              .circle,
+                                          color: Color
+                                              .fromRGBO(
+                                              00,
+                                              00,
+                                              00,
+                                              0.4),
+                                        ),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color:
+                                          Colors.white,
+                                          size: 25,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                            : const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 15.0,
+                                horizontal: 30.0),
+                            child:
+                            CircularProgressIndicator())),
+                  );
+                },
+              )),
+            ) : const SizedBox();
+          })
         ],
       ),
     );

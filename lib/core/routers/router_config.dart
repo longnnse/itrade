@@ -27,6 +27,7 @@ import 'package:i_trade/src/presentation/pages/login/login_page.dart';
 import 'package:i_trade/src/presentation/pages/login/widget/register_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.dart';
 import 'package:i_trade/src/presentation/pages/search/search_controller.dart';
 import 'package:i_trade/src/presentation/pages/search/search_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
@@ -65,6 +66,17 @@ class ITradeRouterConfigs {
     GetPage(
       name: ManagePage.routeName,
       page: () => const ManagePage(),
+      binding: BindingsBuilder(
+            () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<ManageService>(ManageRepositories());
+          Get.lazyPut(() => ManageController());
+        },
+      ),
+    ),
+    GetPage(
+      name: ManageTradePage.routeName,
+      page: () => const ManageTradePage(),
       binding: BindingsBuilder(
             () {
           Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);

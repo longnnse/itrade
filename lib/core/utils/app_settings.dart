@@ -45,7 +45,7 @@ class AppSettings {
     }
   }
 
-  static Future<void> saveSharePrefByUser(UserEntity userModel) async {
+  static Future<void> saveSharePrefByUser(UserEntity userModel, String accessToken) async {
     try {
       clearAllSharePref();
       await Future.delayed(const Duration(milliseconds: 100));
@@ -60,6 +60,8 @@ class AppSettings {
           KeyAppSetting.userName, userModel.userName ?? "");
       AppSettings.setValue<String>(
           KeyAppSetting.phoneNumber, userModel.phoneNumber ?? "");
+      AppSettings.setValue<String>(
+          KeyAppSetting.token, accessToken ?? "");
       AppSettings.setValue<int>(
           KeyAppSetting.exp, userModel.exp ?? 0);
       AppSettings.setValue<String>(
@@ -81,6 +83,7 @@ class AppSettings {
     setValue<String>(KeyAppSetting.fullName, "");
     setValue<String>(KeyAppSetting.userName, "");
     setValue<String>(KeyAppSetting.phoneNumber, "");
+    setValue<String>(KeyAppSetting.token, "");
     setValue<int>(KeyAppSetting.exp, 0);
     setValue<String>(KeyAppSetting.iss, "");
     setValue<String>(KeyAppSetting.aud, "");
@@ -115,6 +118,9 @@ enum KeyAppSetting {
 
   /// type: String
   urlImage,
+
+  /// type: String
+  token,
 
   /// type: bool
   isDangNhap,

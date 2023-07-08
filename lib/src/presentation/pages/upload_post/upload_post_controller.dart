@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/models/params/upload_product_param.dart';
 import 'package:i_trade/src/domain/services/upload_product_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,7 +14,9 @@ import '../../../../core/initialize/core_images.dart';
 import '../../../../core/initialize/theme.dart';
 import '../../../domain/enums/enums.dart';
 import '../../../domain/models/category_model.dart';
+import '../../../domain/models/params/file_param.dart';
 import '../../../domain/models/product_model.dart';
+import 'package:http/http.dart' as http;
 
 class UploadPostController extends GetxController {
   final TextEditingController priceController = TextEditingController();
@@ -19,6 +26,8 @@ class UploadPostController extends GetxController {
 
   RxList<String>  items = ['Chọn danh mục'].obs;
   RxString selectedValue = 'Chọn danh mục'.obs;
+  RxList<FileParam>? files;
+  RxList<MediaFilesModel> mediaModels = (List<MediaFilesModel>.of([])).obs;
   RxBool isNew = false.obs;
   RxBool isPro = false.obs;
   RxBool isFree = false.obs;
@@ -47,10 +56,10 @@ class UploadPostController extends GetxController {
       isValid = false;
       Get.snackbar('Thông báo', 'Vui lòng nhập nội dung', backgroundColor: kSecondaryRed, colorText: kTextColor);
     }
-    // if(addressController.text == ''){
-    //   isValid = false;
-    //   Get.snackbar('Thông báo', 'Vui lòng nhập địa chỉ', backgroundColor: kSecondaryRed, colorText: kTextColor);
-    // }
+    if(addressController.text == ''){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng nhập địa chỉ', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
     if(titleController.text == ''){
       isValid = false;
       Get.snackbar('Thông báo', 'Vui lòng nhập tiêu đề', backgroundColor: kSecondaryRed, colorText: kTextColor);
@@ -60,14 +69,12 @@ class UploadPostController extends GetxController {
       UploadProductParam param = UploadProductParam(
           title: titleController.text,
           content: contentController.text,
-          categoryName: selectedValue.value,
+          location: addressController.text,
           price: double.parse(priceController.text),
-          isTrade: isSell.value == false ? true : false,
-          isSell: isSell.value,
-          isUsed: isNew.value,
-          isFree: isFree.value,
-          isProfessional: isPro.value,
+          isUsed: isNew.value == false ? true : false,
+          type: isFree.value == true ? 'Free' : isSell.value == true ? 'Sell' : 'Trade',
           files: [],
+          categoryIds: [selectedValue.value.split('@').last],
       );
       isLoading.call(true);
       final Either<ErrorObject, Data> res = await _uploadProductService.postUploadProduct(param: param);
@@ -101,7 +108,7 @@ class UploadPostController extends GetxController {
       },
           (value) async {
          for(var cont in value){
-           items.add(cont.name);
+           items.add('${cont.name}@${cont.id}');
          }
         isLoading.call(false);
         isFirst.call(false);
@@ -109,6 +116,9 @@ class UploadPostController extends GetxController {
     );
   }
 
+  void deleteImage(int index){
+    mediaModels.call().removeAt(index);
+  }
 
   Future mediaSelection({required int index, required BuildContext context}) async {
     showModalBottomSheet(
@@ -258,9 +268,62 @@ class UploadPostController extends GetxController {
       var filename = pathFile.split('/').last;
       var typeFile = pathFile.split('.').last;
 
+      mediaModels.call().add(MediaFilesModel(
+        isLoading: false,
+        pathFile: pathFile,
+        typeFile: typeFile,
+        urlFile: '',
+        isShow: true,
+        uint8list: Uint8List.fromList(utf8.encode(pathFile))
+      ));
+      // medias[index] = medias.elementAt(index).copyWith(
+      //     pathFile: pathFile,
+      //     typeFile: typeFile,
+      //     urlFile: '',
+      //     isLoading: false);
+      // http.ByteStream? stream = await uploadFile(pathFile, filename);
+      // if (stream != null) {
+      //   bool isCheckUploadSuccess = false;
+      //   stream.transform(utf8.decoder).listen((value) {
+      //
+      //     medias[index] = medias.elementAt(index).copyWith(
+      //         pathFile: pathFile,
+      //         typeFile: typeFile,
+      //         urlFile: jsonDecode(value),
+      //         isLoading: false);
+      //
+      //     isCheckUploadSuccess = true;
+      //   });
+      // } else {
+      //   Get.snackbar('Thông báo', 'Tải tập tin lỗi!', backgroundColor: kSecondaryRed, colorText: kTextColor);
+      // }
 
     } on Exception catch (ex) {
-      print("lỗi $ex");
+      Get.snackbar('Thông báo', 'Tải tập tin lỗi!', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+  }
+
+
+  Future<http.ByteStream?> uploadFile(String path, String filename) async {
+    var postUri = Uri.parse(CoreUrl.baseImageURL);
+
+    /// Tạm thời đóng
+    var request = new http.MultipartRequest("POST", postUri);
+    // request.fields['PhanLoai'] = 'VPTT';
+
+    Uri uri = Uri(path: path);
+    request.files.add(http.MultipartFile.fromBytes(
+        'file', await File.fromUri(uri).readAsBytes(),
+        filename: filename));
+
+    try {
+      http.StreamedResponse streamedResponse = await request.send();
+      if (streamedResponse.statusCode != 200) {
+        return null;
+      }
+      return streamedResponse.stream;
+    } catch (e) {
+      return null;
     }
   }
 

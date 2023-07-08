@@ -5,6 +5,7 @@ import 'package:core_http/core_http.dart';
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/initialize/core_url.dart';
+import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/models/params/upload_product_param.dart';
 import 'package:i_trade/src/domain/services/upload_product_service.dart';
 
@@ -23,26 +24,16 @@ class UploadProdcutRepositories implements UploadProductService {
       final Map<String, dynamic> queryParameters = {
         'Title': param.title,
         'Content': param.content,
-        'IsTrade': param.isTrade,
-        'IsSell': param.isSell,
+        'Location': param.location,
+        'Price': param.price,
         'isUsed': param.isUsed,
-        'isProfessional': param.isProfessional,
-        'isFree': param.isFree,
-        'CategoryName': param.categoryName,
-        'price': param.price,
-
-        'Files': param.files
+        'Type': param.type,
+        'Files': param.files,
+        'CategoryIds': param.categoryIds
       };
 
       final res = await _coreHttp.post(url, queryParameters,
-          headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-              'eyJVc2VySWQiOiJkMDcyNzNjYy1jZDQ0LTRkODMtODg3My0wNjNjOGM2Mjg4YWEiLCJ'
-              'FbWFpbCI6ImxvbmdubEBmcHQuZWR1LnZuIiwiRnVsbE5hbWUiOiJOZ-G7jWMgTG9uZ0'
-              '5ndXnhu4VuIiwiVXNlck5hbWUiOiJsb25nbmwiLCJodHRwOi8vc2NoZW1hcy5taWNyb'
-              '3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNZW1iZXIi'
-              'LCJQaG9uZU51bWJlciI6IjA5ODc2NTQzMjEiLCJleHAiOjE2ODgzMDIzOTgsImlzcyI'
-              '6Ik9ubGluZV9NYXJrZXRwbGFjZV9TeXN0ZW0iLCJhdWQiOiJPbmxpbmVfTWFya2V0cG'
-              'xhY2VfU3lzdGVtIn0.1GC0fNz0RUw4SMKM-gwkxBrN1e2SSOdB-CDr75_ibd0'});
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = Data.fromJson(res);
