@@ -28,6 +28,7 @@ class UploadPostController extends GetxController {
   RxString selectedValue = 'Chọn danh mục'.obs;
   RxList<FileParam>? files;
   RxList<MediaFilesModel> mediaModels = (List<MediaFilesModel>.of([])).obs;
+  RxList<FileParam> lstFiles = (List<FileParam>.of([])).obs;
   RxBool isNew = false.obs;
   RxBool isPro = false.obs;
   RxBool isFree = false.obs;
@@ -73,7 +74,7 @@ class UploadPostController extends GetxController {
           price: double.parse(priceController.text),
           isUsed: isNew.value == false ? true : false,
           type: isFree.value == true ? 'Free' : isSell.value == true ? 'Sell' : 'Trade',
-          files: [],
+          files: lstFiles.call(),
           categoryIds: [selectedValue.value.split('@').last],
       );
       isLoading.call(true);
@@ -222,6 +223,10 @@ class UploadPostController extends GetxController {
 
         if (pickedFile != null) {
           pathFile = pickedFile.path;
+          print('1111');
+          FileParam param = FileParam(contentType: 'application/json', contentDisposition: '', headers: IHeaderDictionary(contentLength: pathFile.length), length: pathFile.length, name: pathFile.split('/').last, fileName: pathFile);
+          lstFiles.call().add(param);
+          print(lstFiles.length);
         } else {
           final LostData response = await picker.getLostData();
 
@@ -272,7 +277,7 @@ class UploadPostController extends GetxController {
         isLoading: false,
         pathFile: pathFile,
         typeFile: typeFile,
-        urlFile: '',
+        urlFile: pathFile,
         isShow: true,
         uint8list: Uint8List.fromList(utf8.encode(pathFile))
       ));
