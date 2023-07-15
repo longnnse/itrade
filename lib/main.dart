@@ -7,6 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_page.dart';
+import 'package:i_trade/src/presentation/pages/login/login_controller.dart';
+import 'package:i_trade/src/presentation/pages/login/login_page.dart';
 import 'core/config/module_config.dart';
 import 'core/initialize/global_binding.dart';
 import 'core/initialize/theme.dart';
@@ -84,13 +86,14 @@ class _PressPageState extends State<PressPage> {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     Get.put(DashboardController());
+    Get.put(LoginController());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: DashboardPage(),
+    return Scaffold(
+      body: AppSettings.getValue(KeyAppSetting.isDangNhap) == true ? const DashboardPage() : const LoginPage(),
     );
   }
 }

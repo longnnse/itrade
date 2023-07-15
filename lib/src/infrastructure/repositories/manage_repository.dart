@@ -6,11 +6,14 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/models/category_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
+import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_model.dart';
+import 'package:i_trade/src/domain/models/trade_result_model.dart';
 import 'package:i_trade/src/domain/services/home_service.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
 
 import '../../../core/initialize/core_url.dart';
+import '../../../core/utils/app_settings.dart';
 
 class ManageRepositories implements ManageService {
   final CoreHttp _coreHttp = Get.find();
@@ -21,14 +24,7 @@ class ManageRepositories implements ManageService {
       const url = '${CoreUrl.baseURL}/Post/Personal';
 
       final res = await _coreHttp.get(url,
-          headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-              'eyJVc2VySWQiOiJkMDcyNzNjYy1jZDQ0LTRkODMtODg3My0wNjNjOGM2Mjg4YWEiLCJ'
-              'FbWFpbCI6ImxvbmdubEBmcHQuZWR1LnZuIiwiRnVsbE5hbWUiOiJOZ-G7jWMgTG9uZ0'
-              '5ndXnhu4VuIiwiVXNlck5hbWUiOiJsb25nbmwiLCJodHRwOi8vc2NoZW1hcy5taWNyb'
-              '3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNZW1iZXIi'
-              'LCJQaG9uZU51bWJlciI6IjA5ODc2NTQzMjEiLCJleHAiOjE2ODgzMDIzOTgsImlzcyI'
-              '6Ik9ubGluZV9NYXJrZXRwbGFjZV9TeXN0ZW0iLCJhdWQiOiJPbmxpbmVfTWFya2V0cG'
-              'xhY2VfU3lzdGVtIn0.1GC0fNz0RUw4SMKM-gwkxBrN1e2SSOdB-CDr75_ibd0'});
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = res
@@ -64,14 +60,7 @@ class ManageRepositories implements ManageService {
 
 
       final res = await _coreHttp.get(url, queryParameters: queryParameters,
-          headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-              'eyJVc2VySWQiOiJkMDcyNzNjYy1jZDQ0LTRkODMtODg3My0wNjNjOGM2Mjg4YWEiLCJ'
-              'FbWFpbCI6ImxvbmdubEBmcHQuZWR1LnZuIiwiRnVsbE5hbWUiOiJOZ-G7jWMgTG9uZ0'
-              '5ndXnhu4VuIiwiVXNlck5hbWUiOiJsb25nbmwiLCJodHRwOi8vc2NoZW1hcy5taWNyb'
-              '3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNZW1iZXIi'
-              'LCJQaG9uZU51bWJlciI6IjA5ODc2NTQzMjEiLCJleHAiOjE2ODgzMDIzOTgsImlzcyI'
-              '6Ik9ubGluZV9NYXJrZXRwbGFjZV9TeXN0ZW0iLCJhdWQiOiJPbmxpbmVfTWFya2V0cG'
-              'xhY2VfU3lzdGVtIn0.1GC0fNz0RUw4SMKM-gwkxBrN1e2SSOdB-CDr75_ibd0'});
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = TradeModel.fromJson(res);
@@ -101,14 +90,7 @@ class ManageRepositories implements ManageService {
 
 
       final res = await _coreHttp.post(url, queryParameters,
-          headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-              'eyJVc2VySWQiOiJkMDcyNzNjYy1jZDQ0LTRkODMtODg3My0wNjNjOGM2Mjg4YWEiLCJ'
-              'FbWFpbCI6ImxvbmdubEBmcHQuZWR1LnZuIiwiRnVsbE5hbWUiOiJOZ-G7jWMgTG9uZ0'
-              '5ndXnhu4VuIiwiVXNlck5hbWUiOiJsb25nbmwiLCJodHRwOi8vc2NoZW1hcy5taWNyb'
-              '3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNZW1iZXIi'
-              'LCJQaG9uZU51bWJlciI6IjA5ODc2NTQzMjEiLCJleHAiOjE2ODgzMDIzOTgsImlzcyI'
-              '6Ik9ubGluZV9NYXJrZXRwbGFjZV9TeXN0ZW0iLCJhdWQiOiJPbmxpbmVfTWFya2V0cG'
-              'xhY2VfU3lzdGVtIn0.1GC0fNz0RUw4SMKM-gwkxBrN1e2SSOdB-CDr75_ibd0'});
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = DataTrade.fromJson(res);
@@ -138,14 +120,7 @@ class ManageRepositories implements ManageService {
 
 
       final res = await _coreHttp.post(url, queryParameters,
-          headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-              'eyJVc2VySWQiOiJkMDcyNzNjYy1jZDQ0LTRkODMtODg3My0wNjNjOGM2Mjg4YWEiLCJ'
-              'FbWFpbCI6ImxvbmdubEBmcHQuZWR1LnZuIiwiRnVsbE5hbWUiOiJOZ-G7jWMgTG9uZ0'
-              '5ndXnhu4VuIiwiVXNlck5hbWUiOiJsb25nbmwiLCJodHRwOi8vc2NoZW1hcy5taWNyb'
-              '3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNZW1iZXIi'
-              'LCJQaG9uZU51bWJlciI6IjA5ODc2NTQzMjEiLCJleHAiOjE2ODgzMDIzOTgsImlzcyI'
-              '6Ik9ubGluZV9NYXJrZXRwbGFjZV9TeXN0ZW0iLCJhdWQiOiJPbmxpbmVfTWFya2V0cG'
-              'xhY2VfU3lzdGVtIn0.1GC0fNz0RUw4SMKM-gwkxBrN1e2SSOdB-CDr75_ibd0'});
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = DataTrade.fromJson(res);
@@ -163,4 +138,124 @@ class ManageRepositories implements ManageService {
           failure: const NoConnectionFailure()));
     }
   }
+
+  @override
+  Future<Either<ErrorObject, TradeResultModel>> postTrading({required String fromPostId, required String toPostId}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Trading';
+
+      final Map<String, dynamic> queryParameters = {
+        'fromPostId': fromPostId,
+        'toPostId': toPostId,
+      };
+
+
+      final res = await _coreHttp.post(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = TradeResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, List<RequestResultModel>>> getRequestByID({required String postID}) async {
+    try {
+      final url = '${CoreUrl.baseURL}/Request/$postID';
+
+      final res = await _coreHttp.get(url,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = res
+            .map<RequestResultModel>(
+                (e) => RequestResultModel.fromJson(e))
+            .toList();
+        return Right(data ?? []);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, RequestResultModel>> postAcceptRequest({required String tradeID}) async{
+    try {
+      const url = '${CoreUrl.baseURL}/Request/AcceptRequest';
+
+      final Map<String, dynamic> queryParameters = {
+        'id': tradeID,
+      };
+
+
+      final res = await _coreHttp.post(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = RequestResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, RequestResultModel>> postDenyReques({required String tradeID}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Request/DenyRequest';
+
+      final Map<String, dynamic> queryParameters = {
+        'id': tradeID,
+      };
+
+
+      final res = await _coreHttp.post(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = RequestResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
 }

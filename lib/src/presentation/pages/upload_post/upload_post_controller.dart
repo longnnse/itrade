@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/models/params/upload_product_param.dart';
 import 'package:i_trade/src/domain/services/upload_product_service.dart';
+import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/initialize/core_images.dart';
 import '../../../../core/initialize/theme.dart';
@@ -36,6 +37,8 @@ class UploadPostController extends GetxController {
   final ImagePicker picker = ImagePicker();
   final RxBool isLoading = false.obs;
   final RxBool isFirst = true.obs;
+  final RxString toPostID = ''.obs;
+  final RxBool isPostToTrade = false.obs;
   final UploadProductService _uploadProductService = Get.find();
   @override
   void onInit() {
@@ -86,6 +89,10 @@ class UploadPostController extends GetxController {
           Get.snackbar('Thông báo', failure.message, backgroundColor: kSecondaryRed, colorText: kTextColor);
         },
             (value) async {
+          if(isPostToTrade.value == true){
+            final ManageController manageController = Get.find();
+            await manageController.postTrading(fromPostId: value.id, toPostId: toPostID.value);
+          }
           Get.snackbar('Thông báo', 'Đăng bài thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
           titleController.clear();
           contentController.clear();

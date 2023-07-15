@@ -61,8 +61,8 @@ dependencies:
 
   core_http:
     git:
-      url: https://git.vietinfo.tech:8443/flutter_package_project/core_http.git
-      ref: dev
+      url: https://github.com/longnnse/httpcore
+      ref: main
 dev_dependencies:
   flutter_test:
     sdk: flutter

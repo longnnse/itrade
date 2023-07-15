@@ -5,8 +5,6 @@ import 'dart:typed_data';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:i_trade/core/initialize/core_url.dart';
-import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 import 'package:i_trade/src/presentation/widgets/appbar_customize.dart';
 
@@ -30,7 +28,7 @@ class UploadPostPage extends GetView<UploadPostController> {
     return Scaffold(
       appBar: AppbarCustomize.buildAppbar(
         context: context,
-        title: 'Đăng bài',
+        title: controller.isPostToTrade.value == false ? 'Đăng bài' : 'Đăng bài trao đổi',
         isUseOnlyBack: true,
       ),
         backgroundColor: kBackground,
@@ -262,25 +260,27 @@ class UploadPostPage extends GetView<UploadPostController> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10.0,),
-                    GestureDetector(
-                      onTap: () => controller.isSell.call(true),
-                      child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground
-                        ),
-                        child: Text(
-                          'Bán',
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody,
-                              fontWeight: FontWeight.w500
+                    if(controller.isPostToTrade.value == false)...[
+                      const SizedBox(width: 10.0,),
+                      GestureDetector(
+                        onTap: () => controller.isSell.call(true),
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground
                           ),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            'Bán',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody,
+                                fontWeight: FontWeight.w500
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                    ),
+                      )
+                    ],
                   ],
                 )),
                 _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number, textController: controller.priceController),

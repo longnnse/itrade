@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:i_trade/main.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_pham_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
@@ -49,14 +50,15 @@ class InformationController extends GetxController {
   }
 
   Future<void> onButtonClick() async {
-    if(AppSettings.getValue(KeyAppSetting.isDangNhap) == true){
-      AppSettings.clearAllSharePref();
-
-    }
-    final result = await Get.toNamed(LoginPage.routeName);
-    if(result == true){
-      checkInfoUser();
-    }
+    // if(AppSettings.getValue(KeyAppSetting.isDangNhap) == true){
+    //
+    // }
+    AppSettings.clearAllSharePref();
+    Get.offNamedUntil('LoginPage', (route) => false);
+    // final result = Get.toNamed(LoginPage.routeName);
+    // if(result == true){
+    //   checkInfoUser();
+    // }
   }
 
   void goPostProduct(){

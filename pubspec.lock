@@ -53,9 +53,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: dev
-      resolved-ref: fe0729514ca3bf914d490ae526058819dd9e71d3
-      url: "https://git.vietinfo.tech:8443/flutter_package_project/core_http.git"
+      ref: main
+      resolved-ref: "2e71ad1ff71ed8212efc320548c199486dcf847c"
+      url: "https://github.com/longnnse/httpcore"
     source: git
     version: "0.0.1"
   cross_file:

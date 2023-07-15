@@ -53,8 +53,8 @@ class Data {
   late String content;
   late String location;
   late double price;
-  late bool isConfirmed;
-  late bool isCompleted;
+  bool? isConfirmed;
+  bool? isCompleted;
   late String type;
   late String dateCreated;
   late String dateUpdated;
@@ -70,8 +70,8 @@ class Data {
         required this.content,
         required this.location,
         required this.price,
-        required this.isConfirmed,
-        required this.isCompleted,
+        this.isConfirmed,
+        this.isCompleted,
         required this.type,
         required this.dateCreated,
         required this.dateUpdated});
@@ -97,8 +97,8 @@ class Data {
     content = json['content'] ?? '';
     location = json['location'] ?? '';
     price = json['price'] ?? 0.0;
-    isConfirmed = json['isConfirmed'];
-    isCompleted = json['isCompleted'];
+    isConfirmed = json['isConfirmed'] ?? false;
+    isCompleted = json['isCompleted'] ?? false;
     type = json['type'] ?? '';
     dateCreated = json['dateCreated'] ?? '';
     dateUpdated = json['dateUpdated'] ?? '';

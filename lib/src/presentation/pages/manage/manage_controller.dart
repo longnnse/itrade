@@ -3,13 +3,19 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
+import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_model.dart';
+import 'package:i_trade/src/domain/models/trade_result_model.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.dart';
+import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../../../domain/services/upload_product_service.dart';
+import '../../../infrastructure/repositories/upload_product_repository.dart';
 import '../home/home_controller.dart';
 import '../home/widgets/product_detail.dart';
+import '../upload_post/upload_post_page.dart';
 
 class ManageController extends GetxController {
   RxBool isBuying = true.obs;
@@ -17,12 +23,30 @@ class ManageController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isLoadingTrade = false.obs;
   final RxBool isLoadingConfirmTrade = false.obs;
+  final RxBool isLoadingRequestTrade = false.obs;
   final Rxn<List<Data>> productList = Rxn<List<Data>>();
   final Rxn<TradeModel> tradeList = Rxn<TradeModel>();
+  final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
+  final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
+  final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
+  final RxString ownerPostID = ''.obs;
+  final RxBool isTrade = false.obs;
   @override
   void onInit() {
     super.onInit();
+  }
+
+  void goGoCreatePost() async {
+    Get.put<UploadProductService>(UploadProdcutRepositories());
+    Get.put(UploadPostController());
+    final UploadPostController uploadPostController = Get.find();
+    uploadPostController.isPostToTrade.call(true);
+    uploadPostController.toPostID.call(ownerPostID.value);
+    var result = await Get.toNamed(UploadPostPage.routeName);
+    if(result == true){
+      getPersonalPosts();
+    }
   }
 
   void goDetail({required String id}){
@@ -35,8 +59,9 @@ class ManageController extends GetxController {
     isBuying.call(isChange == true ? true : false);
   }
 
-  void goTradePage(String id){
+  void goTradePage(String id, bool isTradeVal){
     productID.call(id);
+    isTrade.call(isTradeVal);
     Get.toNamed(ManageTradePage.routeName);
   }
 
@@ -47,11 +72,32 @@ class ManageController extends GetxController {
 
     res.fold(
           (failure) {
+
         isLoading.call(false);
       },
           (value) async {
+
         productList.call(value);
         isLoading.call(false);
+      },
+    );
+  }
+
+  Future<void> postTrading({required String fromPostId, required String toPostId}) async {
+    //TODO use test
+    isLoadingRequestTrade.call(true);
+    final Either<ErrorObject, TradeResultModel> res = await _manageService.postTrading(fromPostId: fromPostId, toPostId: toPostId);
+
+    res.fold(
+          (failure) {
+            Get.snackbar('Thông báo', 'Không thể trao đổi', backgroundColor: kSecondaryRed, colorText: kTextColor);
+            isLoadingRequestTrade.call(false);
+      },
+          (value) async {
+        Get.snackbar('Thông báo', 'Trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        tradeResult.call(value);
+        idFromPost.call(value.fromPostId);
+        isLoadingRequestTrade.call(false);
       },
     );
   }
@@ -68,6 +114,22 @@ class ManageController extends GetxController {
           (value) async {
             tradeList.call(value);
             isLoadingTrade.call(false);
+      },
+    );
+  }
+
+  Future<void> getRequestByID({required String postID}) async {
+    //TODO use test
+    isLoadingTrade.call(true);
+    final Either<ErrorObject, List<RequestResultModel>> res = await _manageService.getRequestByID(postID: postID);
+
+    res.fold(
+          (failure) {
+        isLoadingTrade.call(false);
+      },
+          (value) async {
+        requestLst.call(value);
+        isLoadingTrade.call(false);
       },
     );
   }
@@ -110,5 +172,42 @@ class ManageController extends GetxController {
     );
   }
 
+  Future<void> postAcceptRequest({required String tradeID, required BuildContext context}) async {
+    //TODO use test
+    isLoadingConfirmTrade.call(true);
+    final Either<ErrorObject, RequestResultModel> res = await _manageService.postAcceptRequest(tradeID: tradeID);
+
+    res.fold(
+          (failure) {
+        isLoadingConfirmTrade.call(false);
+        Get.snackbar('Thông báo', failure.message, backgroundColor: kSecondaryRed, colorText: kTextColor);
+      },
+          (value) async {
+
+        Get.snackbar('Thông báo', 'Yêu cầu mua/miễn phí thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        isLoadingConfirmTrade.call(false);
+        Navigator.pop(context, true);
+      },
+    );
+  }
+
+  Future<void> postDenyRequest({required String tradeID, required BuildContext context}) async {
+    //TODO use test
+    isLoadingConfirmTrade.call(true);
+    final Either<ErrorObject, RequestResultModel> res = await _manageService.postDenyReques(tradeID: tradeID);
+
+    res.fold(
+          (failure) {
+        isLoadingConfirmTrade.call(false);
+        Get.snackbar('Thông báo', failure.message, backgroundColor: kSecondaryRed, colorText: kTextColor);
+      },
+          (value) async {
+
+        Get.snackbar('Thông báo', 'Từ chối mua/miễn phí thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        isLoadingConfirmTrade.call(false);
+        Navigator.pop(context, true);
+      },
+    );
+  }
 
 }

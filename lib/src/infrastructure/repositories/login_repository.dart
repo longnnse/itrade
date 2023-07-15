@@ -9,6 +9,8 @@ import 'package:i_trade/src/domain/models/login_model.dart';
 import 'package:i_trade/src/domain/models/params/register_account_param.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 
+import '../../../core/utils/app_settings.dart';
+
 
 class LoginRepositories implements LoginService {
   final CoreHttp _coreHttp = Get.find();
@@ -23,12 +25,7 @@ class LoginRepositories implements LoginService {
       };
 
       final res = await _coreHttp.post(url, queryParameters,
-          headers: {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
-          'eyJVc2VySWQiOiJkMDcyNzNjYy1jZDQ0LTRkODMtODg3My0wNjNjOGM2Mjg4YWEiLCJFbWFpbCI6ImxvbmdubEBmcHQuZWR1Ln'
-          'ZuIiwiRnVsbE5hbWUiOiJOZ-G7jWMgTG9uZ05ndXnhu4VuIiwiVXNlck5hbWUiOiJsb25nbmwiLCJodHRwOi8vc2NoZW1hcy5ta'
-          'WNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNZW1iZXIiLCJQaG9uZU51bWJlciI6IjA5ODc2'
-          'NTQzMjEiLCJleHAiOjE2ODc4NzEzMDgsImlzcyI6Ik9ubGluZV9NYXJrZXRwbGFjZV9TeXN0ZW0iLCJhdWQiOiJPbmxpbmVfTWFy'
-          'a2V0cGxhY2VfU3lzdGVtIn0.gRePLm9mAi_vbK9C6Gw4bWnfwJFw37weUlwbUOS6MB8'});
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = LoginModel.fromJson(res);

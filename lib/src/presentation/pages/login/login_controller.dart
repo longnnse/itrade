@@ -7,6 +7,7 @@ import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/entities/user_entity.dart';
 import 'package:i_trade/src/domain/models/params/register_account_param.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
+import 'package:i_trade/src/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 import '../../../../core/initialize/theme.dart';
@@ -29,7 +30,7 @@ class LoginController extends GetxController {
   Rxn<UserEntity>();
   final RxBool isLoading = false.obs;
   final LoginService _loginService = Get.find();
-  final RxBool isShow = true.obs;
+  final RxBool isShow = false.obs;
   void onInit() {
     super.onInit();
   }
@@ -55,7 +56,7 @@ class LoginController extends GetxController {
           userEntity.call(UserEntity.fromJson(Jwt.parseJwt(loginModel.value!.accessToken)));
           await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken);
           isLoading.call(false);
-          Navigator.pop(context, true);
+          Get.toNamed(DashboardPage.routeName);
         },
     );
   }

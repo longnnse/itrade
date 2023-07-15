@@ -113,7 +113,15 @@ class ProductDetailPage extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                )
+                ),
+                Obx(() => controller.isLoadingRequest.value == true ?
+                Positioned(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      color: kBackground.withOpacity(0.5),
+                      child: const Center(child: CircularProgressIndicator()),
+                    )) : const SizedBox())
               ],
             );
           } else {
@@ -203,9 +211,9 @@ class ProductDetailPage extends GetView<HomeController> {
                         ),
                       ),
                     ),
-                    if(content.type == 'Trade')
+                    if(content.type != '')
                       GestureDetector(
-                        onTap: () => Get.toNamed(UploadPostPage.routeName),
+                        onTap: () => controller.funcButton(content.type, content.id, context),
                         child: Container(
                           margin: const EdgeInsets.only(top: 5.0, right: 10.0),
                           padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
@@ -217,7 +225,10 @@ class ProductDetailPage extends GetView<HomeController> {
                               borderRadius: BorderRadius.circular(5.0)
                           ),
                           child: Text(
-                            'Trao đổi',
+                            content.type == 'Trade' ? 'Trao đổi' :
+                            content.type == 'Sell' ? 'Bán' :
+                            content.type == 'Free' ? 'Miễn phí' :
+                            '',
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
                           ),
                         ),

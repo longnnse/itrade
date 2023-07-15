@@ -20,15 +20,66 @@ class LoginPage extends GetView<LoginController> {
         backgroundColor: kBackgroundBottomBar,
         body: Stack(
           children: [
-            Column(
-              children: [
-                _buildHeader(context),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                _buildInput(context: context),
-                _buildInput(context: context, isPassword: true),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                _buildButton(context)
-              ],
+            SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  _buildHeader(context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: kBackground,
+                                width: 2.0
+                            )
+                        )
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(5.0),
+                          margin: const EdgeInsets.only(right: 10.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              gradient: kDefaultGradient
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 30.0,
+                          ),
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            controller: controller.emailController,
+                            decoration: InputDecoration(
+                                suffixIcon: null,
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                contentPadding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                disabledBorder: InputBorder.none,
+                                hintText: 'Email...',
+                                hintStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(color: kTextColorGrey)),
+                            onChanged: (value) {},
+                            onFieldSubmitted: (value) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildInput(context: context, isPassword: true),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  _buildButton(context)
+                ],
+              ),
             ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.17,
@@ -90,16 +141,16 @@ class LoginPage extends GetView<LoginController> {
             ],
           ),
         ),
-        Positioned(
-          top: MediaQuery.of(context).padding.top,
-          child: IconButton(
-            onPressed: () => Navigator.pop(context, true),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            )
-          ),
-        )
+        // Positioned(
+        //   top: MediaQuery.of(context).padding.top,
+        //   child: IconButton(
+        //     onPressed: () => Navigator.pop(context, true),
+        //     icon: const Icon(
+        //       Icons.arrow_back_ios,
+        //       color: Colors.white,
+        //     )
+        //   ),
+        // )
       ],
     );
   }
