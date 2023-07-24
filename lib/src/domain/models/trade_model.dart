@@ -79,7 +79,7 @@ class FromPost {
   late List<Resources> resources;
   late List<PostCategories> postCategories;
   late String id;
-  late User user;
+  late User? user;
   late String title;
   late String content;
   late String location;
@@ -97,7 +97,7 @@ class FromPost {
         required this.resources,
         required this.postCategories,
         required this.id,
-        required this.user,
+        this.user,
         required this.title,
         required this.content,
         required this.location,
@@ -125,7 +125,7 @@ class FromPost {
       });
     }
     id = json['id'] ?? '';
-    user = (json['user'] != null ? User.fromJson(json['user']) : null)!;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     title = json['title'] ?? '';
     content = json['content'] ?? '';
     location = json['location'] ?? '';
@@ -151,7 +151,7 @@ class FromPost {
     }
     data['id'] = id;
     if (user != null) {
-      data['user'] = user.toJson();
+      data['user'] = user!.toJson();
     }
     data['title'] = title;
     data['content'] = content;

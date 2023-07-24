@@ -45,9 +45,9 @@ class Post {
   late String id;
   User? user;
   late String title;
-  late String content;
+  late String? content;
   late String location;
-  late double price;
+  late double? price;
   late bool isConfirmed;
   late bool isCompleted;
   late bool isUsed;
@@ -59,9 +59,9 @@ class Post {
       {required this.id,
         this.user,
         required this.title,
-        required this.content,
+         this.content,
         required this.location,
-        required this.price,
+         this.price,
         required this.isConfirmed,
         required this.isCompleted,
         required this.isUsed,
