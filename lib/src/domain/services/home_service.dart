@@ -8,7 +8,7 @@ import '../models/product_model.dart';
 
 abstract class HomeService {
   Future<Either<ErrorObject, List<CategoryModel>>> getCategories({required int pageIndex,required int pageSize});
-  Future<Either<ErrorObject, ProductModel>> getPosts({required int pageIndex,required int pageSize});
+  Future<Either<ErrorObject, ProductModel>> getPosts({required int pageIndex,required int pageSize, required String categoryIds, String searchValue});
   Future<Either<ErrorObject, Data>> getPostByID({required String id});
   Future<Either<ErrorObject, SellFreeResultModel>> postSellFree({required String postID, required String desc});
 }

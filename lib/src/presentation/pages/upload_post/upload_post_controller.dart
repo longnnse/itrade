@@ -18,6 +18,7 @@ import '../../../domain/models/category_model.dart';
 import '../../../domain/models/params/file_param.dart';
 import '../../../domain/models/product_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class UploadPostController extends GetxController {
   final TextEditingController priceController = TextEditingController();
@@ -31,7 +32,7 @@ class UploadPostController extends GetxController {
   RxList<MediaFilesModel> mediaModels = (List<MediaFilesModel>.of([])).obs;
   RxList<FileParam> lstFiles = (List<FileParam>.of([])).obs;
   RxBool isNew = false.obs;
-  RxBool isPro = false.obs;
+  //RxBool isPro = false.obs;
   RxBool isFree = false.obs;
   RxBool isSell = false.obs;
   final ImagePicker picker = ImagePicker();
@@ -211,6 +212,38 @@ class UploadPostController extends GetxController {
         });
   }
 
+  Future<void> uploadImage(FileParam fileParam, File imageFile) async {
+
+    var request = http.MultipartRequest('POST', Uri.parse('YOUR_UPLOAD_URL'));
+
+
+    request.headers['Content-Type'] = fileParam.contentType;
+    request.headers['Content-Length'] = fileParam.length.toString();
+
+
+    var filePart = http.MultipartFile(
+      'file',
+      imageFile.readAsBytes().asStream(),
+      imageFile.lengthSync(),
+      filename: fileParam.fileName,
+      contentType: MediaType.parse(fileParam.contentType),
+    );
+
+    request.files.add(filePart);
+
+
+    var response = await request.send();
+
+
+    if (response.statusCode == 200) {
+
+      print('Image uploaded successfully!');
+    } else {
+
+      print('Failed to upload image. Status code: ${response.statusCode}');
+    }
+  }
+
   void showMediaSelection(
       {required int index,
         required  BuildContext context,
@@ -230,10 +263,10 @@ class UploadPostController extends GetxController {
 
         if (pickedFile != null) {
           pathFile = pickedFile.path;
-          print('1111');
-          FileParam param = FileParam(contentType: 'application/json', contentDisposition: '', headers: IHeaderDictionary(contentLength: pathFile.length), length: pathFile.length, name: pathFile.split('/').last, fileName: pathFile);
+          var imageFile = File(pathFile);
+          FileParam param = FileParam(contentType: 'image/jpeg', contentDisposition: 'form-data', headers: IHeaderDictionary(contentLength: pathFile.length), length: pathFile.length, name: 'file', fileName: pathFile.split('/').last);
+          //uploadImage(param, imageFile);
           lstFiles.call().add(param);
-          print(lstFiles.length);
         } else {
           final LostData response = await picker.getLostData();
 

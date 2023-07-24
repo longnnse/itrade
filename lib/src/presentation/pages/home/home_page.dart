@@ -9,6 +9,7 @@ import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart'
 import 'package:i_trade/src/presentation/pages/home/widgets/product_list.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../../../domain/models/category_model.dart';
 import 'home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -23,7 +24,7 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     controller.getCategories(pageIndex: 1, pageSize: 10);
-    controller.getPosts(pageIndex: 1, pageSize: 20);
+    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
     return Scaffold(
         backgroundColor: kBackgroundBottomBar,
         body: Column(
@@ -58,7 +59,7 @@ class HomePage extends GetView<HomeController> {
                                     crossAxisSpacing: 0,
                                     mainAxisSpacing: 0,
                                     children: List.generate(controller.categoryList.value!.length, (index) {
-                                      return _buildItemButton(context: context, title: controller.categoryList.value![index].name);
+                                      return _buildItemButton(context: context, title: controller.categoryList.value![index].name, cont: controller.categoryList.value![index]);
                                     }));
                               } else {
                                 return Center(
@@ -116,10 +117,11 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildItemButton({required BuildContext context, required String title, re}){
+  Widget _buildItemButton({required BuildContext context, required String title, required CategoryModel cont}){
     return GestureDetector(
       onTap: () {
-        //controller.title.call(title);
+        controller.title.call(title);
+        controller.idCate.call(cont.id);
         Get.toNamed(ProductListPage.routeName);
       },
       child: Column(
@@ -133,6 +135,10 @@ class HomePage extends GetView<HomeController> {
               boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
               color: kBackground
             ),
+            child: cont.id.isNotEmpty ? Image.network(
+                CoreUrl.baseImageURL + cont.id + '.jpg',
+                fit: BoxFit.fill
+            ) : const SizedBox(),
           ),
           Expanded(
             child: Text(
@@ -156,105 +162,108 @@ class HomePage extends GetView<HomeController> {
       crossAxisCount: 2,
       children: <Widget>[
         for(var cont in productModel.data)
-          GestureDetector(
-            onTap: () => controller.goDetail(id: cont.id),
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        height: MediaQuery.of(context).size.width * 0.25,
-                        margin: const EdgeInsets.only(bottom: 5.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: kBackground
+          if(cont.isConfirmed == true)...[
+            GestureDetector(
+              onTap: () => controller.goDetail(id: cont.id),
+              child: Padding(
+                padding: const EdgeInsets.all(0),
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.width * 0.25,
+                          margin: const EdgeInsets.only(bottom: 5.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: kBackground
+                          ),
+                          child: cont.resources.isNotEmpty ? Image.network(
+                              CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
+                              fit: BoxFit.fill
+                          ) : const SizedBox(),
                         ),
-                        child: cont.resources.isNotEmpty ? Image.network(
-                          CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                          fit: BoxFit.fill
-                        ) : const SizedBox(),
-                      ),
-                      Positioned(
-                          right: 10.0,
-                          top: 10.0,
-                          child: Stack(
-                            children: [
-                              const Icon(
-                                Icons.camera_alt,
-                                size: 30.0,
-                                color: Colors.grey,
-                              ),
-                              Positioned(
-                                child: SizedBox(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  child: Center(
-                                    child: Container(
-                                      width: 15.0,
-                                      height: 15.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: Colors.white,
-                                      ),
-                                      child: Text(
-                                        cont.resources.length.toString(),
-                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                        textAlign: TextAlign.center,
+                        Positioned(
+                            right: 10.0,
+                            top: 10.0,
+                            child: Stack(
+                              children: [
+                                const Icon(
+                                  Icons.camera_alt,
+                                  size: 30.0,
+                                  color: Colors.grey,
+                                ),
+                                Positioned(
+                                  child: SizedBox(
+                                    width: 30.0,
+                                    height: 30.0,
+                                    child: Center(
+                                      child: Container(
+                                        width: 15.0,
+                                        height: 15.0,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                          color: Colors.white,
+                                        ),
+                                        child: Text(
+                                          cont.resources.length.toString(),
+                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
-                          )
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Text(
-                      cont.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Text(
-                      '${cont.price.toString().split('.').first} đ',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ShaderMask(
-                          blendMode: BlendMode.srcIn,
-                          shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                          child: const Icon(
-                              Icons.date_range,
-                              color: kPrimaryLightColor,
-                              size: 15.0
-                          ),
-                        ),
-                        Flexible(
-                          child: Text(
-                            '${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                                )
+                              ],
+                            )
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Text(
+                        cont.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Text(
+                        '${cont.price.toString().split('.').first} đ',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ShaderMask(
+                            blendMode: BlendMode.srcIn,
+                            shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                            child: const Icon(
+                                Icons.date_range,
+                                color: kPrimaryLightColor,
+                                size: 15.0
+                            ),
+                          ),
+                          Flexible(
+                            child: Text(
+                              '${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
+            )
+          ]
+
       ],
     );
   }

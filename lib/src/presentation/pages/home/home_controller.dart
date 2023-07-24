@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +18,13 @@ import 'widgets/product_detail.dart';
 class HomeController extends GetxController{
   RxString title = ''.obs;
   RxString idPost = ''.obs;
+  RxString idCate = ''.obs;
   RxBool isMore = false.obs;
   RxInt countImage = 0.obs;
   final RxBool isLoading = false.obs;
   final RxBool isLoadingRequest = false.obs;
   final RxBool isLoadingProduct = false.obs;
+  final RxBool isLoadingProductCate = false.obs;
   final RxBool isLoadingData = false.obs;
   final HomeService _homeService = Get.find();
   final Rxn<List<CategoryModel>> categoryList = Rxn<List<CategoryModel>>();
@@ -160,18 +164,31 @@ class HomeController extends GetxController{
       },
     );
   }
-  Future<void> getPosts({required int pageIndex,required int pageSize}) async {
+  Future<void> getPosts({required int pageIndex,required int pageSize, required String categoryIds, bool isPostCateLst = false, String searchValue = ''}) async {
     //TODO use test
-    isLoadingProduct.call(true);
-    final Either<ErrorObject, ProductModel> res = await _homeService.getPosts(pageSize: pageSize, pageIndex: pageIndex);
+    if(isPostCateLst == false){
+      isLoadingProduct.call(true);
+    }else{
+      isLoadingProductCate(true);
+    }
+
+    final Either<ErrorObject, ProductModel> res = await _homeService.getPosts(pageSize: pageSize, pageIndex: pageIndex, categoryIds: categoryIds, searchValue: searchValue);
 
     res.fold(
           (failure) {
-          isLoadingProduct.call(false);
+            if(isPostCateLst == false){
+              isLoadingProduct.call(false);
+            }else{
+              isLoadingProductCate(false);
+            }
       },
           (value) async {
         productModel.call(value);
-        isLoadingProduct.call(false);
+        if(isPostCateLst == false){
+          isLoadingProduct.call(false);
+        }else{
+          isLoadingProductCate(false);
+        }
       },
     );
   }

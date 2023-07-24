@@ -23,5 +23,4 @@ abstract class ManageService {
   Future<Either<ErrorObject, RequestResultModel>> postAcceptRequest({required String tradeID});
 
   Future<Either<ErrorObject, RequestResultModel>> postDenyReques({required String tradeID});
-
 }

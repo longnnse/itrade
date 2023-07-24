@@ -313,49 +313,49 @@ class UploadPostPage extends GetView<UploadPostController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(() => Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => controller.isPro.call(false),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color:  controller.isPro.value == false ?  kPrimaryLightColor2 : kBackground
-                        ),
-                        child: Text(
-                          'Cá nhân',
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: controller.isPro.value == false ? kPrimaryLightColor : kTextColorBody,
-                              fontWeight: FontWeight.w500
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10.0,),
-                    GestureDetector(
-                      onTap: () => controller.isPro.call(true),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: controller.isPro.value == true ?  kPrimaryLightColor2 : kBackground
-                        ),
-                        child: Text(
-                          'Bán chuyên',
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: controller.isPro.value == true ? kPrimaryLightColor : kTextColorBody,
-                              fontWeight: FontWeight.w500
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+                // Obx(() => Row(
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () => controller.isPro.call(false),
+                //       child: Container(
+                //         width: MediaQuery.of(context).size.width * 0.35,
+                //         padding: const EdgeInsets.all(10.0),
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(10.0),
+                //             color:  controller.isPro.value == false ?  kPrimaryLightColor2 : kBackground
+                //         ),
+                //         child: Text(
+                //           'Cá nhân',
+                //           style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                //               color: controller.isPro.value == false ? kPrimaryLightColor : kTextColorBody,
+                //               fontWeight: FontWeight.w500
+                //           ),
+                //           textAlign: TextAlign.center,
+                //         ),
+                //       ),
+                //     ),
+                //     const SizedBox(width: 10.0,),
+                //     GestureDetector(
+                //       onTap: () => controller.isPro.call(true),
+                //       child: Container(
+                //         width: MediaQuery.of(context).size.width * 0.35,
+                //         padding: const EdgeInsets.all(10.0),
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(10.0),
+                //             color: controller.isPro.value == true ?  kPrimaryLightColor2 : kBackground
+                //         ),
+                //         child: Text(
+                //           'Bán chuyên',
+                //           style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                //               color: controller.isPro.value == true ? kPrimaryLightColor : kTextColorBody,
+                //               fontWeight: FontWeight.w500
+                //           ),
+                //           textAlign: TextAlign.center,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // )),
                 _buildTextFormField(context: context, title: 'Địa chỉ', maxLine: 1, textController: controller.addressController),
               ],
             ),

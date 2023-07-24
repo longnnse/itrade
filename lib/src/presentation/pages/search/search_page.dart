@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/initialize/core_url.dart';
 import '../../../../core/initialize/theme.dart';
+import '../../../domain/models/category_model.dart';
 import '../home/widgets/product_detail.dart';
 
 class SearchPage extends GetView<SearchController> {
@@ -20,7 +21,8 @@ class SearchPage extends GetView<SearchController> {
   @override
   Widget build(BuildContext context) {
     Get.put(SearchController());
-    controller.getPosts(pageIndex: 1, pageSize: 20);
+    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
+    controller.getCategories(pageIndex: 1, pageSize: 10);
     return Scaffold(
         backgroundColor: kBackground,
         body: Column(
@@ -29,7 +31,22 @@ class SearchPage extends GetView<SearchController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildHeaderFilter(context),
+                    Obx(() {
+                      if (controller.isLoadingFilter.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if(controller.categoryList.value != null) {
+                        return _buildHeaderFilter(context, controller.categoryList.value!);
+                      } else {
+                        return Center(
+                            child: Text(
+                              'Không có dữ liệu',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                            )
+                        );
+                      }
+                    }),
+
                     _buildSearch(context: context),
                     Expanded(child: _buildItemList(context: context))
                   ],
@@ -51,7 +68,7 @@ class SearchPage extends GetView<SearchController> {
     );
   }
 
-  Widget _buildHeaderFilter(BuildContext context){
+  Widget _buildHeaderFilter(BuildContext context, List<CategoryModel> lstCate){
     return Container(
       width: MediaQuery.of(context).size.width,
       color: kBackgroundBottomBar,
@@ -88,51 +105,57 @@ class SearchPage extends GetView<SearchController> {
           Row(
             children: [
               GestureDetector(
-                onTap: () => _buildModelBottomFilter(context),
-                child: Container(
+                onTap: () => _buildModelBottomFilter(context, lstCate),
+                child: Obx(() => Container(
                   padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kBackground,
-                      width: 1.5
-                    ),
-                    borderRadius: BorderRadius.circular(5.0)
+                      border: Border.all(
+                          color: controller.cateName.value == '' ? kBackground : kPrimaryLightColor,
+                          width: 1.5
+                      ),
+                      color: controller.cateName.value == '' ? kBackgroundBottomBar : kPrimaryLightColor,
+                      borderRadius: BorderRadius.circular(5.0)
                   ),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.filter_alt_outlined,
                         size: 20.0,
+                        color: controller.cateName.value == '' ? Colors.black : Colors.white,
                       ),
                       Text(
                         'Lọc',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: controller.cateName.value == '' ? Colors.black : Colors.white),
                       ),
                     ],
                   ),
-                ),
+                )),
               ),
               const SizedBox(width: 10.0,),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: kBackground,
-                        width: 1.5
-                    ),
-                    borderRadius: BorderRadius.circular(5.0)
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Tất cả danh mục',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const Icon(
-                      Icons.arrow_drop_down,
-                      size: 20.0,
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () => controller.showSelectDanhMuc(context),
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: kBackground,
+                          width: 1.5
+                      ),
+                      borderRadius: BorderRadius.circular(5.0)
+                  ),
+                  child: Row(
+                    children: [
+                      Obx(() => Text(
+                        controller.cateName.value == '' ? 'Tất cả danh mục' : controller.cateName.value,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      )),
+
+                      const Icon(
+                        Icons.arrow_drop_down,
+                        size: 20.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 10.0,),
@@ -181,7 +204,7 @@ class SearchPage extends GetView<SearchController> {
                 .textTheme
                 .titleMedium!
                 .copyWith(color: kTextColorGrey)),
-        onChanged: (value) {},
+        onChanged: (value) => controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '', searchValue: value),
         onFieldSubmitted: (value) {},
       ),
     );
@@ -205,127 +228,129 @@ class SearchPage extends GetView<SearchController> {
                 return Column(
                   children: [
                     for(var cont in controller.productModel.value!.data)
-                      GestureDetector(
-                      onTap: () => controller.goDetail(id: cont.id),
-                      child: Container(
-                        decoration: const  BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: kBackground
-                              )
-                          ),
-                        ),
-                        height: MediaQuery.of(context).size.width * 0.25,
-                        margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                        child: Row(
-                          children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width * 0.4,
-                                  height: MediaQuery.of(context).size.width * 0.25,
-                                  margin: const EdgeInsets.only(bottom: 5.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
+                      if(cont.isConfirmed == true)...[
+                        GestureDetector(
+                          onTap: () => controller.goDetail(id: cont.id),
+                          child: Container(
+                            decoration: const  BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
                                       color: kBackground
-                                  ),
-                                  child: cont.resources.isNotEmpty ? Image.network(
-                                      CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                                      fit: BoxFit.fill
-                                  ) : const SizedBox(),
-                                ),
-                                Positioned(
-                                    right: 10.0,
-                                    top: 10.0,
-                                    child: Stack(
-                                      children: [
-                                        const Icon(
-                                          Icons.camera_alt,
-                                          size: 30.0,
-                                          color: Colors.grey,
-                                        ),
-                                        Positioned(
-                                          child: SizedBox(
-                                            width: 30.0,
-                                            height: 30.0,
-                                            child: Center(
-                                              child: Container(
-                                                width: 15.0,
-                                                height: 15.0,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                  color: Colors.white,
-                                                ),
-                                                child: Text(
-                                                  cont.resources.length.toString(),
-                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                                  textAlign: TextAlign.center,
+                                  )
+                              ),
+                            ),
+                            height: MediaQuery.of(context).size.width * 0.25,
+                            margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+                            child: Row(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.4,
+                                      height: MediaQuery.of(context).size.width * 0.25,
+                                      margin: const EdgeInsets.only(bottom: 5.0),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5.0),
+                                          color: kBackground
+                                      ),
+                                      child: cont.resources.isNotEmpty ? Image.network(
+                                          CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
+                                          fit: BoxFit.fill
+                                      ) : const SizedBox(),
+                                    ),
+                                    Positioned(
+                                        right: 10.0,
+                                        top: 10.0,
+                                        child: Stack(
+                                          children: [
+                                            const Icon(
+                                              Icons.camera_alt,
+                                              size: 30.0,
+                                              color: Colors.grey,
+                                            ),
+                                            Positioned(
+                                              child: SizedBox(
+                                                width: 30.0,
+                                                height: 30.0,
+                                                child: Center(
+                                                  child: Container(
+                                                    width: 15.0,
+                                                    height: 15.0,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                      color: Colors.white,
+                                                    ),
+                                                    child: Text(
+                                                      cont.resources.length.toString(),
+                                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
+                                            )
+                                          ],
                                         )
-                                      ],
-                                    )
-                                ),
-                              ],
-                            ),
-                            const SizedBox(width: 5.0,),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          child: Text(
-                                            cont.title,
-                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          child: Text(
-                                            '${cont.price.toString().split('.').first} đ',
-                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          ShaderMask(
-                                            blendMode: BlendMode.srcIn,
-                                            shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                                            child: const Icon(
-                                                Icons.person,
-                                                color: kPrimaryLightColor,
-                                                size: 15.0
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              'Đã đăng ${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
-                                              style: Theme.of(context).textTheme.bodySmall,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            )
+                                const SizedBox(width: 5.0,),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              child: Text(
+                                                cont.title,
+                                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              child: Text(
+                                                '${cont.price.toString().split('.').first} đ',
+                                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              ShaderMask(
+                                                blendMode: BlendMode.srcIn,
+                                                shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                                                child: const Icon(
+                                                    Icons.person,
+                                                    color: kPrimaryLightColor,
+                                                    size: 15.0
+                                                ),
+                                              ),
+                                              Flexible(
+                                                child: Text(
+                                                  'Đã đăng ${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
+                                                  style: Theme.of(context).textTheme.bodySmall,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
 
-                          ],
-                        ),
-                      ),
-                    )
+                              ],
+                            ),
+                          ),
+                        )
+                      ]
                   ],
                 );
               } else {
@@ -343,7 +368,7 @@ class SearchPage extends GetView<SearchController> {
     );
   }
 
-  void _buildModelBottomFilter(BuildContext context){
+  void _buildModelBottomFilter(BuildContext context, List<CategoryModel> lstCate){
     showModalBottomSheet(
         context: context,
         builder: (builder) {
@@ -373,10 +398,17 @@ class SearchPage extends GetView<SearchController> {
                         style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        'Bỏ lọc',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.center,
+                      GestureDetector(
+                        onTap: () {
+                         controller.cateName.call('');
+                         controller.cateID.call('');
+                         Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Bỏ lọc',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        ),
                       )
                     ],
                   ),
@@ -390,25 +422,26 @@ class SearchPage extends GetView<SearchController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Danh mục',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          Text(
-                            'Thời trang',
+                          Obx(() => Text(
+                            controller.cateName.value == '' ? 'Tất cả danh mục' : controller.cateName.value,
                             style: Theme.of(context).textTheme.titleSmall!.copyWith(color: kPrimaryLightColor),
-                          ),
+                          )),
                         ],
                       ),
-                      IconButton(
-                        onPressed: (){},
-                        icon: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: kTextColorGrey,
-                          size: 20.0,
-                        )
-                      )
+                      // IconButton(
+                      //   onPressed: (){},
+                      //   icon: const Icon(
+                      //     Icons.arrow_forward_ios,
+                      //     color: kTextColorGrey,
+                      //     size: 20.0,
+                      //   )
+                      // )
                     ],
                   ),
                 ),

@@ -70,7 +70,13 @@ class AppbarCustomize {
                                     ))
                               ].toList(),
                       ),
-                    ) : const SizedBox(),
+                    ) : Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: _actionLefts,
+                      ),
+                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10.0),

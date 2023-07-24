@@ -49,14 +49,26 @@ class HomeRepositories implements HomeService {
   }
 
   @override
-  Future<Either<ErrorObject, ProductModel>> getPosts({required int pageIndex, required int pageSize}) async {
+  Future<Either<ErrorObject, ProductModel>> getPosts({required int pageIndex, required int pageSize, required String categoryIds, String? searchValue}) async {
     try {
       const url = '${CoreUrl.baseURL}/Post';
+      final Map<String, dynamic> queryParameters;
 
-      final Map<String, dynamic> queryParameters = {
-        'PageIndex': pageIndex,
-        'PageSize': pageSize
-      };
+      if(categoryIds == ''){
+        queryParameters = {
+          'PageIndex': pageIndex,
+          'PageSize': pageSize,
+          'SearchValue': searchValue
+        };
+      }else{
+        queryParameters = {
+          'PageIndex': pageIndex,
+          'PageSize': pageSize,
+          'SearchValue': searchValue,
+          'CategoryIds' : categoryIds
+        };
+      }
+
 
       final res = await _coreHttp.get(url, queryParameters: queryParameters,
           headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});

@@ -6,6 +6,7 @@ import 'package:i_trade/src/presentation/widgets/appbar_customize.dart';
 import 'package:i_trade/src/presentation/widgets/floating_action_button.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../upload_post/upload_post_page.dart';
 
 class DashboardPage extends GetView<DashboardController> {
   static const String routeName = '/DashboardPage';
@@ -24,6 +25,15 @@ class DashboardPage extends GetView<DashboardController> {
         isUseOnlyBack: false,
         actionRights: [
           if(controller.lastSelected.value == 'TAB: 0')
+            IconButton(
+                onPressed: () => Get.toNamed(UploadPostPage.routeName),
+                icon: const Icon(
+                  Icons.upload,
+                  color: Colors.white,
+                  size: 25.0,
+                )
+            ),
+          if(controller.lastSelected.value == 'TAB: 0' || controller.lastSelected.value == 'TAB: 1')
             IconButton(
                 onPressed: () => _buildModelBottomFilter(context),
                 icon: const Icon(

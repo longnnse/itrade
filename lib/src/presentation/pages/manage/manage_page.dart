@@ -8,6 +8,7 @@ import 'package:i_trade/src/presentation/pages/manage/widgets/manage_product_shi
 
 import '../../../../core/initialize/core_url.dart';
 import '../../../../core/initialize/theme.dart';
+import '../../../../core/utils/app_settings.dart';
 
 
 class ManagePage extends GetView<ManageController> {
@@ -40,7 +41,7 @@ class ManagePage extends GetView<ManageController> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                             child: Text(
-                              'Nguyễn Ngọc Long',
+                              AppSettings.getValue(KeyAppSetting.fullName),
                               style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                             ),
                           ),

@@ -189,13 +189,13 @@ class InformationPage extends GetView<InformationController> {
                       )
                     ],
                   ),
+                  _buildButtonFunc(context: context, iconData: Icons.report_outlined, title: 'Báo cáo vi phạm', iTradePolicy: ITradePolicy.baoCaoViPham),
+                  _buildButtonFunc(context: context, iconData: Icons.feedback_outlined, title: 'Đánh giá từ tôi', iTradePolicy: ITradePolicy.danhGiaTuToi),
+                  _buildButtonFunc(context: context, iconData: Icons.wallet, title: 'Ví của tôi', iTradePolicy: ITradePolicy.viCuaToi),
                   _buildButtonFunc(context: context, iconData: Icons.question_mark, title: 'Hướng dẫn sử dụng', iTradePolicy: ITradePolicy.huongDanSuDung),
                   _buildButtonFunc(context: context, iconData: Icons.menu_book, title: 'Điều khoản sử dụng', iTradePolicy: ITradePolicy.dieuKhoanSuDung),
                   _buildButtonFunc(context: context, iconData: Icons.security, title: 'Chính sách bảo mật', iTradePolicy: ITradePolicy.chinhSachBaoMat),
                   _buildButtonFunc(context: context, iconData: Icons.info_outline, title: 'Thông tin ứng dụng', iTradePolicy: ITradePolicy.thongTinUngDung),
-                  _buildButtonFunc(context: context, iconData: Icons.wallet, title: 'Ví của tôi', iTradePolicy: ITradePolicy.viCuaToi),
-                  _buildButtonFunc(context: context, iconData: Icons.report_outlined, title: 'Báo cáo vi phạm', iTradePolicy: ITradePolicy.baoCaoViPham),
-                  _buildButtonFunc(context: context, iconData: Icons.feedback_outlined, title: 'Đánh giá từ tôi', iTradePolicy: ITradePolicy.danhGiaTuToi),
                   _buildButton(context),
                   Padding(
                     padding: const EdgeInsets.all(10.0),

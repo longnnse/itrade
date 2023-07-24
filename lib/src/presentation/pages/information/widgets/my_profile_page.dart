@@ -4,6 +4,7 @@ import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.da
 import 'package:i_trade/src/presentation/pages/information/information_controller.dart';
 
 import '../../../../../core/initialize/theme.dart';
+import '../../../../../core/utils/app_settings.dart';
 import '../../../../domain/enums/enums.dart';
 import '../../../widgets/appbar_customize.dart';
 import '../../home/widgets/product_detail.dart';
@@ -111,7 +112,7 @@ class MyProfilePage extends GetView<InformationController> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    'Nguyễn Ngọc Long',
+                    AppSettings.getValue(KeyAppSetting.fullName),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                   ),
                 ),

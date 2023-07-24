@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../core/initialize/theme.dart';
+import '../../../../../core/utils/app_settings.dart';
 import '../../../widgets/appbar_customize.dart';
 import '../information_controller.dart';
 
@@ -123,7 +124,7 @@ class MyFeedbackPage extends GetView<InformationController> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Nguyễn Ngọc Long',
+                        AppSettings.getValue(KeyAppSetting.fullName),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),

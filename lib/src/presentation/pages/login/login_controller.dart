@@ -54,6 +54,8 @@ class LoginController extends GetxController {
           emailController.clear();
           passwordController.clear();
           userEntity.call(UserEntity.fromJson(Jwt.parseJwt(loginModel.value!.accessToken)));
+          print(Jwt.parseJwt(loginModel.value!.accessToken));
+          print('zxvzxv');
           await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken);
           isLoading.call(false);
           Get.toNamed(DashboardPage.routeName);
