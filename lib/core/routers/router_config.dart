@@ -92,6 +92,8 @@ class ITradeRouterConfigs {
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<ManageService>(ManageRepositories());
           Get.lazyPut(() => ManageController());
         },
       ),

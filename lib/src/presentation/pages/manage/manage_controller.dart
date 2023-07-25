@@ -18,16 +18,18 @@ import '../home/widgets/product_detail.dart';
 import '../upload_post/upload_post_page.dart';
 
 class ManageController extends GetxController {
-  RxBool isBuying = true.obs;
+  RxBool isisTradePost = true.obs;
   final ManageService _manageService = Get.find();
   final RxBool isLoading = false.obs;
   final RxBool isLoadingTrade = false.obs;
   final RxBool isLoadingConfirmTrade = false.obs;
   final RxBool isLoadingRequestTrade = false.obs;
+  final RxBool isLoadingTradingReceived = false.obs;
   final Rxn<List<Data>> productList = Rxn<List<Data>>();
   final Rxn<TradeModel> tradeList = Rxn<TradeModel>();
   final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
+  final Rxn<List<DataTrade>> tradingReceivedLst = Rxn<List<DataTrade>>();
   final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
   final RxString ownerPostID = ''.obs;
@@ -56,7 +58,7 @@ class ManageController extends GetxController {
   }
 
   void updateStatus(bool isChange){
-    isBuying.call(isChange == true ? true : false);
+    isisTradePost.call(isChange == true ? true : false);
   }
 
   void goTradePage(String id, bool isTradeVal){
@@ -79,6 +81,22 @@ class ManageController extends GetxController {
 
         productList.call(value);
         isLoading.call(false);
+      },
+    );
+  }
+
+  Future<void> getTradingReceived() async {
+    //TODO use test
+    isLoadingTradingReceived.call(true);
+    final Either<ErrorObject, List<DataTrade>> res = await _manageService.getTradingReceived();
+
+    res.fold(
+          (failure) {
+        isLoadingTradingReceived.call(false);
+      },
+          (value) async {
+        tradingReceivedLst.call(value);
+        isLoadingTradingReceived.call(false);
       },
     );
   }

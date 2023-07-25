@@ -33,8 +33,8 @@ class SellFreeResultModel {
     data['id'] = id;
     data['dateCreated'] = dateCreated;
     data['dateUpdated'] = dateUpdated;
-    data['user'] = user!.toJson();
-    data['post'] = post!.toJson();
+    data['user'] = user.toJson();
+    data['post'] = post.toJson();
     data['description'] = description;
     data['status'] = status;
     return data;

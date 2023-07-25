@@ -258,4 +258,32 @@ class ManageRepositories implements ManageService {
     }
   }
 
+  @override
+  Future<Either<ErrorObject, List<DataTrade>>> getTradingReceived() async {
+    try {
+      const url = '${CoreUrl.baseURL}/Trading/TradingReceived';
+
+      final res = await _coreHttp.get(url,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = res
+            .map<DataTrade>(
+                (e) => DataTrade.fromJson(e))
+            .toList();
+        return Right(data ?? []);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
 }
