@@ -5,6 +5,7 @@ class LoginModel {
   late int expiresIn;
   late String userName;
   late String phoneNumber;
+  late String userAva;
 
   LoginModel(
       {required this.accessToken,
@@ -12,7 +13,8 @@ class LoginModel {
         required this.userID,
         required this.expiresIn,
         required this.userName,
-        required this.phoneNumber});
+        required this.phoneNumber,
+        required this.userAva});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     accessToken = json['access_token'];
@@ -21,6 +23,7 @@ class LoginModel {
     expiresIn = json['expires_in'];
     userName = json['userName'];
     phoneNumber = json['phoneNumber'];
+    userAva = json['userAva'] ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDK4gXyt3wzCyT9ekbDsR-thEKFtWuQoFraQ&usqp=CAU';
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +34,7 @@ class LoginModel {
     data['expires_in'] = expiresIn;
     data['userName'] = userName;
     data['phoneNumber'] = phoneNumber;
+    data['userAva'] = userAva;
     return data;
   }
 }

@@ -42,6 +42,7 @@ class SellFreeResultModel {
 }
 
 class Post {
+  late List<Resources> resources;
   late String id;
   User? user;
   late String title;
@@ -56,7 +57,8 @@ class Post {
   late String dateUpdated;
 
   Post(
-      {required this.id,
+      {required this.resources,
+        required this.id,
         this.user,
         required this.title,
          this.content,
@@ -70,6 +72,12 @@ class Post {
         required this.dateUpdated});
 
   Post.fromJson(Map<String, dynamic> json) {
+    if (json['resources'] != null) {
+      resources = <Resources>[];
+      json['resources'].forEach((v) {
+        resources.add(Resources.fromJson(v));
+      });
+    }
     id = json['id'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     title = json['title'];
@@ -86,6 +94,7 @@ class Post {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['resources'] = resources.map((v) => v.toJson()).toList();
     data['id'] = id;
     data['user'] = user;
     data['title'] = title;

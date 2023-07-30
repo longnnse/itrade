@@ -3,16 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
-import 'package:i_trade/src/presentation/pages/change_password/change_password_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
 
 import '../../../../core/initialize/theme.dart';
-import '../login/login_page.dart';
-import '../upload_post/upload_post_page.dart';
 import 'information_controller.dart';
-import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.dart';
-
-import 'widgets/iTrade_policy_page.dart';
 
 class InformationPage extends GetView<InformationController> {
   static const String routeName = '/InformationPage';
@@ -110,12 +104,12 @@ class InformationPage extends GetView<InformationController> {
                                       borderRadius: BorderRadius.circular(60.0),
                                       boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
                                     ),
-                                    child: Obx(() => CircleAvatar(
+                                    child: CircleAvatar(
                                       radius: 60.0,
                                       backgroundImage:
-                                      NetworkImage(controller.urlLink.value),
+                                      NetworkImage(AppSettings.getValue(KeyAppSetting.userAva)),
                                       backgroundColor: Colors.transparent,
-                                    )),
+                                    ),
                                   ),
                                 ),
                                 Obx(() => Column(

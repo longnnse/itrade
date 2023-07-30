@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/entities/user_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +46,7 @@ class AppSettings {
     }
   }
 
-  static Future<void> saveSharePrefByUser(UserEntity userModel, String accessToken) async {
+  static Future<void> saveSharePrefByUser(UserEntity userModel, String accessToken, String userAva) async {
     try {
       clearAllSharePref();
       await Future.delayed(const Duration(milliseconds: 100));
@@ -60,6 +61,8 @@ class AppSettings {
           KeyAppSetting.userName, userModel.userName ?? "");
       AppSettings.setValue<String>(
           KeyAppSetting.phoneNumber, userModel.phoneNumber ?? "");
+      AppSettings.setValue<String>(
+          KeyAppSetting.userAva, CoreUrl.baseAvaURL + userAva ?? "");
       AppSettings.setValue<String>(
           KeyAppSetting.token, accessToken ?? "");
       AppSettings.setValue<int>(
@@ -87,6 +90,7 @@ class AppSettings {
     setValue<int>(KeyAppSetting.exp, 0);
     setValue<String>(KeyAppSetting.iss, "");
     setValue<String>(KeyAppSetting.aud, "");
+    setValue<String>(KeyAppSetting.userAva, "");
     setValue<bool>(KeyAppSetting.isDangNhap, false);
   }
 }
@@ -117,7 +121,7 @@ enum KeyAppSetting {
   aud,
 
   /// type: String
-  urlImage,
+  userAva,
 
   /// type: String
   token,

@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/models/category_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
+import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
@@ -273,6 +274,32 @@ class ManageRepositories implements ManageService {
             .toList();
         return Right(data ?? []);
       }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, RequestPostResultModel>> getRequestReceived() async {
+    try {
+      const url = '${CoreUrl.baseURL}/Request/Received?PageSize=10';
+
+      final res = await _coreHttp.get(url,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = RequestPostResultModel.fromJson(res);
+        return Right(data);
+      }
+
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const DataParsingFailure()));
     } on ServerException {

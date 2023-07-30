@@ -6,12 +6,12 @@ import 'package:i_trade/src/domain/services/upload_product_service.dart';
 import 'package:i_trade/src/infrastructure/repositories/home_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/login_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/upload_product_repository.dart';
-import 'package:i_trade/src/presentation/pages/change_password/chang_password_controller.dart';
 import 'package:i_trade/src/presentation/pages/chat/chat_controller.dart';
 import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.dart';
+import 'package:i_trade/src/presentation/pages/edit_profile/widgets/edit_password_page.dart';
 import 'package:i_trade/src/presentation/pages/home/home_controller.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart';
@@ -35,8 +35,8 @@ import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart
 
 import '../../src/domain/services/manage_service.dart';
 import '../../src/infrastructure/repositories/manage_repository.dart';
-import '../../src/presentation/pages/change_password/change_password_page.dart';
 import '../../src/presentation/pages/dashboard/dashboard_page.dart';
+import '../../src/presentation/pages/login/widget/forget_password_page.dart';
 import '../../src/presentation/pages/manage/widgets/trade_product_page.dart';
 import '../../src/presentation/pages/login/login_controller.dart';
 import '../../src/presentation/pages/manage/widgets/manage_history_page.dart';
@@ -150,11 +150,35 @@ class ITradeRouterConfigs {
       ),
     ),
     GetPage(
+      name: ForgetPasswordPage.routeName,
+      page: () => const ForgetPasswordPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.lazyPut(() => LoginController());
+        },
+      ),
+    ),
+    GetPage(
       name: EditProfilePage.routeName,
       page: () => const EditProfilePage(),
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<LoginService>(LoginRepositories());
+          Get.lazyPut(() => EditProfileController());
+        },
+      ),
+    ),
+    GetPage(
+      name: EditPasswordPage.routeName,
+      page: () => const EditPasswordPage(),
+      binding: BindingsBuilder(
+            () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<LoginService>(LoginRepositories());
           Get.lazyPut(() => EditProfileController());
         },
       ),
@@ -167,16 +191,6 @@ class ITradeRouterConfigs {
           Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
           Get.put<UploadProductService>(UploadProdcutRepositories());
           Get.lazyPut(() => UploadPostController());
-        },
-      ),
-    ),
-    GetPage(
-      name: ChangePasswordPage.routeName,
-      page: () => const ChangePasswordPage(),
-      binding: BindingsBuilder(
-            () {
-          // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.lazyPut(() => ChangePasswordController());
         },
       ),
     ),

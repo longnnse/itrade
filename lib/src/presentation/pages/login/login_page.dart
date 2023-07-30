@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/login/login_controller.dart';
+import 'package:i_trade/src/presentation/pages/login/widget/forget_password_page.dart';
 import 'package:i_trade/src/presentation/pages/login/widget/register_page.dart';
 
 import '../../../../core/initialize/theme.dart';
@@ -259,7 +260,7 @@ class LoginPage extends GetView<LoginController> {
         ),
         const SizedBox(height: 5.0,),
         GestureDetector(
-          onTap: () {},
+          onTap: () => Get.toNamed(ForgetPasswordPage.routeName),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

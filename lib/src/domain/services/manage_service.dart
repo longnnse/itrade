@@ -1,5 +1,6 @@
 import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
+import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
 
@@ -25,4 +26,6 @@ abstract class ManageService {
   Future<Either<ErrorObject, RequestResultModel>> postDenyReques({required String tradeID});
 
   Future<Either<ErrorObject, List<DataTrade>>> getTradingReceived();
+
+  Future<Either<ErrorObject, RequestPostResultModel>> getRequestReceived();
 }

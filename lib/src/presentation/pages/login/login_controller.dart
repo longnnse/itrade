@@ -29,6 +29,7 @@ class LoginController extends GetxController {
   final Rxn<UserEntity> userEntity =
   Rxn<UserEntity>();
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingForgetPassword = false.obs;
   final LoginService _loginService = Get.find();
   final RxBool isShow = false.obs;
   void onInit() {
@@ -56,7 +57,7 @@ class LoginController extends GetxController {
           userEntity.call(UserEntity.fromJson(Jwt.parseJwt(loginModel.value!.accessToken)));
           print(Jwt.parseJwt(loginModel.value!.accessToken));
           print('zxvzxv');
-          await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken);
+          await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken, loginModel.value!.userAva);
           isLoading.call(false);
           Get.toNamed(DashboardPage.routeName);
         },
@@ -137,6 +138,33 @@ class LoginController extends GetxController {
           lastNameController.clear();
           ageController.clear();
           isLoading.call(false);
+          Navigator.pop(context, true);
+        },
+      );
+    }
+  }
+
+  Future<void> postForgetPassword({required BuildContext context}) async {
+    //TODO use test
+    bool isValid = true;
+    if(emailController.text == ''){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng nhập email', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+
+    if(isValid == true){
+      isLoadingForgetPassword.call(true);
+      final Either<ErrorObject, String> res = await _loginService.postForgetPassword(email: emailController.text);
+
+      res.fold(
+            (failure) {
+          isLoadingForgetPassword.call(false);
+          Get.snackbar('Thông báo', failure.message, backgroundColor: kSecondaryRed, colorText: kTextColor);
+        },
+            (value) async {
+          Get.snackbar('Thông báo', value, backgroundColor: kSecondaryGreen, colorText: kTextColor);
+          emailController.clear();
+          isLoadingForgetPassword.call(false);
           Navigator.pop(context, true);
         },
       );

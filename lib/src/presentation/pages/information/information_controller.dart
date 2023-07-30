@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 import 'package:i_trade/main.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
+import 'package:i_trade/src/presentation/pages/edit_profile/widgets/edit_password_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_pham_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_page.dart';
 
 import '../../../../core/initialize/theme.dart';
 import '../../../../core/utils/app_settings.dart';
-import '../change_password/change_password_page.dart';
 import '../edit_profile/edit_profile_page.dart';
 import '../login/login_page.dart';
 import '../upload_post/upload_post_page.dart';
@@ -113,7 +113,7 @@ class InformationController extends GetxController {
         Get.toNamed(EditProfilePage.routeName);
         break;
       case ProfileEnums.lock:
-        Get.toNamed(ChangePasswordPage.routeName);
+        Get.toNamed(EditPasswordPage.routeName);
         break;
     }
   }

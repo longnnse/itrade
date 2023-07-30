@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
+import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
@@ -25,11 +26,13 @@ class ManageController extends GetxController {
   final RxBool isLoadingConfirmTrade = false.obs;
   final RxBool isLoadingRequestTrade = false.obs;
   final RxBool isLoadingTradingReceived = false.obs;
+  final RxBool isLoadingRequestReceived = false.obs;
   final Rxn<List<Data>> productList = Rxn<List<Data>>();
   final Rxn<TradeModel> tradeList = Rxn<TradeModel>();
   final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
   final Rxn<List<DataTrade>> tradingReceivedLst = Rxn<List<DataTrade>>();
+  final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
   final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
   final RxString ownerPostID = ''.obs;
@@ -59,6 +62,11 @@ class ManageController extends GetxController {
 
   void updateStatus(bool isChange){
     isisTradePost.call(isChange == true ? true : false);
+    if(isisTradePost.value == true){
+      getTradingReceived();
+    }else{
+      getRequestReceived();
+    }
   }
 
   void goTradePage(String id, bool isTradeVal){
@@ -97,6 +105,22 @@ class ManageController extends GetxController {
           (value) async {
         tradingReceivedLst.call(value);
         isLoadingTradingReceived.call(false);
+      },
+    );
+  }
+
+  Future<void> getRequestReceived() async {
+    //TODO use test
+    isLoadingRequestReceived.call(true);
+    final Either<ErrorObject, RequestPostResultModel> res = await _manageService.getRequestReceived();
+
+    res.fold(
+          (failure) {
+            isLoadingRequestReceived.call(false);
+      },
+          (value) async {
+        requestReceivedLst.call(value);
+        isLoadingRequestReceived.call(false);
       },
     );
   }

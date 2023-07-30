@@ -136,7 +136,7 @@ class HomePage extends GetView<HomeController> {
               color: kBackground
             ),
             child: cont.id.isNotEmpty ? Image.network(
-                CoreUrl.baseImageURL + cont.id + '.jpg',
+                CoreUrl.baseCateURL + cont.img,
                 fit: BoxFit.fill
             ) : const SizedBox(),
           ),

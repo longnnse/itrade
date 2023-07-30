@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/models/login_model.dart';
+import 'package:i_trade/src/domain/models/params/edit_password_param.dart';
 import 'package:i_trade/src/domain/models/params/register_account_param.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 
@@ -74,6 +75,65 @@ class LoginRepositories implements LoginService {
           failure: const ServerFailure(),
           title: 'Thông báo',
           mess: 'Sai thông tin nhập, vui lòng kiểm tra lại số CMND/CCCD, email hoặc SDT')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, String>> postEditPassword({required EditPasswordParam param}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/User/ChangePassword';
+
+      final Map<String, dynamic> queryParameters = {
+        'email': param.email,
+        'currentPassword': param.currentPassword,
+        'newPassword': param.newPassword
+      };
+
+      final res = await _coreHttp.post(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        return const Right('Đổi mật khẩu thành công');
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo',
+          mess: 'Sai thông tin nhập, vui lòng kiểm tra lại số email, mật khẩu hiện tại hoặc mới')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, String>> postForgetPassword({required String email}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/User/ForgotPassword';
+
+      final Map<String, dynamic> queryParameters = {
+        'email': email,
+      };
+
+      final res = await _coreHttp.post(url, queryParameters);
+
+      if (res != null) {
+        return const Right('Mật khẩu reset email đã được gửi');
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo',
+          mess: 'Sai thông tin nhập, vui lòng kiểm tra lại số email')
       );
     } on NoConnectionException {
       return Left(ErrorObject.mapFailureToErrorObject(

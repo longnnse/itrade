@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:i_trade/core/initialize/theme.dart';
-import 'package:i_trade/src/presentation/pages/change_password/chang_password_controller.dart';
+import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_controller.dart';
 
-class ChangePasswordPage extends GetView<ChangePasswordController> {
-  static const String routeName = '/ChangePasswordPage';
+import '../../../../../core/initialize/theme.dart';
+
+
+
+class EditPasswordPage extends GetView<EditProfileController> {
+  static const String routeName = '/EditPasswordPage';
   final Widget? leading;
-  const ChangePasswordPage({
+  const EditPasswordPage({
     Key? key,
     this.leading,
   }) : super(key: key);
@@ -17,23 +20,19 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
         backgroundColor: kBackgroundBottomBar,
         body: Stack(
           children: [
-            Column(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildHeader(context),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                      _buildInput(context: context, title: 'Nhập mật khẩu hiện tại', iconData: Icons.lock),
-                      _buildInput(context: context, title: 'Nhập mật khẩu mới', iconData: Icons.lock),
-                      _buildInput(context: context, title: 'Nhập lại mật khẩu mới', iconData: Icons.lock),
-                      const SizedBox(height: 50.0),
-                      _buildButton(context)
-                    ],
-                  ),
-                ),
-
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildHeader(context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  _buildInput(context: context, title: 'Email', iconData: Icons.email, controllerText: controller.emailController),
+                  _buildInput(context: context, title: 'Mật khẩu hiện tại', iconData: Icons.lock, controllerText: controller.currentPasswordController),
+                  _buildInput(context: context, title: 'Mật khẩu mới', iconData: Icons.lock, controllerText: controller.newPasswordController),
+                  _buildInput(context: context, title: 'Re-Mật khẩu mới', iconData: Icons.lock, controllerText: controller.reNewPasswordController),
+                  const SizedBox(height: 50.0),
+                  _buildButton(context)
+                ],
+              ),
             ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.1,
@@ -59,9 +58,17 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
                   ),
                 ),
               ),
-            )
+            ),
+            Obx(() => controller.isLoading.value == true ?
+            Positioned(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: kBackground.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
+                )) : const SizedBox())
           ],
-     ));
+        ));
   }
 
   Widget _buildHeader(BuildContext context){
@@ -77,12 +84,12 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 25.0,
-              )
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 25.0,
+            )
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
@@ -97,7 +104,7 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
     );
   }
 
-  Widget _buildInput({required BuildContext context, required String title, required IconData iconData}){
+  Widget _buildInput({required BuildContext context, required String title, required IconData iconData, required TextEditingController controllerText}){
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -127,7 +134,7 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
           Expanded(
             child: TextFormField(
               //initialValue: number.toString(),
-              //controller: blocQLDTTNMT.keySearchTextEditingController,
+              controller: controllerText,
               decoration: InputDecoration(
                   suffixIcon: null,
                   border: InputBorder.none,
@@ -151,25 +158,23 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
   }
 
   Widget _buildButton(BuildContext context){
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(13.0),
-          margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: kDefaultGradient
-          ),
-          child: Text(
-            'Cập nhật mật khẩu',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
-          ),
+    return GestureDetector(
+      onTap: () => controller.postEditPassword(context: context),
+      child: Container(
+        padding: const EdgeInsets.all(13.0),
+        margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            gradient: kDefaultGradient
         ),
-      ],
+        child: Text(
+          'Cập nhật mật khẩu',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
-
 
 }
