@@ -248,7 +248,7 @@ class ManageTradePage extends GetView<ManageController> {
                                                   color: kBackground
                                               ),
                                               child: Text(
-                                                cont.content,
+                                                cont.content != '' ? cont.content : cont.status,
                                                 style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
                                               ),
                                             )

@@ -1,3 +1,5 @@
+import 'package:core_http/core/error_handling/error_object.dart';
+import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/main.dart';
 import 'package:i_trade/src/domain/enums/enums.dart';
@@ -8,6 +10,9 @@ import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_pa
 
 import '../../../../core/initialize/theme.dart';
 import '../../../../core/utils/app_settings.dart';
+import '../../../domain/models/product_model.dart';
+import '../../../domain/models/request_post_result_model.dart';
+import '../../../domain/services/manage_service.dart';
 import '../edit_profile/edit_profile_page.dart';
 import '../login/login_page.dart';
 import '../upload_post/upload_post_page.dart';
@@ -24,9 +29,49 @@ class InformationController extends GetxController {
   RxString phoneNumber = ''.obs;
   RxString urlLink = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDK4gXyt3wzCyT9ekbDsR-thEKFtWuQoFraQ&usqp=CAU'.obs;
   RxString buttonTxt = 'Đăng nhập'.obs;
+  final RxBool isLoadingPersonalPost = false.obs;
+  final RxBool isLoadingRequestReceived = false.obs;
+  final ManageService _manageService = Get.find();
+  final Rxn<List<Data>> personalProductList = Rxn<List<Data>>();
+  final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
+
   @override
   void onInit() {
     super.onInit();
+  }
+
+  Future<void> getPersonalPosts() async {
+    //TODO use test
+    isLoadingPersonalPost.call(true);
+    final Either<ErrorObject, List<Data>> res = await _manageService.getPersonalPosts();
+
+    res.fold(
+          (failure) {
+
+        isLoadingPersonalPost.call(false);
+      },
+          (value) async {
+
+        personalProductList.call(value);
+        isLoadingPersonalPost.call(false);
+      },
+    );
+  }
+
+  Future<void> getRequestReceived() async {
+    //TODO use test
+    isLoadingRequestReceived.call(true);
+    final Either<ErrorObject, RequestPostResultModel> res = await _manageService.getRequestReceived();
+
+    res.fold(
+          (failure) {
+        isLoadingRequestReceived.call(false);
+      },
+          (value) async {
+        requestReceivedLst.call(value);
+        isLoadingRequestReceived.call(false);
+      },
+    );
   }
 
   void checkInfoUser(){
@@ -47,6 +92,11 @@ class InformationController extends GetxController {
 
   void updateStatusProfileTab(bool isChange){
     isShow.call(isChange == true ? true : false);
+    if(isShow.value == true){
+      getPersonalPosts();
+    }else{
+      getRequestReceived();
+    }
   }
 
   Future<void> onButtonClick() async {

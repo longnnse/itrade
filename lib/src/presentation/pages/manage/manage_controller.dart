@@ -26,6 +26,7 @@ class ManageController extends GetxController {
   final RxBool isLoadingConfirmTrade = false.obs;
   final RxBool isLoadingRequestTrade = false.obs;
   final RxBool isLoadingTradingReceived = false.obs;
+  final RxBool isLoadingTradingSent = false.obs;
   final RxBool isLoadingRequestReceived = false.obs;
   final RxBool isLoadingPostRequested = false.obs;
   final Rxn<List<Data>> productList = Rxn<List<Data>>();
@@ -33,6 +34,7 @@ class ManageController extends GetxController {
   final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
   final Rxn<List<DataTrade>> tradingReceivedLst = Rxn<List<DataTrade>>();
+  final Rxn<List<DataTrade>> tradingSentLst = Rxn<List<DataTrade>>();
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
   final Rxn<PostRequestedResultModel> postRequestedLst = Rxn<PostRequestedResultModel>();
   final RxString idFromPost = ''.obs;
@@ -68,8 +70,10 @@ class ManageController extends GetxController {
       getTradingReceived();
     }if(tabInt.value == 1){
       getRequestReceived();
+    }if(tabInt.value == 1){
+      getPostRequestedReceived();
     }else{
-
+      getTradingSent();
     }
   }
 
@@ -109,6 +113,22 @@ class ManageController extends GetxController {
           (value) async {
         tradingReceivedLst.call(value);
         isLoadingTradingReceived.call(false);
+      },
+    );
+  }
+
+  Future<void> getTradingSent() async {
+    //TODO use test
+    isLoadingTradingSent.call(true);
+    final Either<ErrorObject, List<DataTrade>> res = await _manageService.getTradingSent();
+
+    res.fold(
+          (failure) {
+            isLoadingTradingSent.call(false);
+      },
+          (value) async {
+        tradingSentLst.call(value);
+        isLoadingTradingSent.call(false);
       },
     );
   }

@@ -24,15 +24,15 @@ class DashboardPage extends GetView<DashboardController> {
         title: controller.appBarTitle.value,
         isUseOnlyBack: false,
         actionRights: [
-          if(controller.lastSelected.value == 'TAB: 0')
-            IconButton(
-                onPressed: () => Get.toNamed(UploadPostPage.routeName),
-                icon: const Icon(
-                  Icons.upload,
-                  color: Colors.white,
-                  size: 25.0,
-                )
-            ),
+          // if(controller.lastSelected.value == 'TAB: 0')
+          //   IconButton(
+          //       onPressed: () => Get.toNamed(UploadPostPage.routeName),
+          //       icon: const Icon(
+          //         Icons.upload,
+          //         color: Colors.white,
+          //         size: 25.0,
+          //       )
+          //   ),
           if(controller.lastSelected.value == 'TAB: 0' || controller.lastSelected.value == 'TAB: 1')
             IconButton(
                 onPressed: () => _buildModelBottomFilter(context),

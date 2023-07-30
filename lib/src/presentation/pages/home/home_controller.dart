@@ -8,6 +8,7 @@ import 'package:i_trade/core/initialize/theme.dart';
 import 'package:i_trade/src/domain/models/category_model.dart';
 import 'package:i_trade/src/domain/models/sell_free_result_model.dart';
 import 'package:i_trade/src/domain/services/home_service.dart';
+import 'package:i_trade/src/domain/services/manage_service.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/trade_product_page.dart';
 
@@ -22,15 +23,18 @@ class HomeController extends GetxController{
   RxBool isMore = false.obs;
   RxInt countImage = 0.obs;
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingPersonalPost = false.obs;
   final RxBool isLoadingRequest = false.obs;
   final RxBool isLoadingProduct = false.obs;
   final RxBool isLoadingProductCate = false.obs;
   final RxBool isLoadingData = false.obs;
   final HomeService _homeService = Get.find();
+  final ManageService _manageService = Get.find();
   final Rxn<List<CategoryModel>> categoryList = Rxn<List<CategoryModel>>();
   final Rxn<ProductModel> productModel = Rxn<ProductModel>();
   final Rxn<SellFreeResultModel> sellFreeResultModel = Rxn<SellFreeResultModel>();
   final Rxn<Data> productByIDModel = Rxn<Data>();
+  final Rxn<List<Data>> personalProductList = Rxn<List<Data>>();
 
   TextEditingController descControler = TextEditingController();
   void dependencies() {
@@ -130,6 +134,23 @@ class HomeController extends GetxController{
     );
   }
 
+  Future<void> getPersonalPosts() async {
+    //TODO use test
+    isLoadingPersonalPost.call(true);
+    final Either<ErrorObject, List<Data>> res = await _manageService.getPersonalPosts();
+
+    res.fold(
+          (failure) {
+
+            isLoadingPersonalPost.call(false);
+      },
+          (value) async {
+
+        personalProductList.call(value);
+        isLoadingPersonalPost.call(false);
+      },
+    );
+  }
 
   Future<void> postSellFree({required String postID, required String desc}) async {
     //TODO use test

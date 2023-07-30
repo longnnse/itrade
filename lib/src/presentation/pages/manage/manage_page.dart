@@ -66,6 +66,7 @@ class ManagePage extends GetView<ManageController> {
                         ],
                       ),
                     ),
+                    _buildSearch(context: context),
                     Obx(() {
                       if (controller.isLoading.value) {
                         return const ManageProductShimmerWidget(
@@ -105,6 +106,39 @@ class ManagePage extends GetView<ManageController> {
             )
           ],
         ));
+  }
+
+  Widget _buildSearch({required BuildContext context}){
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: kBackgroundBottomBar,
+        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+      ),
+      child: TextFormField(
+        //initialValue: number.toString(),
+        //controller: blocQLDTTNMT.keySearchTextEditingController,
+        decoration: InputDecoration(
+            suffixIcon: const Icon(
+                Icons.search
+            ),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            contentPadding: const EdgeInsets.only(top: 10.0),
+            disabledBorder: InputBorder.none,
+            hintText: 'Nhập sản phẩm cần tìm...',
+            hintStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: kTextColorGrey)),
+        onChanged: (value) {},
+        onFieldSubmitted: (value) {},
+      ),
+    );
   }
 
   Widget _buildItem({required BuildContext context, required Data model}){

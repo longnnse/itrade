@@ -10,6 +10,7 @@ import 'package:i_trade/src/presentation/pages/home/widgets/product_list.dart';
 
 import '../../../../core/initialize/theme.dart';
 import '../../../domain/models/category_model.dart';
+import '../upload_post/upload_post_page.dart';
 import 'home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -113,7 +114,14 @@ class HomePage extends GetView<HomeController> {
               height: 5.0,
             )
           ],
-        )
+        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(UploadPostPage.routeName),
+        backgroundColor: kPrimaryLightColor,
+        child: const Icon(
+            Icons.upload
+        ),
+      ),
     );
   }
 

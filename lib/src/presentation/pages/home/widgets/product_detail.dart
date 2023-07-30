@@ -21,6 +21,8 @@ class ProductDetailPage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     controller.getPostByID(id: controller.idPost.value);
+    controller.getPersonalPosts();
+    controller.getPosts(pageIndex: 1, pageSize: 10, categoryIds: '');
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
             context: context,
@@ -484,29 +486,29 @@ class ProductDetailPage extends GetView<HomeController> {
                       ],
                     )
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: Text(
-                            'Xuất xứ: Không rõ',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: Text(
-                            'Mã phụ tùng: In trên box',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ],
-                    )
-                ),
+                // Padding(
+                //     padding: const EdgeInsets.only(top: 10.0),
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         SizedBox(
+                //           width: MediaQuery.of(context).size.width * 0.4,
+                //           child: Text(
+                //             'Xuất xứ: Không rõ',
+                //             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                //           ),
+                //         ),
+                //         SizedBox(
+                //           width: MediaQuery.of(context).size.width * 0.4,
+                //           child: Text(
+                //             'Mã phụ tùng: In trên box',
+                //             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                //           ),
+                //         ),
+                //       ],
+                //     )
+                // ),
               ],
             ),
           ),
@@ -668,108 +670,240 @@ class ProductDetailPage extends GetView<HomeController> {
                     ],
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for(int i = 0; i < 5; i++)
-                        GestureDetector(
-                          onTap: () => Get.toNamed(ProductDetailPage.routeName),
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 10.0, top: 10.0),
-                            child: Column(
-                              children: [
-                                Stack(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width * 0.4,
-                                      height: MediaQuery.of(context).size.width * 0.25,
-                                      margin: const EdgeInsets.only(bottom: 5.0),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5.0),
-                                          color: kBackground
-                                      ),
-                                    ),
-                                    Positioned(
-                                        right: 10.0,
-                                        top: 10.0,
-                                        child: Stack(
-                                          children: [
-                                            const Icon(
-                                              Icons.camera_alt,
-                                              size: 30.0,
-                                              color: Colors.grey,
-                                            ),
-                                            Positioned(
-                                              child: SizedBox(
-                                                width: 30.0,
-                                                height: 30.0,
-                                                child: Center(
-                                                  child: Container(
-                                                    width: 15.0,
-                                                    height: 15.0,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child: Text(
-                                                      '6',
-                                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.4,
-                                  child: Text(
-                                    'Cần bán Rick Owen',
-                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.4,
-                                  child: Text(
-                                    '9,500,000 VND',
-                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.4,
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                if(isSimilar == false)...[
+                  Obx(() {
+                    if (controller.isLoadingPersonalPost.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if(controller.personalProductList.value!.isNotEmpty) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for(var cont in controller.personalProductList.value!)
+                              GestureDetector(
+                                onTap: () => Get.toNamed(ProductDetailPage.routeName),
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 10.0, top: 10.0),
+                                  child: Column(
                                     children: [
-                                      ShaderMask(
-                                        blendMode: BlendMode.srcIn,
-                                        shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                                        child: const Icon(
-                                            Icons.person,
-                                            color: kPrimaryLightColor,
-                                            size: 15.0
+                                      Stack(
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context).size.width * 0.4,
+                                            height: MediaQuery.of(context).size.width * 0.25,
+                                            margin: const EdgeInsets.only(bottom: 5.0),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                                color: kBackground
+                                            ),
+                                            child: cont.resources.isNotEmpty ? Image.network(
+                                                CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
+                                                fit: BoxFit.fill
+                                            ) : const SizedBox(),
+                                          ),
+                                          Positioned(
+                                              right: 10.0,
+                                              top: 10.0,
+                                              child: Stack(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.camera_alt,
+                                                    size: 30.0,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  Positioned(
+                                                    child: SizedBox(
+                                                      width: 30.0,
+                                                      height: 30.0,
+                                                      child: Center(
+                                                        child: Container(
+                                                          width: 15.0,
+                                                          height: 15.0,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                            color: Colors.white,
+                                                          ),
+                                                          child: Text(
+                                                            cont.resources.length.toString(),
+                                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.4,
+                                        child: Text(
+                                          cont.title,
+                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                      Flexible(
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.4,
                                         child: Text(
-                                          '2 giờ trước - Tp.Hồ Chí Minh',
-                                          style: Theme.of(context).textTheme.bodySmall,
+                                          '${cont.price.toString().split('.').first} đ',
+                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.4,
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            ShaderMask(
+                                              blendMode: BlendMode.srcIn,
+                                              shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                                              child: const Icon(
+                                                  Icons.date_range,
+                                                  color: kPrimaryLightColor,
+                                                  size: 15.0
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: Text(
+                                                '${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
+                                                style: Theme.of(context).textTheme.bodySmall,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
-                )
+                      );
+                    } else {
+                      return Center(
+                          child: Text(
+                            'Không có dữ liệu',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                          )
+                      );
+                    }
+                  })
+                ]else...[
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        for(var cont in controller.productModel.value!.data)...[
+                          if(cont.isConfirmed == true)...[
+                            GestureDetector(
+                              onTap: () => Get.toNamed(ProductDetailPage.routeName),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 10.0, top: 10.0),
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.4,
+                                          height: MediaQuery.of(context).size.width * 0.25,
+                                          margin: const EdgeInsets.only(bottom: 5.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              color: kBackground
+                                          ),
+                                          child: cont.resources.isNotEmpty ? Image.network(
+                                              CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
+                                              fit: BoxFit.fill
+                                          ) : const SizedBox(),
+                                        ),
+                                        Positioned(
+                                            right: 10.0,
+                                            top: 10.0,
+                                            child: Stack(
+                                              children: [
+                                                const Icon(
+                                                  Icons.camera_alt,
+                                                  size: 30.0,
+                                                  color: Colors.grey,
+                                                ),
+                                                Positioned(
+                                                  child: SizedBox(
+                                                    width: 30.0,
+                                                    height: 30.0,
+                                                    child: Center(
+                                                      child: Container(
+                                                        width: 15.0,
+                                                        height: 15.0,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(10.0),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: Text(
+                                                          cont.resources.length.toString(),
+                                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.4,
+                                      child: Text(
+                                        cont.title,
+                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.4,
+                                      child: Text(
+                                        '${cont.price.toString().split('.').first} đ',
+                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.4,
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          ShaderMask(
+                                            blendMode: BlendMode.srcIn,
+                                            shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                                            child: const Icon(
+                                                Icons.date_range,
+                                                color: kPrimaryLightColor,
+                                                size: 15.0
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              '${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
+                                              style: Theme.of(context).textTheme.bodySmall,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ]
+                        ]
+
+                      ],
+                    ),
+                  )
+                ]
+
               ],
             ),
           ),

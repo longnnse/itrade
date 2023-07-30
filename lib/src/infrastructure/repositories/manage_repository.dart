@@ -4,13 +4,11 @@ import 'package:core_http/core/error_handling/failures.dart';
 import 'package:core_http/core_http.dart';
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
-import 'package:i_trade/src/domain/models/category_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
-import 'package:i_trade/src/domain/services/home_service.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
 
 import '../../../core/initialize/core_url.dart';
@@ -326,6 +324,34 @@ class ManageRepositories implements ManageService {
         return Right(data);
       }
 
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, List<DataTrade>>> getTradingSent() async {
+    try {
+      const url = '${CoreUrl.baseURL}/Trading/TradingSent';
+
+      final res = await _coreHttp.get(url,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = res
+            .map<DataTrade>(
+                (e) => DataTrade.fromJson(e))
+            .toList();
+        return Right(data ?? []);
+      }
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const DataParsingFailure()));
     } on ServerException {

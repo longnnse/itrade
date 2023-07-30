@@ -26,6 +26,7 @@ class ManageHistoryPage extends GetView<ManageController> {
     controller.getTradingReceived();
     controller.getRequestReceived();
     controller.getPostRequestedReceived();
+    controller.getTradingSent();
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
@@ -46,7 +47,6 @@ class ManageHistoryPage extends GetView<ManageController> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-
               Obx(() {
                 if (controller.isLoadingTradingReceived.value) {
                   return const SearchProductShimmerWidget(
@@ -57,18 +57,23 @@ class ManageHistoryPage extends GetView<ManageController> {
                   return Column(
                     children: [
                       _buildTab(context,
-                          controller.tradingReceivedLst.value!.length,
-                          controller.requestReceivedLst.value!.data.length,
-                          controller.postRequestedLst.value!.data.length),
+                        controller.tradingReceivedLst.value!.length,
+                        controller.requestReceivedLst.value!.data.length,
+                        controller.postRequestedLst.value!.data.length,
+                        controller.tradingSentLst.value!.length,
+                      ),
                       if(controller.tabInt.value == 0)...[
                         for(var cont in controller.tradingReceivedLst.value!)
                           _buildHistoryTradeItem(context: context, dataTrade: cont)
                       ]else if(controller.tabInt.value == 1)...[
                         for(var cont in controller.requestReceivedLst.value!.data)
                           _buildHistoryRequestItem(context: context, dataRequest: cont)
-                      ]else...[
+                      ]else if(controller.tabInt.value == 2)...[
                         for(var cont in controller.postRequestedLst.value!.data)
                           _buildPostRequestedItem(context: context, dataRequest: cont)
+                      ]else...[
+                        for(var cont in controller.tradingSentLst.value!)
+                          _buildHistoryTradeItem(context: context, dataTrade: cont)
                       ]
 
                     ],
@@ -87,7 +92,7 @@ class ManageHistoryPage extends GetView<ManageController> {
         ));
   }
 
-  Widget _buildTab(BuildContext context, int slTraoDoi, int slRequest, int slPost){
+  Widget _buildTab(BuildContext context, int slTraoDoi, int slRequest, int slPost, int slSent){
     return Obx(() => SizedBox(
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
@@ -98,18 +103,14 @@ class ManageHistoryPage extends GetView<ManageController> {
               onTap: () => controller.updateStatus(0),
               child: Container(
                 //width: MediaQuery.of(context).size.width * 0.4,
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
                 decoration: BoxDecoration(
-                    border: controller.tabInt.value == 0 ? const Border(
-                        bottom: BorderSide(
-                            color: kPrimaryLightColor,
-                            width: 2.0
-                        )
-                    ) : null
+                  gradient: controller.tabInt.value == 0 ? kDefaultGradient : null,
                 ),
                 child: Text(
                   'Đã trao đổi ($slTraoDoi)',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
+                      color: controller.tabInt.value == 0 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -118,18 +119,14 @@ class ManageHistoryPage extends GetView<ManageController> {
               onTap: () => controller.updateStatus(1),
               child: Container(
                 //width: MediaQuery.of(context).size.width * 0.4,
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
                 decoration: BoxDecoration(
-                    border: controller.tabInt.value == 1 ? const Border(
-                        bottom: BorderSide(
-                            color: kPrimaryLightColor,
-                            width: 2.0
-                        )
-                    ): null
+                  gradient: controller.tabInt.value == 1 ? kDefaultGradient : null,
                 ),
                 child: Text(
                   'Đã cho/bán/mua ($slRequest)',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
+                      color: controller.tabInt.value == 1 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -138,18 +135,30 @@ class ManageHistoryPage extends GetView<ManageController> {
               onTap: () => controller.updateStatus(2),
               child: Container(
                 //width: MediaQuery.of(context).size.width * 0.4,
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
                 decoration: BoxDecoration(
-                    border: controller.tabInt.value == 2 ? const Border(
-                        bottom: BorderSide(
-                            color: kPrimaryLightColor,
-                            width: 2.0
-                        )
-                    ): null
+                  gradient: controller.tabInt.value == 2 ? kDefaultGradient : null,
                 ),
                 child: Text(
                   'Đã mua/xin/cho ($slPost)',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
+                      color: controller.tabInt.value == 2 ? Colors.white : Colors.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => controller.updateStatus(3),
+              child: Container(
+                //width: MediaQuery.of(context).size.width * 0.4,
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+                decoration: BoxDecoration(
+                  gradient: controller.tabInt.value == 3 ? kDefaultGradient : null,
+                ),
+                child: Text(
+                  'Đã gửi trao đổi ($slSent)',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
+                      color: controller.tabInt.value == 3 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
