@@ -25,6 +25,7 @@ class ManageHistoryPage extends GetView<ManageController> {
   Widget build(BuildContext context) {
     controller.getTradingReceived();
     controller.getRequestReceived();
+    controller.getPostRequestedReceived();
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
@@ -55,13 +56,19 @@ class ManageHistoryPage extends GetView<ManageController> {
                 if(controller.tradingReceivedLst.value != null) {
                   return Column(
                     children: [
-                      _buildTab(context, controller.tradingReceivedLst.value!.length, controller.requestReceivedLst.value!.data.length),
-                      if(controller.isisTradePost.value == true)...[
+                      _buildTab(context,
+                          controller.tradingReceivedLst.value!.length,
+                          controller.requestReceivedLst.value!.data.length,
+                          controller.postRequestedLst.value!.data.length),
+                      if(controller.tabInt.value == 0)...[
                         for(var cont in controller.tradingReceivedLst.value!)
                           _buildHistoryTradeItem(context: context, dataTrade: cont)
-                      ]else...[
+                      ]else if(controller.tabInt.value == 1)...[
                         for(var cont in controller.requestReceivedLst.value!.data)
                           _buildHistoryRequestItem(context: context, dataRequest: cont)
+                      ]else...[
+                        for(var cont in controller.postRequestedLst.value!.data)
+                          _buildPostRequestedItem(context: context, dataRequest: cont)
                       ]
 
                     ],
@@ -80,18 +87,20 @@ class ManageHistoryPage extends GetView<ManageController> {
         ));
   }
 
-  Widget _buildTab(BuildContext context, int slTraoDoi, int slRequest){
+  Widget _buildTab(BuildContext context, int slTraoDoi, int slRequest, int slPost){
     return Obx(() => SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () => controller.updateStatus(true),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () => controller.updateStatus(0),
               child: Container(
+                //width: MediaQuery.of(context).size.width * 0.4,
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                    border: controller.isisTradePost.value == true ? const Border(
+                    border: controller.tabInt.value == 0 ? const Border(
                         bottom: BorderSide(
                             color: kPrimaryLightColor,
                             width: 2.0
@@ -105,28 +114,48 @@ class ManageHistoryPage extends GetView<ManageController> {
                 ),
               ),
             ),
-          ),
-          GestureDetector(
-            onTap: () => controller.updateStatus(false),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  border: controller.isisTradePost.value == false ? const Border(
-                      bottom: BorderSide(
-                          color: kPrimaryLightColor,
-                          width: 2.0
-                      )
-                  ): null
-              ),
-              child: Text(
-                'Đã mua/bán ($slRequest)',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
+            GestureDetector(
+              onTap: () => controller.updateStatus(1),
+              child: Container(
+                //width: MediaQuery.of(context).size.width * 0.4,
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                    border: controller.tabInt.value == 1 ? const Border(
+                        bottom: BorderSide(
+                            color: kPrimaryLightColor,
+                            width: 2.0
+                        )
+                    ): null
+                ),
+                child: Text(
+                  'Đã cho/bán/mua ($slRequest)',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
-        ],
+            GestureDetector(
+              onTap: () => controller.updateStatus(2),
+              child: Container(
+                //width: MediaQuery.of(context).size.width * 0.4,
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                    border: controller.tabInt.value == 2 ? const Border(
+                        bottom: BorderSide(
+                            color: kPrimaryLightColor,
+                            width: 2.0
+                        )
+                    ): null
+                ),
+                child: Text(
+                  'Đã mua/xin/cho ($slPost)',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     ));
   }
@@ -251,6 +280,125 @@ class ManageHistoryPage extends GetView<ManageController> {
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: dataRequest.status == 'Accept' ? kSecondaryGreen :
                           dataRequest.status == 'Deny' ? kSecondaryRed : kSecondaryYellow,
+                          fontWeight: FontWeight.w700)
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10.0,),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPostRequestedItem({required BuildContext context, required Post dataRequest}){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.only(top: 15.0),
+      decoration: BoxDecoration(
+        color: kBackgroundBottomBar,
+        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Tiêu đề: ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: dataRequest.title,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: kPrimaryLightColor,
+                          fontWeight: FontWeight.w700)
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Nội dung: ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: dataRequest.content ?? 'Không có',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: kPrimaryLightColor,
+                          fontWeight: FontWeight.w700)
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Địa chỉ: ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: dataRequest.location,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: kPrimaryLightColor,
+                          fontWeight: FontWeight.w700)
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Giá: ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: dataRequest.price != null ? dataRequest.price.toString().split('.').first : '0đ',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: kPrimaryLightColor,
+                          fontWeight: FontWeight.w700)
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Trạng thái: ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: dataRequest.isUsed == true ? 'Đã sử dụng' : 'Mới',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: kPrimaryLightColor,
+                          fontWeight: FontWeight.w700)
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Loại hàng: ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: dataRequest.type,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: kPrimaryLightColor,
                           fontWeight: FontWeight.w700)
                   ),
                 ],
@@ -510,5 +658,4 @@ class ManageHistoryPage extends GetView<ManageController> {
       ),
     );
   }
-
 }

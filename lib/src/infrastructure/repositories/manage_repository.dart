@@ -290,13 +290,39 @@ class ManageRepositories implements ManageService {
   @override
   Future<Either<ErrorObject, RequestPostResultModel>> getRequestReceived() async {
     try {
-      const url = '${CoreUrl.baseURL}/Request/Received?PageSize=10';
+      const url = '${CoreUrl.baseURL}/Request/Received?PageSize=20';
 
       final res = await _coreHttp.get(url,
           headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
         final data = RequestPostResultModel.fromJson(res);
+        return Right(data);
+      }
+
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, PostRequestedResultModel>> getPostRequested() async {
+    try {
+      const url = '${CoreUrl.baseURL}/Post/Requested?PageSize=20';
+
+      final res = await _coreHttp.get(url,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = PostRequestedResultModel.fromJson(res);
         return Right(data);
       }
 

@@ -283,6 +283,26 @@ class UploadPostPage extends GetView<UploadPostController> {
                     ],
                   ],
                 )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Tôi muốn cho miễn phí',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Obx(() => ShaderMask(
+                      blendMode: BlendMode.srcIn,
+                      shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                      child: IconButton(
+                          onPressed: () => controller.isFree.call(controller.isFree.value == false ? true : false),
+                          icon: Icon(
+                            controller.isFree.value == false ? Icons.check_box_outline_blank : Icons.check_box,
+                            size: 32.0,
+                          )
+                      ),
+                    ))
+                  ],
+                ),
                 _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number, textController: controller.priceController),
                 _buildTextFormField(context: context, title: 'Tiêu đề', maxLine: 1, textController: controller.titleController),
                 _buildTextFormField(context: context, title: 'Mô tả sản phẩm', maxLine: 5, textController: controller.contentController),
@@ -521,26 +541,7 @@ class UploadPostPage extends GetView<UploadPostController> {
       margin: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Tôi muốn cho miễn phí',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Obx(() => ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                child: IconButton(
-                    onPressed: () => controller.isFree.call(controller.isFree.value == false ? true : false),
-                    icon: Icon(
-                      controller.isFree.value == false ? Icons.check_box_outline_blank : Icons.check_box,
-                      size: 32.0,
-                    )
-                ),
-              ))
-            ],
-          ),
+
           GestureDetector(
             onTap: () => controller.postUploadProduct(context: context),
             child: Container(

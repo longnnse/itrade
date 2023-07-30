@@ -28,4 +28,7 @@ abstract class ManageService {
   Future<Either<ErrorObject, List<DataTrade>>> getTradingReceived();
 
   Future<Either<ErrorObject, RequestPostResultModel>> getRequestReceived();
+
+  Future<Either<ErrorObject, PostRequestedResultModel>> getPostRequested();
+
 }

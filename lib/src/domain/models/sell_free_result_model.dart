@@ -82,7 +82,7 @@ class Post {
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     title = json['title'];
     content = json['content'];
-    location = json['location'];
+    location = json['location'] ?? '';
     price = json['price'];
     isConfirmed = json['isConfirmed'];
     isCompleted = json['isCompleted'];

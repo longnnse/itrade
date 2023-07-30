@@ -19,7 +19,7 @@ import '../home/widgets/product_detail.dart';
 import '../upload_post/upload_post_page.dart';
 
 class ManageController extends GetxController {
-  RxBool isisTradePost = true.obs;
+  RxInt tabInt = 0.obs;
   final ManageService _manageService = Get.find();
   final RxBool isLoading = false.obs;
   final RxBool isLoadingTrade = false.obs;
@@ -27,12 +27,14 @@ class ManageController extends GetxController {
   final RxBool isLoadingRequestTrade = false.obs;
   final RxBool isLoadingTradingReceived = false.obs;
   final RxBool isLoadingRequestReceived = false.obs;
+  final RxBool isLoadingPostRequested = false.obs;
   final Rxn<List<Data>> productList = Rxn<List<Data>>();
   final Rxn<TradeModel> tradeList = Rxn<TradeModel>();
   final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
   final Rxn<List<DataTrade>> tradingReceivedLst = Rxn<List<DataTrade>>();
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
+  final Rxn<PostRequestedResultModel> postRequestedLst = Rxn<PostRequestedResultModel>();
   final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
   final RxString ownerPostID = ''.obs;
@@ -60,12 +62,14 @@ class ManageController extends GetxController {
     Get.toNamed(ProductDetailPage.routeName);
   }
 
-  void updateStatus(bool isChange){
-    isisTradePost.call(isChange == true ? true : false);
-    if(isisTradePost.value == true){
+  void updateStatus(int countTab){
+    tabInt.call(countTab);
+    if(tabInt.value == 0){
       getTradingReceived();
-    }else{
+    }if(tabInt.value == 1){
       getRequestReceived();
+    }else{
+
     }
   }
 
@@ -121,6 +125,22 @@ class ManageController extends GetxController {
           (value) async {
         requestReceivedLst.call(value);
         isLoadingRequestReceived.call(false);
+      },
+    );
+  }
+
+  Future<void> getPostRequestedReceived() async {
+    //TODO use test
+    isLoadingPostRequested.call(true);
+    final Either<ErrorObject, PostRequestedResultModel> res = await _manageService.getPostRequested();
+
+    res.fold(
+          (failure) {
+            isLoadingPostRequested.call(false);
+      },
+          (value) async {
+        postRequestedLst.call(value);
+        isLoadingPostRequested.call(false);
       },
     );
   }

@@ -107,7 +107,9 @@ class LoginRepositories implements LoginService {
           title: 'Thông báo',
           mess: 'Sai thông tin nhập, vui lòng kiểm tra lại số email, mật khẩu hiện tại hoặc mới')
       );
-    } on NoConnectionException {
+    }
+    on NoConnectionException {
+      print('1213123');
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const NoConnectionFailure()));
     }

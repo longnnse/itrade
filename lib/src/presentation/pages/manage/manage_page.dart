@@ -58,7 +58,7 @@ class ManagePage extends GetView<ManageController> {
                                   )
                               ),
                               child: Text(
-                                'Quản lý đơn bán',
+                                'Lịch sử trao đổi cho mua',
                                 style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor),
                               ),
                             ),
