@@ -55,6 +55,9 @@ dependencies:
   http:
   image_picker: ^0.8.4+1
   firebase_messaging: ^14.4.1
+  flutter_easyloading: ^3.0.5
+  flutter_screenutil: ^5.7.0
+  cached_network_image: ^3.2.3
   intl:
 
   flutter_localizations:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
+import 'package:i_trade/src/presentation/pages/exchange/index.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
 import 'package:i_trade/src/presentation/pages/search/search_page.dart';
@@ -49,7 +50,7 @@ class DashboardController extends GetxController {
         content = const SearchPage();
         break;
       case 'TAB: 3':
-        content = const ChatPage();
+        content = const ExchangePage();
         break;
       case 'TAB: 4':
         content = const InformationPage();
