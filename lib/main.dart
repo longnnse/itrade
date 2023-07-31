@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/common/utils/FirebaseMessagingHandler.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:i_trade/src/presentation/pages/login/login_controller.dart';
@@ -37,6 +39,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  firebaseChatInit().whenComplete(() => FirebaseMessagingHandler.config());
 
   runApp(const MyApp());
 }
@@ -101,17 +105,17 @@ class _PressPageState extends State<PressPage> {
   }
 }
 
-// Future firebaseChatInit() async {
-//   FirebaseMessaging.onBackgroundMessage(
-//       FirebaseMessagingHandler.firebaseMessagingBackground);
-//   if (GetPlatform.isAndroid) {
-//     FirebaseMessagingHandler.flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//             AndroidFlutterLocalNotificationsPlugin>()!
-//         .createNotificationChannel(FirebaseMessagingHandler.channel_call);
-//     FirebaseMessagingHandler.flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//             AndroidFlutterLocalNotificationsPlugin>()!
-//         .createNotificationChannel(FirebaseMessagingHandler.channel_message);
-//   }
-// }
+Future firebaseChatInit() async {
+  FirebaseMessaging.onBackgroundMessage(
+      FirebaseMessagingHandler.firebaseMessagingBackground);
+  if (GetPlatform.isAndroid) {
+    FirebaseMessagingHandler.flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .createNotificationChannel(FirebaseMessagingHandler.channel_call);
+    FirebaseMessagingHandler.flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .createNotificationChannel(FirebaseMessagingHandler.channel_message);
+  }
+}

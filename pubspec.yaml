@@ -60,6 +60,7 @@ dependencies:
   cached_network_image: ^3.2.3
   permission_handler: ^10.2.0
   signalr_netcore: any
+  flutter_local_notifications: ^15.1.0+1
   intl:
 
   flutter_localizations:

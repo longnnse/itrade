@@ -16,6 +16,13 @@ class ExchangeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    // asyncLoadAllData();
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
     asyncLoadAllData();
   }
 
