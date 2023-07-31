@@ -24,29 +24,6 @@ class DashboardController extends GetxController {
   Rx<RangeValues> currentRangeValues = const RangeValues(0, 30000000).obs;
   var formatNum =
       NumberFormat.simpleCurrency(locale: 'vi-VN', decimalDigits: 0);
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-    firebaseMessageSetup();
-  }
-
-  firebaseMessageSetup() async {
-    String? fcmToken = await FirebaseMessaging.instance.getToken();
-    // print("...my device token is $fcmToken");
-    // print("...my token ${AppSettings.getValue(KeyAppSetting.token)}");
-    if (fcmToken != null) {
-      BindFcmTokenRequestEntity bindFcmTokenRequestEntity =
-          BindFcmTokenRequestEntity();
-      bindFcmTokenRequestEntity.fcmtoken = fcmToken;
-      await ChatAPI.bind_fcmtoken(bindFcmTokenRequestEntity);
-    }
-  }
 
   void selectedTab(int index) {
     lastSelected.call('TAB: $index');
