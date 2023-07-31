@@ -10,7 +10,7 @@ import '../../../../core/initialize/theme.dart';
 import '../../../domain/models/category_model.dart';
 import '../home/widgets/product_detail.dart';
 
-class SearchPage extends GetView<SearchController> {
+class SearchPage extends GetView<SearchControllerCustom> {
   static const String routeName = '/SearchPage';
   final Widget? leading;
   const SearchPage({

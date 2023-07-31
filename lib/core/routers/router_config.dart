@@ -6,12 +6,12 @@ import 'package:i_trade/src/domain/services/upload_product_service.dart';
 import 'package:i_trade/src/infrastructure/repositories/home_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/login_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/upload_product_repository.dart';
-import 'package:i_trade/src/presentation/pages/chat/chat_controller.dart';
-import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
+import 'package:i_trade/src/presentation/pages/chat/index.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/widgets/edit_password_page.dart';
+import 'package:i_trade/src/presentation/pages/exchange/index.dart';
 import 'package:i_trade/src/presentation/pages/home/home_controller.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart';
@@ -47,7 +47,7 @@ class ITradeRouterConfigs {
       name: DashboardPage.routeName,
       page: () => const DashboardPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => DashboardController());
         },
@@ -57,8 +57,9 @@ class ITradeRouterConfigs {
       name: HomePage.routeName,
       page: () => const HomePage(),
       binding: BindingsBuilder(
-            () {
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+        () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<HomeService>(HomeRepositories());
           Get.lazyPut(() => HomeController());
         },
@@ -68,8 +69,9 @@ class ITradeRouterConfigs {
       name: ManagePage.routeName,
       page: () => const ManagePage(),
       binding: BindingsBuilder(
-            () {
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+        () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<ManageService>(ManageRepositories());
           Get.lazyPut(() => ManageController());
         },
@@ -79,8 +81,9 @@ class ITradeRouterConfigs {
       name: ManageTradePage.routeName,
       page: () => const ManageTradePage(),
       binding: BindingsBuilder(
-            () {
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+        () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<ManageService>(ManageRepositories());
           Get.lazyPut(() => ManageController());
         },
@@ -90,9 +93,10 @@ class ITradeRouterConfigs {
       name: ManageHistoryPage.routeName,
       page: () => const ManageHistoryPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<ManageService>(ManageRepositories());
           Get.lazyPut(() => ManageController());
         },
@@ -102,27 +106,21 @@ class ITradeRouterConfigs {
       name: SearchPage.routeName,
       page: () => const SearchPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.lazyPut(() => SearchController());
+          Get.lazyPut(() => SearchControllerCustom());
         },
       ),
     ),
     GetPage(
-      name: ChatPage.routeName,
-      page: () => const ChatPage(),
-      binding: BindingsBuilder(
-            () {
-          // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.lazyPut(() => ChatController());
-        },
-      ),
-    ),
+        name: ChatPage.routeName,
+        page: () => const ChatPage(),
+        binding: ChatBinding()),
     GetPage(
       name: InformationPage.routeName,
       page: () => const InformationPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => InformationController());
         },
@@ -132,8 +130,9 @@ class ITradeRouterConfigs {
       name: LoginPage.routeName,
       page: () => const LoginPage(),
       binding: BindingsBuilder(
-            () {
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+        () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<LoginService>(LoginRepositories());
           Get.lazyPut(() => LoginController());
         },
@@ -143,7 +142,7 @@ class ITradeRouterConfigs {
       name: RegisterPage.routeName,
       page: () => const RegisterPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => LoginController());
         },
@@ -153,7 +152,7 @@ class ITradeRouterConfigs {
       name: ForgetPasswordPage.routeName,
       page: () => const ForgetPasswordPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => LoginController());
         },
@@ -163,9 +162,10 @@ class ITradeRouterConfigs {
       name: EditProfilePage.routeName,
       page: () => const EditProfilePage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<LoginService>(LoginRepositories());
           Get.lazyPut(() => EditProfileController());
         },
@@ -175,9 +175,10 @@ class ITradeRouterConfigs {
       name: EditPasswordPage.routeName,
       page: () => const EditPasswordPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<LoginService>(LoginRepositories());
           Get.lazyPut(() => EditProfileController());
         },
@@ -187,8 +188,9 @@ class ITradeRouterConfigs {
       name: UploadPostPage.routeName,
       page: () => const UploadPostPage(),
       binding: BindingsBuilder(
-            () {
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+        () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<UploadProductService>(UploadProdcutRepositories());
           Get.lazyPut(() => UploadPostController());
         },
@@ -198,7 +200,7 @@ class ITradeRouterConfigs {
       name: ProductListPage.routeName,
       page: () => const ProductListPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           //Get.lazyPut(() => HomeController());
         },
@@ -208,7 +210,7 @@ class ITradeRouterConfigs {
       name: ProductDetailPage.routeName,
       page: () => const ProductDetailPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => HomeController());
         },
@@ -218,20 +220,20 @@ class ITradeRouterConfigs {
       name: TradeProductPage.routeName,
       page: () => const TradeProductPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'), permanent: true);
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
           Get.put<ManageService>(ManageRepositories());
           Get.lazyPut(() => ManageController());
         },
       ),
     ),
-
     GetPage(
       name: ITradePolicyPage.routeName,
       page: () => const ITradePolicyPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => InformationController());
         },
@@ -241,7 +243,7 @@ class ITradeRouterConfigs {
       name: BaoCaoViPhamPage.routeName,
       page: () => const BaoCaoViPhamPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => InformationController());
         },
@@ -251,7 +253,7 @@ class ITradeRouterConfigs {
       name: ViCuaToiPage.routeName,
       page: () => const ViCuaToiPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => InformationController());
         },
@@ -261,7 +263,7 @@ class ITradeRouterConfigs {
       name: MyFeedbackPage.routeName,
       page: () => const MyFeedbackPage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => InformationController());
         },
@@ -271,11 +273,15 @@ class ITradeRouterConfigs {
       name: MyProfilePage.routeName,
       page: () => const MyProfilePage(),
       binding: BindingsBuilder(
-            () {
+        () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.lazyPut(() => InformationController());
         },
       ),
     ),
+    GetPage(
+        name: ExchangePage.routeName,
+        page: () => const ExchangePage(),
+        binding: ExchangeBinding()),
   ];
 }

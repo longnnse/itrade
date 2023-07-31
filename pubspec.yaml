@@ -54,6 +54,13 @@ dependencies:
   shared_preferences: ^2.1.2
   http:
   image_picker: ^0.8.4+1
+  firebase_messaging: ^14.4.1
+  flutter_easyloading: ^3.0.5
+  flutter_screenutil: ^5.7.0
+  cached_network_image: ^3.2.3
+  permission_handler: ^10.2.0
+  signalr_netcore: any
+  flutter_local_notifications: ^15.1.0+1
   intl:
 
   flutter_localizations:
@@ -89,6 +96,7 @@ flutter:
   assets:
    - assets/
    - assets/images/
+   - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

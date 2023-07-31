@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "208676433911",
+    "project_id": "chat-oms",
+    "storage_bucket": "chat-oms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208676433911:android:befe781a2bf857957b08f2",
+        "android_client_info": {
+          "package_name": "com.example.chatty_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208676433911-5h9f0oqn6f202ktd7mv5jrvg45kp641f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOw25rpDCLlVqdiVFXEnW1rTAJ71QxqfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208676433911-5h9f0oqn6f202ktd7mv5jrvg45kp641f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "208676433911-h582rpk3nat00j6bq6vujhgd6qvpjp1h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chattyMac"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208676433911:android:7fb04f9460100c2b7b08f2",
+        "android_client_info": {
+          "package_name": "com.example.i_trade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208676433911-5h9f0oqn6f202ktd7mv5jrvg45kp641f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOw25rpDCLlVqdiVFXEnW1rTAJ71QxqfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208676433911-5h9f0oqn6f202ktd7mv5jrvg45kp641f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "208676433911-h582rpk3nat00j6bq6vujhgd6qvpjp1h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chattyMac"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
