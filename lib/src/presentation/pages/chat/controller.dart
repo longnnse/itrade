@@ -94,6 +94,7 @@ class ChatController extends GetxController {
     hubConnection.on("MessageAdded", (arguments) async {
       var message = Msgcontent.fromJson(arguments![0] as Map<String, dynamic>);
       if (message.tradingUserChat?.trading?.id == trading_id) {
+        message.dateCreated = message.dateCreated!.split('+')[0];
         state.msgcontentList.insert(0, message);
 
         state.msgcontentList.refresh();

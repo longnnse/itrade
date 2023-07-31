@@ -2,7 +2,7 @@ import 'package:i_trade/src/domain/entities/tradingUserChat.dart';
 
 class Msgcontent {
   final String? id;
-  final String? dateCreated;
+  late String? dateCreated;
   final String? content;
   final String? type;
   final TradingUserChatItem? tradingUserChat;
