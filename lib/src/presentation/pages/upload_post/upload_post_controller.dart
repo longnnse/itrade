@@ -30,7 +30,7 @@ class UploadPostController extends GetxController {
   RxString selectedValue = 'Chọn danh mục'.obs;
   RxList<FileParam>? files;
   RxList<MediaFilesModel> mediaModels = (List<MediaFilesModel>.of([])).obs;
-  RxList<FileParam> lstFiles = (List<FileParam>.of([])).obs;
+  RxList<File> lstFiles = (List<File>.of([])).obs;
   RxBool isNew = false.obs;
   //RxBool isPro = false.obs;
   RxBool isFree = false.obs;
@@ -263,10 +263,8 @@ class UploadPostController extends GetxController {
 
         if (pickedFile != null) {
           pathFile = pickedFile.path;
-          var imageFile = File(pathFile);
-          FileParam param = FileParam(contentType: 'image/jpeg', contentDisposition: 'form-data', headers: IHeaderDictionary(contentLength: pathFile.length), length: pathFile.length, name: 'file', fileName: pathFile.split('/').last);
-          //uploadImage(param, imageFile);
-          lstFiles.call().add(param);
+          File imageFile = File(pathFile);
+          lstFiles.call().add(imageFile);
         } else {
           final LostData response = await picker.getLostData();
 
@@ -289,6 +287,8 @@ class UploadPostController extends GetxController {
 
         if (pickedFile != null) {
           pathFile = pickedFile.path;
+          File imageFile = File(pathFile);
+          lstFiles.call().add(imageFile);
         } else {
           final LostData response = await picker.getLostData();
           if (response.isEmpty) {

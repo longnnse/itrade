@@ -32,7 +32,7 @@ class UploadProdcutRepositories implements UploadProductService {
         'CategoryIds': param.categoryIds[0]
       };
 
-      final res = await _coreHttp.postWithFile(url, queryParameters, [],
+      final res = await _coreHttp.postWithFile(url, queryParameters, param.files, fileKey: 'Files',
           headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {

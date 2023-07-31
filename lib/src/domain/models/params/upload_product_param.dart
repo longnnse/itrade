@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:i_trade/src/domain/models/params/file_param.dart';
 
 class UploadProductParam {
@@ -7,7 +9,7 @@ class UploadProductParam {
   late double price;
   late bool isUsed;
   late String type;
-  late List<FileParam> files;
+  late List<File> files;
   late List<String> categoryIds;
 
   UploadProductParam(
