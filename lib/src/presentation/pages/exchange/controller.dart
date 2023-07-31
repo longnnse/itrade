@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/common/apis/exchange.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/entities/trading.dart';
+import 'package:i_trade/src/presentation/pages/chat/index.dart';
 import 'package:i_trade/src/presentation/pages/exchange/state.dart';
 
 class ExchangeController extends GetxController {
@@ -23,7 +24,7 @@ class ExchangeController extends GetxController {
         await ExchangeAPI.create_trading_user_chat(tradingItem.id!);
     // ignore: unnecessary_null_comparison
     if (tradingUserChat != null) {
-      Get.toNamed("/chat", parameters: {
+      Get.toNamed(ChatPage.routeName, parameters: {
         "trading_id": tradingItem.id!,
         "to_avatar": AppSettings.getValue(KeyAppSetting.userId) ==
                 tradingItem.fromPost!.user!.id!

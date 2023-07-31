@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
 import 'package:i_trade/src/presentation/pages/exchange/index.dart';
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
