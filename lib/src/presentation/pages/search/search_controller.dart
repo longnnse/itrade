@@ -12,7 +12,7 @@ import '../../../domain/services/home_service.dart';
 import '../home/home_controller.dart';
 import '../home/widgets/product_detail.dart';
 
-class SearchController extends GetxController {
+class SearchControllerCustom extends GetxController {
   Rx<RangeValues> currentRangeValues = const RangeValues(0, 30000000).obs;
   var formatNum = NumberFormat.simpleCurrency(locale: 'vi-VN', decimalDigits: 0);
   final RxBool isLoading = false.obs;

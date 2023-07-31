@@ -104,7 +104,7 @@ class ITradeRouterConfigs {
       binding: BindingsBuilder(
             () {
           // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.lazyPut(() => SearchController());
+          Get.lazyPut(() => SearchControllerCustom());
         },
       ),
     ),
