@@ -6,7 +6,8 @@ import 'package:i_trade/src/domain/services/upload_product_service.dart';
 import 'package:i_trade/src/infrastructure/repositories/home_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/login_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/upload_product_repository.dart';
-import 'package:i_trade/src/presentation/pages/chat/chat_controller.dart';
+import 'package:i_trade/src/presentation/pages/chat/binding.dart';
+import 'package:i_trade/src/presentation/pages/chat/controller.dart';
 import 'package:i_trade/src/presentation/pages/chat/chat_page.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_controller.dart';
@@ -111,12 +112,7 @@ class ITradeRouterConfigs {
     GetPage(
       name: ChatPage.routeName,
       page: () => const ChatPage(),
-      binding: BindingsBuilder(
-            () {
-          // Get.put<ThongKeService>(ThongKeRepositories());
-          Get.lazyPut(() => ChatController());
-        },
-      ),
+      binding: ChatBinding()
     ),
     GetPage(
       name: InformationPage.routeName,
