@@ -2,9 +2,13 @@ import 'dart:ffi';
 
 import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/common/apis/chat.dart';
 import 'package:i_trade/core/initialize/theme.dart';
+import 'package:i_trade/core/utils/app_settings.dart';
+import 'package:i_trade/src/domain/entities/base.dart';
 import 'package:i_trade/src/domain/models/category_model.dart';
 import 'package:i_trade/src/domain/models/sell_free_result_model.dart';
 import 'package:i_trade/src/domain/services/home_service.dart';
@@ -44,6 +48,25 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+  }
+
+    @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    firebaseMessageSetup();
+  }
+
+  firebaseMessageSetup() async {
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    // print("...my device token is $fcmToken");
+    // print("...my token ${AppSettings.getValue(KeyAppSetting.token)}");
+    if (fcmToken != null) {
+      BindFcmTokenRequestEntity bindFcmTokenRequestEntity =
+          BindFcmTokenRequestEntity();
+      bindFcmTokenRequestEntity.fcmtoken = fcmToken;
+      await ChatAPI.bind_fcmtoken(bindFcmTokenRequestEntity);
+    }
   }
 
   void nextImage(int count) {
