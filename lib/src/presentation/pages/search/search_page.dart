@@ -20,7 +20,7 @@ class SearchPage extends GetView<SearchControllerCustom> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SearchController());
+    Get.put(SearchControllerCustom());
     controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
     controller.getCategories(pageIndex: 1, pageSize: 10);
     return Scaffold(
