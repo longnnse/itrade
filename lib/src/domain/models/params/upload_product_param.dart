@@ -6,7 +6,7 @@ class UploadProductParam {
   late String title;
   late String content;
   late String location;
-  late double price;
+  late double? price;
   late bool isUsed;
   late String type;
   late List<File> files;
@@ -16,7 +16,7 @@ class UploadProductParam {
       {required this.title,
         required this.content,
         required this.location,
-        required this.price,
+                 this.price,
         required this.isUsed,
         required this.type,
         required this.files,
@@ -26,7 +26,7 @@ class UploadProductParam {
     title = json['Title'];
     content = json['Content'];
     location = json['Location'];
-    price = json['Price'];
+    price = json['Price'] ?? "";
     isUsed = json['IsUsed'];
     type = json['Type'];
     files = json['Files'];
