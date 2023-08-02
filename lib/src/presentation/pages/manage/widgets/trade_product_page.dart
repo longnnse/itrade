@@ -45,30 +45,28 @@ class TradeProductPage extends GetView<ManageController> {
                 children: [
                   _buildSearch(context: context),
                   const SizedBox(height: 10.0,),
-                  Expanded(
-                      child: Obx(() {
-                        if (controller.isLoading.value) {
-                          return const ManageProductShimmerWidget(
-                            columnCount: 1,
-                          );
-                        }
-                        if(controller.productList.value!.isNotEmpty) {
-                          return Column(
-                            children: [
-                              for(var cont in controller.productList.value!)
-                                _buildItem(context: context, model: cont)
-                            ],
-                          );
-                        } else {
-                          return Center(
-                              child: Text(
-                                'Không có dữ liệu',
-                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
-                              )
-                          );
-                        }
-                      })
-                  )
+                  Obx(() {
+                    if (controller.isLoading.value) {
+                      return const ManageProductShimmerWidget(
+                        columnCount: 1,
+                      );
+                    }
+                    if(controller.productList.value!.isNotEmpty) {
+                      return Column(
+                        children: [
+                          for(var cont in controller.productList.value!)
+                            _buildItem(context: context, model: cont)
+                        ],
+                      );
+                    } else {
+                      return Center(
+                          child: Text(
+                            'Không có dữ liệu',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                          )
+                      );
+                    }
+                  })
                 ],
               ),
             ),
