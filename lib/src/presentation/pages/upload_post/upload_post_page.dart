@@ -242,7 +242,10 @@ class UploadPostPage extends GetView<UploadPostController> {
                 Obx(() => Row(
                   children: [
                     GestureDetector(
-                      onTap: () => controller.isFree.value == false ? controller.isSell.call(false) : null,
+                      onTap: () {
+                        controller.isSell.call(false);
+                        controller.isFree.call(false);
+                      },
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         padding: const EdgeInsets.all(10.0),
@@ -263,7 +266,10 @@ class UploadPostPage extends GetView<UploadPostController> {
                     if(controller.isPostToTrade.value == false)...[
                       const SizedBox(width: 10.0,),
                       GestureDetector(
-                        onTap: () => controller.isFree.value == false ? controller.isSell.call(true) : null,
+                        onTap: () {
+                          controller.isSell.call(true);
+                          controller.isFree.call(false);
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(10.0),
                           decoration: BoxDecoration(

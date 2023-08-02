@@ -2,6 +2,7 @@ import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/models/params/edit_password_param.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 

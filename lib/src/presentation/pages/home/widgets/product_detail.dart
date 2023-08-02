@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
@@ -44,7 +45,7 @@ class ProductDetailPage extends GetView<HomeController> {
                       _buildDetail(context, controller.productByIDModel.value!),
                       _buildSpecifications(context, controller.productByIDModel.value!),
                       _buildProfile(context, controller.productByIDModel.value!),
-                      _buildOtherItem(context: context),
+                      _buildOtherItem(context: context, name: '${controller.productByIDModel.value!.user.firstName} ${controller.productByIDModel.value!.user.lastName}'),
                       _buildOtherItem(context: context, isSimilar: true),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.07,)
                     ],
@@ -633,7 +634,7 @@ class ProductDetailPage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildOtherItem({required BuildContext context, bool isSimilar = false}){
+  Widget _buildOtherItem({required BuildContext context, bool isSimilar = false, String name = ''}){
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       color: kBackgroundBottomBar,
@@ -651,7 +652,7 @@ class ProductDetailPage extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        isSimilar == false ? 'Tin khác của Long' : 'Tin đăng tương tự',
+                        isSimilar == false ? 'Tin khác của $name' : 'Tin đăng tương tự',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                       ),
                       Row(

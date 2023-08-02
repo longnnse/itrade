@@ -140,7 +140,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 2 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã mua/xin/cho ($slPost)',
+                  'Đã mua/xin ($slPost)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 2 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/edit_profile/edit_profile_controller.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../../../../core/utils/app_settings.dart';
 
 
 class EditProfilePage extends GetView<EditProfileController> {
@@ -24,11 +25,11 @@ class EditProfilePage extends GetView<EditProfileController> {
                 children: [
                   _buildHeader(context),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                  _buildInput(context: context, title: 'Username', iconData: Icons.person),
-                  _buildInput(context: context, title: 'Email', iconData: Icons.email),
-                  _buildInput(context: context, title: 'Số điện thoại', iconData: Icons.phone),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.userName), iconData: Icons.person),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.email), iconData: Icons.email),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.phoneNumber), iconData: Icons.phone),
                   _buildInput(context: context, title: 'Địa chỉ', iconData: Icons.location_on),
-                  _buildInput(context: context, title: 'CMND/CCCD', iconData: Icons.credit_card),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.exp).toString(), iconData: Icons.credit_card),
                   const SizedBox(height: 50.0),
                   _buildButton(context)
                 ],
