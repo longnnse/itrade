@@ -76,8 +76,25 @@ class ManagePage extends GetView<ManageController> {
                       if(controller.productList.value!.isNotEmpty) {
                         return Column(
                           children: [
-                            for(var cont in controller.productList.value!)
-                              _buildItem(context: context, model: cont)
+                            for(var cont in controller.productList.value!)...[
+                              if(controller.searchStr.value != '')...[
+                                if(cont.title.contains(controller.searchStr.value))...[
+                                  if(controller.lstHide.value.isNotEmpty)...[
+                                    if(!controller.lstHide.contains(cont.id))
+                                      _buildItem(context: context, model: cont)
+                                  ]else...[
+                                    _buildItem(context: context, model: cont)
+                                  ]
+                                ]
+                              ]else...[
+                                if(controller.lstHide.value.isNotEmpty)...[
+                                  if(!controller.lstHide.contains(cont.id))
+                                    _buildItem(context: context, model: cont)
+                                ]else...[
+                                  _buildItem(context: context, model: cont)
+                                ]
+                              ]
+                            ]
                           ],
                         );
                       } else {
@@ -119,7 +136,7 @@ class ManagePage extends GetView<ManageController> {
       ),
       child: TextFormField(
         //initialValue: number.toString(),
-        //controller: blocQLDTTNMT.keySearchTextEditingController,
+        controller: controller.searchController,
         decoration: InputDecoration(
             suffixIcon: const Icon(
                 Icons.search
@@ -135,8 +152,8 @@ class ManagePage extends GetView<ManageController> {
                 .textTheme
                 .titleMedium!
                 .copyWith(color: kTextColorGrey)),
-        onChanged: (value) {},
-        onFieldSubmitted: (value) {},
+        onChanged: (value) => controller.searchStr.call(value),
+        onFieldSubmitted: (value){},
       ),
     );
   }
@@ -165,7 +182,7 @@ class ManagePage extends GetView<ManageController> {
                       ),
                       child: model.resources.isNotEmpty ? Image.network(
                           CoreUrl.baseImageURL + model.resources[0].id + model.resources[0].extension,
-                          fit: BoxFit.fill
+                          fit: BoxFit.contain
                       ) : const SizedBox(),
                     ),
                     Positioned(
@@ -207,7 +224,7 @@ class ManagePage extends GetView<ManageController> {
                 const SizedBox(width: 10.0,),
                 Expanded(
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.2,
+                    height: MediaQuery.of(context).size.width * 0.21,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -222,21 +239,37 @@ class ManagePage extends GetView<ManageController> {
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 5.0,),
-                        Text(
-                          'Đã đăng ${FormatDateTime.getHourFormat(model.dateUpdated)} ${FormatDateTime.getDateFormat(model.dateUpdated)}',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
+                        Expanded(
+                          child: Text(
+                            'Đã đăng ${FormatDateTime.getHourFormat(model.dateUpdated)} ${FormatDateTime.getDateFormat(model.dateUpdated)}',
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
+                          ),
                         )
                       ],
                     ),
                   ),
                 ),
-                IconButton(
-                    alignment: AlignmentDirectional.topCenter,
-                    onPressed: (){},
+                DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
                     icon: const Icon(
                       Icons.more_vert,
                       size: 30.0,
-                    )
+                    ),
+                    elevation: 16,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    onChanged: (String? value) {
+                      if(value == 'Ẩn'){
+                        controller.lstHide.call().add(model.id);
+                        controller.getPersonalPosts();
+                      }
+                    },
+                    items: controller.lstDropdown.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                 )
               ],
             ),
@@ -251,42 +284,36 @@ class ManagePage extends GetView<ManageController> {
             ),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () => controller.goTradePage(model.id, true),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                          right: BorderSide(color: kBackground)
+                if(model.type == 'Trade')...[
+                  GestureDetector(
+                    onTap: () => controller.goTradePage(model.id, true),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 10,
+                      padding: const EdgeInsets.all(10.0),
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(
+                            Icons.chat,
+                            color: kPrimaryLightColor,
+                          ),
+                          Text(
+                            'Trao đổi SP',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(width: 10.0,)
+                        ],
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.chat,
-                          color: kPrimaryLightColor,
-                        ),
-                        Text(
-                          'Trao đổi SP',
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(width: 20.0,)
-                      ],
-                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => controller.goTradePage(model.id, false),
-                  child: Expanded(
+                ]else...[
+                  GestureDetector(
+                    onTap: () => controller.goTradePage(model.id, false),
                     child: Container(
-                      //width: MediaQuery.of(context).size.width * 0.5,
+                      width: MediaQuery.of(context).size.width -10,
                       padding: const EdgeInsets.all(10.0),
                       decoration: const BoxDecoration(
-                        border: Border(
-                            right: BorderSide(color: kBackground)
-                        ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -299,12 +326,13 @@ class ManagePage extends GetView<ManageController> {
                             'Mua/miễn phí SP',
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(width: 20.0,)
+                          const SizedBox(width: 10.0,)
                         ],
                       ),
                     ),
-                  ),
-                )
+                  )
+                ]
+
               ],
             ),
           )

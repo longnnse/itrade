@@ -162,7 +162,8 @@ class MyProfilePage extends GetView<InformationController> {
                     ),
                     const SizedBox(width: 5.0,),
                     Text(
-                      AppSettings.getValue(KeyAppSetting.phoneNumber),
+                      AppSettings.getValue(KeyAppSetting.phoneNumber).substring(0,6).replaceAll(RegExp(r'.'), '*') +
+                          AppSettings.getValue(KeyAppSetting.phoneNumber).substring(7,AppSettings.getValue(KeyAppSetting.phoneNumber).length),
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w400),
                     )
                   ],
@@ -323,7 +324,7 @@ class MyProfilePage extends GetView<InformationController> {
                         ),
                         child: cont.resources.isNotEmpty ? Image.network(
                             CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                            fit: BoxFit.fill
+                            fit: BoxFit.contain
                         ) : const SizedBox(),
                       ),
                       Positioned(
@@ -434,7 +435,7 @@ class MyProfilePage extends GetView<InformationController> {
                         ),
                         child: cont.post.resources.isNotEmpty ? Image.network(
                             CoreUrl.baseImageURL + cont.post.resources[0].id + cont.post.resources[0].extension,
-                            fit: BoxFit.fill
+                            fit: BoxFit.contain
                         ) : const SizedBox(),
                       ),
                       Positioned(

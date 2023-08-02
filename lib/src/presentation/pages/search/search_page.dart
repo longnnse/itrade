@@ -20,7 +20,7 @@ class SearchPage extends GetView<SearchControllerCustom> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SearchController());
+    Get.put(SearchControllerCustom());
     controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
     controller.getCategories(pageIndex: 1, pageSize: 10);
     return Scaffold(
@@ -255,7 +255,7 @@ class SearchPage extends GetView<SearchControllerCustom> {
                                       ),
                                       child: cont.resources.isNotEmpty ? Image.network(
                                           CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                                          fit: BoxFit.fill
+                                          fit: BoxFit.contain
                                       ) : const SizedBox(),
                                     ),
                                     Positioned(

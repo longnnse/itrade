@@ -242,18 +242,18 @@ class UploadPostPage extends GetView<UploadPostController> {
                 Obx(() => Row(
                   children: [
                     GestureDetector(
-                      onTap: () => controller.isSell.call(false),
+                      onTap: () => controller.isFree.value == false ? controller.isSell.call(false) : null,
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         padding: const EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            color:  controller.isSell.value == false ?  kPrimaryLightColor2 : kBackground
+                            color:  controller.isFree.value == false ? controller.isSell.value == false ?  kPrimaryLightColor2 : kBackground : kBackground
                         ),
                         child: Text(
                           'Trao đổi',
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: controller.isSell.value == false ? kPrimaryLightColor : kTextColorBody,
+                              color: controller.isFree.value == false ?  controller.isSell.value == false ? kPrimaryLightColor : kTextColorBody : kTextColorBody,
                               fontWeight: FontWeight.w500
                           ),
                           textAlign: TextAlign.center,
@@ -263,17 +263,17 @@ class UploadPostPage extends GetView<UploadPostController> {
                     if(controller.isPostToTrade.value == false)...[
                       const SizedBox(width: 10.0,),
                       GestureDetector(
-                        onTap: () => controller.isSell.call(true),
+                        onTap: () => controller.isFree.value == false ? controller.isSell.call(true) : null,
                         child: Container(
                           padding: const EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
-                              color: controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground
+                              color: controller.isFree.value == false ?  controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground : kBackground
                           ),
                           child: Text(
                             'Bán',
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                color: controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody,
+                                color: controller.isFree.value == false ? controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody : kTextColorBody,
                                 fontWeight: FontWeight.w500
                             ),
                             textAlign: TextAlign.center,
@@ -281,29 +281,28 @@ class UploadPostPage extends GetView<UploadPostController> {
                         ),
                       )
                     ],
+                    const SizedBox(width: 10.0,),
+                    GestureDetector(
+                      onTap: () => controller.isFree.call(controller.isFree.value == false ? true : false),
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: controller.isFree.value == true ?  kPrimaryLightColor2 : kBackground
+                        ),
+                        child: Text(
+                          'Miễn phí',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: controller.isFree.value == true ? kPrimaryLightColor : kTextColorBody,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
                   ],
                 )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Tôi muốn cho miễn phí',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Obx(() => ShaderMask(
-                      blendMode: BlendMode.srcIn,
-                      shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                      child: IconButton(
-                          onPressed: () => controller.isFree.call(controller.isFree.value == false ? true : false),
-                          icon: Icon(
-                            controller.isFree.value == false ? Icons.check_box_outline_blank : Icons.check_box,
-                            size: 32.0,
-                          )
-                      ),
-                    ))
-                  ],
-                ),
-                _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number, textController: controller.priceController),
+                _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number, textController: controller.priceController, isPrice: true),
                 _buildTextFormField(context: context, title: 'Tiêu đề', maxLine: 1, textController: controller.titleController),
                 _buildTextFormField(context: context, title: 'Mô tả sản phẩm', maxLine: 5, textController: controller.contentController),
               ],
@@ -566,8 +565,9 @@ class UploadPostPage extends GetView<UploadPostController> {
   Widget _buildTextFormField({required BuildContext context,
     required String title, required int maxLine,
     TextInputType textInputType = TextInputType.text,
-    required TextEditingController textController}){
-    return  Container(
+    required TextEditingController textController,
+    bool isPrice = false}){
+    return isPrice == true ? Obx(() => Container(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
       decoration: BoxDecoration(
@@ -575,11 +575,44 @@ class UploadPostPage extends GetView<UploadPostController> {
         border: Border.all(
             color: kBackground
         ),
-        color: kBackgroundBottomBar,
+        color: isPrice == true ? controller.isFree.value == true ? kBackground : kBackgroundBottomBar : kBackgroundBottomBar,
         boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
       ),
       child: TextFormField(
         //initialValue: number.toString(),
+        enabled: isPrice == true ? controller.isFree.value == true ? false : true : true,
+        controller: textController,
+        keyboardType: textInputType,
+        maxLines: maxLine,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            contentPadding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+            disabledBorder: InputBorder.none,
+            hintText: '$title...',
+            hintStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: kTextColorGrey)),
+        onChanged: (value) {},
+        onFieldSubmitted: (value) {},
+      ),
+    )) : Container(
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+      margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+            color: kBackground
+        ),
+        color: isPrice == true ? controller.isFree.value == true ? kBackground : kBackgroundBottomBar : kBackgroundBottomBar,
+        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+      ),
+      child: TextFormField(
+        //initialValue: number.toString(),
+        enabled: isPrice == true ? controller.isFree.value == true ? false : true : true,
         controller: textController,
         keyboardType: textInputType,
         maxLines: maxLine,

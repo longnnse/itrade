@@ -30,7 +30,7 @@ class ManageHistoryPage extends GetView<ManageController> {
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
-          title: 'Quản lý lịch sử',
+          title: 'Lịch sử',
           isUseOnlyBack: true,
           actionRights: [
             IconButton(
@@ -447,7 +447,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   ),
                   child: cont.resources.isNotEmpty ? Image.network(
                       CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                      fit: BoxFit.fill
+                      fit: BoxFit.contain
                   ) : const SizedBox(),
                 ),
                 Positioned(
@@ -571,7 +571,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   ),
                   child: cont.resources.isNotEmpty ? Image.network(
                       CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                      fit: BoxFit.fill
+                      fit: BoxFit.contain
                   ) : const SizedBox(),
                 ),
                 Positioned(

@@ -37,10 +37,14 @@ class ManageController extends GetxController {
   final Rxn<List<DataTrade>> tradingSentLst = Rxn<List<DataTrade>>();
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
   final Rxn<PostRequestedResultModel> postRequestedLst = Rxn<PostRequestedResultModel>();
+  final TextEditingController searchController = TextEditingController();
+  RxString searchStr = ''.obs;
   final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
   final RxString ownerPostID = ''.obs;
   final RxBool isTrade = false.obs;
+  final List<String> lstDropdown = ['Ẩn', 'Chỉnh sửa'];
+  RxList<String> lstHide = RxList<String>();
   @override
   void onInit() {
     super.onInit();

@@ -142,7 +142,7 @@ class TradeProductPage extends GetView<ManageController> {
                         ),
                         child: model.resources.isNotEmpty ? Image.network(
                             CoreUrl.baseImageURL + model.resources[0].id + model.resources[0].extension,
-                            fit: BoxFit.fill
+                            fit: BoxFit.contain
                         ) : const SizedBox(),
                       ),
                       Positioned(

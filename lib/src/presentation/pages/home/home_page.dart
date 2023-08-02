@@ -75,7 +75,7 @@ class HomePage extends GetView<HomeController> {
                         ),
                       ),
                       Text(
-                        'Deals tốt mỗi ngày',
+                        'Nổi bật',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 10.0,),
@@ -145,7 +145,7 @@ class HomePage extends GetView<HomeController> {
             ),
             child: cont.id.isNotEmpty ? Image.network(
                 CoreUrl.baseCateURL + cont.img,
-                fit: BoxFit.fill
+                fit: BoxFit.contain
             ) : const SizedBox(),
           ),
           Expanded(
@@ -189,7 +189,7 @@ class HomePage extends GetView<HomeController> {
                           ),
                           child: cont.resources.isNotEmpty ? Image.network(
                               CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                              fit: BoxFit.fill
+                              fit: BoxFit.contain
                           ) : const SizedBox(),
                         ),
                         Positioned(

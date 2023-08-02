@@ -234,6 +234,10 @@ class HomeController extends GetxController {
       },
       (value) async {
         categoryList.call(value);
+        if(categoryList.value != null){
+          categoryList.value!.sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
+        }
+
         isLoading.call(false);
       },
     );

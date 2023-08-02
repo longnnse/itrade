@@ -150,7 +150,7 @@ class ManageTradePage extends GetView<ManageController> {
                                         ),
                                         child: cont.fromPost.resources.isNotEmpty ? Image.network(
                                             CoreUrl.baseImageURL + cont.fromPost.resources[0].id + cont.fromPost.resources[0].extension,
-                                            fit: BoxFit.fill
+                                            fit: BoxFit.contain
                                         ) : const SizedBox(),
                                       ),
                                       Positioned(

@@ -50,72 +50,72 @@ class ProductDetailPage extends GetView<HomeController> {
                     ],
                   ),
                 ),
-                Positioned(
-                  bottom: 0.0,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            top: BorderSide(
-                                color: kBackground,
-                                width: 2.0
-                            )
-                        ),
-                        color: kBackgroundBottomBar
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ShaderMask(
-                                blendMode: BlendMode.srcIn,
-                                shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                                child: const Icon(
-                                    Icons.message,
-                                    color: kPrimaryLightColor,
-                                    size: 25.0
-                                ),
-                              ),
-                              const SizedBox(width: 5.0,),
-                              Text(
-                                'Nhắn tin',
-                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: const BoxDecoration(
-                                gradient: kDefaultGradient
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                    Icons.call,
-                                    color: kTextColor,
-                                    size: 25.0
-                                ),
-                                const SizedBox(width: 5.0,),
-                                Text(
-                                  'Gọi điện',
-                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 0.0,
+                //   child: Container(
+                //     width: MediaQuery.of(context).size.width,
+                //     decoration: const BoxDecoration(
+                //         border: Border(
+                //             top: BorderSide(
+                //                 color: kBackground,
+                //                 width: 2.0
+                //             )
+                //         ),
+                //         color: kBackgroundBottomBar
+                //     ),
+                //     child: Row(
+                //       children: [
+                //         Container(
+                //           padding: const EdgeInsets.all(10.0),
+                //           width: MediaQuery.of(context).size.width * 0.45,
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               ShaderMask(
+                //                 blendMode: BlendMode.srcIn,
+                //                 shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                //                 child: const Icon(
+                //                     Icons.message,
+                //                     color: kPrimaryLightColor,
+                //                     size: 25.0
+                //                 ),
+                //               ),
+                //               const SizedBox(width: 5.0,),
+                //               Text(
+                //                 'Nhắn tin',
+                //                 style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                //               )
+                //             ],
+                //           ),
+                //         ),
+                //         Expanded(
+                //           child: Container(
+                //             padding: const EdgeInsets.all(10.0),
+                //             decoration: const BoxDecoration(
+                //                 gradient: kDefaultGradient
+                //             ),
+                //             width: MediaQuery.of(context).size.width * 0.45,
+                //             child: Row(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 const Icon(
+                //                     Icons.call,
+                //                     color: kTextColor,
+                //                     size: 25.0
+                //                 ),
+                //                 const SizedBox(width: 5.0,),
+                //                 Text(
+                //                   'Gọi điện',
+                //                   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+                //                 )
+                //               ],
+                //             ),
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 Obx(() => controller.isLoadingRequest.value == true ?
                 Positioned(
                     child: Container(
@@ -152,7 +152,7 @@ class ProductDetailPage extends GetView<HomeController> {
                 width: MediaQuery.of(context).size.width,
                 child: Image.network(
                     CoreUrl.baseImageURL + content.resources[controller.countImage.value].id + content.resources[controller.countImage.value].extension,
-                    fit: BoxFit.fill
+                    fit: BoxFit.contain
                 ),
               ))  : Container(
                 color: kBackground,
@@ -349,7 +349,8 @@ class ProductDetailPage extends GetView<HomeController> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Text(
-                    'Liên hệ ngay: ${content.user.phoneNumber}',
+                    'Liên hệ ngay: ${content.user.phoneNumber.substring(0,6).replaceAll(RegExp(r'.'), '*') +
+                        content.user.phoneNumber.substring(7,content.user.phoneNumber.length)}',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w400),
                   ),
                 ),
@@ -699,7 +700,7 @@ class ProductDetailPage extends GetView<HomeController> {
                                             ),
                                             child: cont.resources.isNotEmpty ? Image.network(
                                                 CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                                                fit: BoxFit.fill
+                                                fit: BoxFit.contain
                                             ) : const SizedBox(),
                                           ),
                                           Positioned(
@@ -816,7 +817,7 @@ class ProductDetailPage extends GetView<HomeController> {
                                           ),
                                           child: cont.resources.isNotEmpty ? Image.network(
                                               CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
-                                              fit: BoxFit.fill
+                                              fit: BoxFit.contain
                                           ) : const SizedBox(),
                                         ),
                                         Positioned(
