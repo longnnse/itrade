@@ -206,12 +206,12 @@ class ManageTradePage extends GetView<ManageController> {
                                                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                                 ),
                                               ),
-                                              SizedBox(
-                                                child: Text(
-                                                  '${cont.fromPost.price.toString().split('.').first} đ',
-                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                                ),
-                                              )
+                                              // SizedBox(
+                                              //   child: Text(
+                                              //     '${cont.fromPost.price.toString().split('.').first} đ',
+                                              //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                              //   ),
+                                              // )
                                             ],
                                           ),
                                           SizedBox(
@@ -343,12 +343,12 @@ class ManageTradePage extends GetView<ManageController> {
                                                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                                 ),
                                               ),
-                                              SizedBox(
-                                                child: Text(
-                                                  '${cont.post.price.toString().split('.').first} đ',
-                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                                ),
-                                              )
+                                              // SizedBox(
+                                              //   child: Text(
+                                              //     '${cont.post.price.toString().split('.').first} đ',
+                                              //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                              //   ),
+                                              // )
                                             ],
                                           ),
                                           SizedBox(

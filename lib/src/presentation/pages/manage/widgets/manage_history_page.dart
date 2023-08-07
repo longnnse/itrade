@@ -124,7 +124,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 1 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã cho/bán/mua ($slRequest)',
+                  'Đã cho ($slRequest)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 1 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -140,7 +140,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 2 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã mua/xin ($slPost)',
+                  'Đã xin ($slPost)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 2 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -365,20 +365,20 @@ class ManageHistoryPage extends GetView<ManageController> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child: RichText(
-              text: TextSpan(
-                text: 'Giá: ',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: dataRequest.price != null ? dataRequest.price.toString().split('.').first : '0đ',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: kPrimaryLightColor,
-                          fontWeight: FontWeight.w700)
-                  ),
-                ],
-              ),
-            ),
+            // child: RichText(
+            //   // text: TextSpan(
+            //   //   text: 'Giá: ',
+            //   //   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+            //   //   children: <TextSpan>[
+            //   //     TextSpan(
+            //   //         text: dataRequest.price != null ? dataRequest.price.toString().split('.').first : '0đ',
+            //   //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            //   //             color: kPrimaryLightColor,
+            //   //             fontWeight: FontWeight.w700)
+            //   //     ),
+            //   //   ],
+            //   // ),
+            // ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
@@ -503,12 +503,12 @@ class ManageHistoryPage extends GetView<ManageController> {
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                           ),
                         ),
-                        SizedBox(
-                          child: Text(
-                            '${cont.price.toString().split('.').first} đ',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                          ),
-                        )
+                        // SizedBox(
+                        //   child: Text(
+                          //     '${cont.price.toString().split('.').first} đ',
+                        //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                        //   ),
+                        // )
                       ],
                     ),
                     SizedBox(
@@ -627,12 +627,12 @@ class ManageHistoryPage extends GetView<ManageController> {
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                           ),
                         ),
-                        SizedBox(
-                          child: Text(
-                            '${cont.price.toString().split('.').first} đ',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                          ),
-                        )
+                        // SizedBox(
+                        //   child: Text(
+                        //     '${cont.price.toString().split('.').first} đ',
+                        //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                        //   ),
+                        // )
                       ],
                     ),
                     SizedBox(

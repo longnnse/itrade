@@ -21,6 +21,7 @@ class ProductDetailPage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.countImage.call(0);
     controller.getPostByID(id: controller.idPost.value);
     controller.getPersonalPosts();
     controller.getPosts(pageIndex: 1, pageSize: 10, categoryIds: '');
@@ -238,13 +239,13 @@ class ProductDetailPage extends GetView<HomeController> {
                       )
                   ],
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    content.price.toString().split('.').first,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                  ),
-                ),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width,
+                //   child: Text(
+                //     content.price.toString().split('.').first,
+                //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                //   ),
+                // ),
                 const SizedBox(height: 5.0,),
                 Row(
                   children: [
@@ -747,13 +748,13 @@ class ProductDetailPage extends GetView<HomeController> {
                                           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.4,
-                                        child: Text(
-                                          '${cont.price.toString().split('.').first} đ',
-                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                        ),
-                                      ),
+                                      // SizedBox(
+                                      //   width: MediaQuery.of(context).size.width * 0.4,
+                                      //   child: Text(
+                                      //     '${cont.price.toString().split('.').first} đ',
+                                      //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                      //   ),
+                                      // ),
                                       SizedBox(
                                         width: MediaQuery.of(context).size.width * 0.4,
                                         child: Row(
@@ -864,13 +865,13 @@ class ProductDetailPage extends GetView<HomeController> {
                                         style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.4,
-                                      child: Text(
-                                        '${cont.price.toString().split('.').first} đ',
-                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
+                                    // SizedBox(
+                                    //   width: MediaQuery.of(context).size.width * 0.4,
+                                    //   child: Text(
+                                    //     '${cont.price.toString().split('.').first} đ',
+                                    //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                    //   ),
+                                    // ),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width * 0.4,
                                       child: Row(
