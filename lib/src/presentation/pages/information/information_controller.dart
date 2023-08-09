@@ -7,6 +7,7 @@ import 'package:i_trade/src/presentation/pages/edit_profile/widgets/edit_passwor
 import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_pham_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_page.dart';
+import 'package:momo_vn/momo_vn.dart';
 
 import '../../../../core/initialize/theme.dart';
 import '../../../../core/utils/app_settings.dart';
@@ -34,10 +35,39 @@ class InformationController extends GetxController {
   final ManageService _manageService = Get.find();
   final Rxn<List<Data>> personalProductList = Rxn<List<Data>>();
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
-
+  late MomoVn momoPay;
+  late PaymentResponse momoPaymentResult;
+  RxString paymentStatus = ''.obs;
   @override
   void onInit() {
     super.onInit();
+  }
+
+  void setStatusValue() {
+    paymentStatus.call('Đã chuyển thanh toán');
+    if (momoPaymentResult.isSuccess == true) {
+      paymentStatus.value += "\nTình trạng: Thành công.";
+      paymentStatus.value += "\nSố điện thoại: ${momoPaymentResult.phoneNumber}";
+      paymentStatus.value += "\nExtra: ${momoPaymentResult.extra!}";
+      paymentStatus.value += "\nToken: ${momoPaymentResult.token}";
+    }
+    else {
+      paymentStatus.value += "\nTình trạng: Thất bại.";
+      paymentStatus.value += "\nExtra: ${momoPaymentResult.extra}";
+      paymentStatus.value += "\nMã lỗi: ${momoPaymentResult.status}";
+    }
+  }
+
+  void handlePaymentSuccess(PaymentResponse response) {
+    momoPaymentResult = response;
+    setStatusValue();
+    Get.snackbar('Thông báo', "THÀNH CÔNG: ${response.phoneNumber}", backgroundColor: kSecondaryGreen, colorText: kTextColor);
+  }
+
+  void handlePaymentError(PaymentResponse response) {
+    momoPaymentResult = response;
+    setStatusValue();
+    Get.snackbar('Thông báo', "THẤT BẠI: ${response.message}", backgroundColor: kSecondaryRed, colorText: kTextColor);
   }
 
   Future<void> getPersonalPosts() async {

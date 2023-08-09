@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../core/initialize/theme.dart';
 import '../../../widgets/appbar_customize.dart';
 import '../information_controller.dart';
-
+import 'package:momo_vn/momo_vn.dart';
 
 class ViCuaToiPage extends GetView<InformationController> {
   static const String routeName = '/ViCuaToiPage';
@@ -15,6 +15,9 @@ class ViCuaToiPage extends GetView<InformationController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.momoPay = MomoVn();
+    controller.momoPay.on(MomoVn.EVENT_PAYMENT_SUCCESS, controller.handlePaymentSuccess);
+    controller.momoPay.on(MomoVn.EVENT_PAYMENT_ERROR, controller.handlePaymentError);
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
@@ -79,6 +82,39 @@ class ViCuaToiPage extends GetView<InformationController> {
                       ),
                     ),
                     const SizedBox(height: 20.0,),
+                    TextButton(
+                      // color: Colors.blue,
+                      // textColor: Colors.white,
+                      // disabledColor: Colors.grey,
+                      // disabledTextColor: Colors.black,
+                      // padding: EdgeInsets.all(8.0),
+                      // splashColor: Colors.blueAccent,
+                      child: const Text('DEMO PAYMENT WITH MOMO.VN'),
+                      onPressed: () async {
+                        MomoPaymentInfo options = MomoPaymentInfo(
+                            merchantName: "TTN",
+                            appScheme: "MOxx",
+                            merchantCode: 'MOxx',
+                            partnerCode: 'Mxx',
+                            amount: 60000,
+                            orderId: '12321312',
+                            orderLabel: 'Gói combo',
+                            merchantNameLabel: "HLGD",
+                            fee: 10,
+                            description: 'Thanh toán combo',
+                            username: '01234567890',
+                            partner: 'merchant',
+                            extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
+                            isTestMode: true
+                        );
+                        try {
+                          controller.momoPay.open(options);
+                        } catch (e) {
+                          debugPrint(e.toString());
+                        }
+                      },
+                    ),
+                    Obx(() => Text(controller.paymentStatus.value.isEmpty ? "CHƯA THANH TOÁN" : controller.paymentStatus.value)),
                     _buildConnectWallet(context),
                     const SizedBox(height: 20.0,),
                     Text(

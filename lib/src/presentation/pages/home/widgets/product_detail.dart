@@ -21,6 +21,7 @@ class ProductDetailPage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.countImage.call(0);
     controller.getPostByID(id: controller.idPost.value);
     controller.getPersonalPosts();
     controller.getPosts(pageIndex: 1, pageSize: 10, categoryIds: '');
