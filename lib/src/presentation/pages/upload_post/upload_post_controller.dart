@@ -54,8 +54,7 @@ class UploadPostController extends GetxController {
       Get.snackbar('Thông báo', 'Vui lòng chọn danh mục', backgroundColor: kSecondaryRed, colorText: kTextColor);
     }
     if(priceController.text == ''){
-      isValid = false;
-      Get.snackbar('Thông báo', 'Vui lòng nhập giá tiền', backgroundColor: kSecondaryRed, colorText: kTextColor);
+      priceController.text = "0";
     }
     if(contentController.text == ''){
       isValid = false;

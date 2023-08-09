@@ -370,13 +370,13 @@ class MyProfilePage extends GetView<InformationController> {
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Text(
-                      '${cont.price.toString().split('.').first} đ',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: MediaQuery.of(context).size.width * 0.4,
+                  //   child: Text(
+                  //     '${cont.price.toString().split('.').first} đ',
+                  //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Row(
@@ -481,13 +481,13 @@ class MyProfilePage extends GetView<InformationController> {
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: Text(
-                      '${cont.post.price.toString().split('.').first} đ',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: MediaQuery.of(context).size.width * 0.4,
+                  //   child: Text(
+                  //     '${cont.post.price.toString().split('.').first} đ',
+                  //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Row(
