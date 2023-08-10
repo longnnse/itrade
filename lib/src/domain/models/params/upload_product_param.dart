@@ -11,6 +11,7 @@ class UploadProductParam {
   late String type;
   late List<File> files;
   late List<String> categoryIds;
+  late List<String> categoryDesiredIds;
 
   UploadProductParam(
       {required this.title,
@@ -20,7 +21,8 @@ class UploadProductParam {
         required this.isUsed,
         required this.type,
         required this.files,
-        required this.categoryIds});
+        required this.categoryIds,
+        required this.categoryDesiredIds});
 
   UploadProductParam.fromJson(Map<String, dynamic> json) {
     title = json['Title'];
@@ -31,5 +33,6 @@ class UploadProductParam {
     type = json['Type'];
     files = json['Files'];
     categoryIds = json['CategoryIds'];
+    categoryDesiredIds = json['CategoryDesiredIds'];
   }
 }

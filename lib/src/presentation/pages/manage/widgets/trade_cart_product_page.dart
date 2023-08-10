@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
-import 'package:i_trade/src/presentation/pages/manage/widgets/trade_cart_product_page.dart';
 
 import '../../../../../core/initialize/core_url.dart';
 import '../../../../../core/initialize/theme.dart';
@@ -11,40 +10,21 @@ import '../../../widgets/appbar_customize.dart';
 import '../../upload_post/upload_post_page.dart';
 import 'manage_product_shimmer_widget.dart';
 
-class TradeProductPage extends GetView<ManageController> {
-  static const String routeName = '/TradeProductPage';
+class TradeCartProductPage extends GetView<ManageController> {
+  static const String routeName = '/TradeCartProductPage';
   final Widget? leading;
-  const TradeProductPage({
+  const TradeCartProductPage({
     Key? key,
     this.leading,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    controller.getPersonalPosts();
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
             context: context,
-            title: 'Danh sách sản phẩm trao đổi',
+            title: 'Danh sách sản phẩm muốn trao đổi',
             isUseOnlyBack: true,
-            actionRights: [
-              IconButton(
-                  onPressed: () => controller.goGoCreatePost(),
-                  icon: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 25.0,
-                  )
-              ),
-              IconButton(
-                  onPressed: () => Get.toNamed(TradeCartProductPage.routeName),
-                  icon: const Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.white,
-                    size: 25.0,
-                  )
-              )
-            ]
         ),
         backgroundColor: kBackgroundBottomBar,
         body: Stack(
@@ -52,22 +32,18 @@ class TradeProductPage extends GetView<ManageController> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  _buildSearch(context: context),
                   const SizedBox(height: 10.0,),
                   Obx(() {
-                    if (controller.isLoading.value) {
-                      return const ManageProductShimmerWidget(
-                        columnCount: 1,
-                      );
-                    }
-                    if(controller.productList.value!.isNotEmpty) {
+                    if (controller.selectedProductList.isNotEmpty) {
                       return Column(
                         children: [
-                          for(var cont in controller.productList.value!)
-                            _buildItem(context: context, model: cont)
+                          for(var cont in controller.selectedProductList)
+                            _buildItem(context: context, model: cont),
+                          const SizedBox(height: 50.0,),
+                          _buildButtonTrade(context)
                         ],
                       );
-                    } else {
+                    }else {
                       return Center(
                           child: Text(
                             'Không có dữ liệu',
@@ -91,39 +67,33 @@ class TradeProductPage extends GetView<ManageController> {
         )
     );
   }
-
-  Widget _buildSearch({required BuildContext context}){
+  Widget _buildButtonTrade(BuildContext context){
     return Container(
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: kBackgroundTextField,
-        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
-      ),
-      child: TextFormField(
-        //initialValue: number.toString(),
-        //controller: blocQLDTTNMT.keySearchTextEditingController,
-        decoration: InputDecoration(
-            suffixIcon: const Icon(
-                Icons.search
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: Column(
+        children: [
+
+          GestureDetector(
+            onTap: (){},
+            child: Container(
+              padding: const EdgeInsets.all(13.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: kDefaultGradient
+              ),
+              child: Text(
+                'Trao đổi',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
             ),
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            contentPadding: const EdgeInsets.only(top: 15.0, bottom: 10.0),
-            disabledBorder: InputBorder.none,
-            hintText: 'Nhập sản phẩm cần tìm...',
-            hintStyle: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(color: kTextColorGrey)),
-        onChanged: (value) {},
-        onFieldSubmitted: (value) {},
+          ),
+        ],
       ),
     );
   }
+  
 
   Widget _buildItem({required BuildContext context, required Data model}){
     return GestureDetector(
@@ -207,52 +177,18 @@ class TradeProductPage extends GetView<ManageController> {
                                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                 ),
                               ),
-                              if(model.requestTradeCount == 0)...[
-                                Obx(() => GestureDetector(
-                                  onTap: () {
-                                    controller.selectedProductList.add(model);
-                                    controller.selectedProductIDs.add(model.id);
-                                  },
-                                  //controller.idFromPost.value == model.id ? null : controller.postTrading(fromPostId: model.id, toPostId: controller.ownerPostID.value),
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 10.0),
-                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: controller.selectedProductIDs.contains(model.id) ? kBackground : kPrimaryLightColor,
-                                            width: 2.0
-                                        ),
-                                        borderRadius: BorderRadius.circular(5.0)
-                                    ),
-                                    child: Text(
-                                      controller.selectedProductIDs.contains(model.id) ? 'Đã yêu cầu' : 'Trao đổi',
-                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                          color: controller.selectedProductIDs.contains(model.id) ? kBackground : kPrimaryLightColor,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                )),
-                              ],
-                              if(model.requestTradeCount == 1)...[
-                                Container(
-                                  margin: const EdgeInsets.only(right: 10.0),
-                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: controller.selectedProductIDs.contains(model.id) ? kBackground : kPrimaryLightColor,
-                                          width: 2.0
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0)
-                                  ),
-                                  child: Text(
-                                    'Đã có 1 yêu cầu',
-                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                        color: controller.selectedProductIDs.contains(model.id) ? kBackground : kPrimaryLightColor,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                              IconButton(
+                                onPressed: () {
+                                  controller.selectedProductIDs.removeWhere( (item) => item == model.id);
+                                  controller.selectedProductList.removeWhere( (item) => item.id == model.id);
+                                  Get.snackbar('Thông báo', 'Xóa thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: kSecondaryRed,
+                                  size: 30.0,
                                 )
-                              ]
-
+                              )
 
                             ],
                           ),
@@ -281,7 +217,7 @@ class TradeProductPage extends GetView<ManageController> {
                 color: kBackgroundBottomBar,
                 boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
               ),
-            )
+            ),
 
           ],
         ),

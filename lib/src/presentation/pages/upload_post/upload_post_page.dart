@@ -168,6 +168,116 @@ class UploadPostPage extends GetView<UploadPostController> {
                 const SizedBox(height: 10.0,),
                 RichText(
                   text: TextSpan(
+                    text: 'Loại đồ muốn trao đổi',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '*',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: kSecondaryRed, fontWeight: FontWeight.w900)),
+                    ],
+                  ),
+                ),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(
+                        child: CircularProgressIndicator()
+                    );
+                  }
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: Row(
+                        children: const [
+                          Icon(
+                            Icons.list,
+                            size: 16,
+                            color: Colors.yellow,
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Chọn danh mục',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.yellow,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      items: controller.items
+                          .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item.split("@").first,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: kTextColorBody,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ))
+                          .toList(),
+                      value: controller.selectedDesiredValue.value,
+                      onChanged: (value) {
+                        controller.selectedDesiredValue.call(value as String);
+
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.only(left: 14, right: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: Colors.black26,
+                          ),
+                          color: kBackgroundBottomBar,
+                        ),
+                        elevation: 2,
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 30.0,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: kPrimaryLightColor,
+                        iconDisabledColor: Colors.grey,
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: null,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: kBackgroundBottomBar,
+                          ),
+                          elevation: 8,
+                          offset: const Offset(0, 0),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: MaterialStateProperty.all(6),
+                            thumbVisibility: MaterialStateProperty.all(true),
+                          )),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 14, right: 14),
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 10.0,),
+                RichText(
+                  text: TextSpan(
                     text: 'Tình trạng',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                     children: <TextSpan>[

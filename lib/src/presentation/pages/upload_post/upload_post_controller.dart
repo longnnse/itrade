@@ -28,6 +28,7 @@ class UploadPostController extends GetxController {
 
   RxList<String>  items = ['Chọn danh mục'].obs;
   RxString selectedValue = 'Chọn danh mục'.obs;
+  RxString selectedDesiredValue = 'Chọn danh mục'.obs;
   RxList<FileParam>? files;
   RxList<MediaFilesModel> mediaModels = (List<MediaFilesModel>.of([])).obs;
   RxList<File> lstFiles = (List<File>.of([])).obs;
@@ -52,6 +53,10 @@ class UploadPostController extends GetxController {
     if(selectedValue.value == 'Chọn danh mục'){
       isValid = false;
       Get.snackbar('Thông báo', 'Vui lòng chọn danh mục', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+    if(selectedDesiredValue.value == 'Chọn danh mục'){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng chọn danh mục muốn trao đổi', backgroundColor: kSecondaryRed, colorText: kTextColor);
     }
     if(priceController.text == ''){
       priceController.text = "0";
@@ -79,6 +84,7 @@ class UploadPostController extends GetxController {
           type: isFree.value == true ? 'Free' : isSell.value == true ? 'Sell' : 'Trade',
           files: lstFiles.call(),
           categoryIds: [selectedValue.value.split('@').last],
+          categoryDesiredIds: [selectedDesiredValue.value.split('@').last],
       );
       isLoading.call(true);
       final Either<ErrorObject, Data> res = await _uploadProductService.postUploadProduct(param: param);

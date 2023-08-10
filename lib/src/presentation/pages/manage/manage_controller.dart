@@ -30,6 +30,8 @@ class ManageController extends GetxController {
   final RxBool isLoadingRequestReceived = false.obs;
   final RxBool isLoadingPostRequested = false.obs;
   final Rxn<List<Data>> productList = Rxn<List<Data>>();
+  final RxList<Data> selectedProductList = RxList<Data>();
+  final RxList<String> selectedProductIDs = RxList<String>();
   final Rxn<TradeModel> tradeList = Rxn<TradeModel>();
   final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
@@ -39,7 +41,7 @@ class ManageController extends GetxController {
   final Rxn<PostRequestedResultModel> postRequestedLst = Rxn<PostRequestedResultModel>();
   final TextEditingController searchController = TextEditingController();
   RxString searchStr = ''.obs;
-  final RxString idFromPost = ''.obs;
+  // final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
   final RxString ownerPostID = ''.obs;
   final RxBool isTrade = false.obs;
@@ -48,6 +50,7 @@ class ManageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    
   }
 
   void goGoCreatePost() async {
@@ -182,7 +185,7 @@ class ManageController extends GetxController {
           (value) async {
         Get.snackbar('Thông báo', 'Trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
         tradeResult.call(value);
-        idFromPost.call(value.fromPostId);
+        // idFromPost.call(value.fromPostId);
         isLoadingRequestTrade.call(false);
       },
     );

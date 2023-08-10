@@ -29,7 +29,8 @@ class UploadProdcutRepositories implements UploadProductService {
         'isUsed': param.isUsed,
         'Type': param.type,
         'Files': param.files,
-        'CategoryIds': param.categoryIds[0]
+        'CategoryIds': param.categoryIds[0],
+        'CategoryDesiredIds': param.categoryDesiredIds[0]
       };
 
       final res = await _coreHttp.postWithFile(url, queryParameters, param.files, fileKey: 'Files',

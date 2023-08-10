@@ -37,6 +37,7 @@ import '../../src/domain/services/manage_service.dart';
 import '../../src/infrastructure/repositories/manage_repository.dart';
 import '../../src/presentation/pages/dashboard/dashboard_page.dart';
 import '../../src/presentation/pages/login/widget/forget_password_page.dart';
+import '../../src/presentation/pages/manage/widgets/trade_cart_product_page.dart';
 import '../../src/presentation/pages/manage/widgets/trade_product_page.dart';
 import '../../src/presentation/pages/login/login_controller.dart';
 import '../../src/presentation/pages/manage/widgets/manage_history_page.dart';
@@ -221,6 +222,19 @@ class ITradeRouterConfigs {
       page: () => const TradeProductPage(),
       binding: BindingsBuilder(
         () {
+          // Get.put<ThongKeService>(ThongKeRepositories());
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
+          Get.put<ManageService>(ManageRepositories());
+          Get.lazyPut(() => ManageController());
+        },
+      ),
+    ),
+    GetPage(
+      name: TradeCartProductPage.routeName,
+      page: () => const TradeCartProductPage(),
+      binding: BindingsBuilder(
+            () {
           // Get.put<ThongKeService>(ThongKeRepositories());
           Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
               permanent: true);
