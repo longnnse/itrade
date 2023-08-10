@@ -36,6 +36,7 @@ import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart
 import '../../src/domain/services/manage_service.dart';
 import '../../src/infrastructure/repositories/manage_repository.dart';
 import '../../src/presentation/pages/dashboard/dashboard_page.dart';
+import '../../src/presentation/pages/home/widgets/multi_trade_cart_product_page.dart';
 import '../../src/presentation/pages/login/widget/forget_password_page.dart';
 import '../../src/presentation/pages/manage/widgets/trade_cart_product_page.dart';
 import '../../src/presentation/pages/manage/widgets/trade_product_page.dart';
@@ -55,13 +56,22 @@ class ITradeRouterConfigs {
       ),
     ),
     GetPage(
+      name: MultiCartProductPage.routeName,
+      page: () => const MultiCartProductPage(),
+      binding: BindingsBuilder(
+            () {
+          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
+              permanent: true);
+          Get.put<HomeService>(HomeRepositories());
+          Get.lazyPut(() => HomeController());
+        },
+      ),
+    ),
+    GetPage(
       name: HomePage.routeName,
       page: () => const HomePage(),
       binding: BindingsBuilder(
         () {
-          Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
-              permanent: true);
-          Get.put<HomeService>(HomeRepositories());
           Get.lazyPut(() => HomeController());
         },
       ),

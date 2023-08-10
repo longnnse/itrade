@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
+import 'package:i_trade/src/presentation/pages/home/home_controller.dart';
 import 'package:i_trade/src/presentation/widgets/FABBottomAppBar.dart';
 import 'package:i_trade/src/presentation/widgets/appbar_customize.dart';
 import 'package:i_trade/src/presentation/widgets/floating_action_button.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../home/widgets/multi_trade_cart_product_page.dart';
 import '../upload_post/upload_post_page.dart';
 
 class DashboardPage extends GetView<DashboardController> {
@@ -18,6 +20,8 @@ class DashboardPage extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
+    HomeController ctrler = Get.find();
     return Obx(() => Scaffold(
       appBar: controller.lastSelected.value != 'TAB: 4' ? AppbarCustomize.buildAppbar(
         context: context,
@@ -33,6 +37,35 @@ class DashboardPage extends GetView<DashboardController> {
           //         size: 25.0,
           //       )
           //   ),
+          Stack(
+            children: [
+              IconButton(
+                  onPressed: () => Get.toNamed(MultiCartProductPage.routeName),
+                  icon: const Icon(
+                    Icons.add_shopping_cart,
+                    color: Colors.white,
+                    size: 25.0,
+                  )
+              ),
+              Positioned(
+                right: 0.0,
+                child: Container(
+                  width: 20.0,
+                  height: 20.0,
+                  padding: const EdgeInsets.all(3.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.0),
+                    color: kSecondaryRed
+                  ),
+                  child: Text(
+                    '${ctrler.selectedProductList.length}',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              )
+            ],
+          ),
           if(controller.lastSelected.value == 'TAB: 0' || controller.lastSelected.value == 'TAB: 1')
             IconButton(
                 onPressed: () => _buildModelBottomFilter(context),

@@ -33,7 +33,12 @@ class HomeController extends GetxController {
   final RxBool isLoadingData = false.obs;
   final HomeService _homeService = Get.find();
   final ManageService _manageService = Get.find();
+  final ManageController manageController = Get.find();
   final Rxn<List<CategoryModel>> categoryList = Rxn<List<CategoryModel>>();
+  final RxList<Data> selectedProductList = RxList<Data>();
+  final RxList<String> selectedProductIDs = RxList<String>();
+  final RxList<Data> selectedMyProductList = RxList<Data>();
+  final RxList<String> selectedMyProductIDs = RxList<String>();
   final Rxn<ProductModel> productModel = Rxn<ProductModel>();
   final Rxn<SellFreeResultModel> sellFreeResultModel =
       Rxn<SellFreeResultModel>();

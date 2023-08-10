@@ -2,6 +2,7 @@ import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/src/domain/models/group_post_result_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
@@ -12,6 +13,7 @@ import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 
 import '../../../../core/initialize/theme.dart';
+import '../../../domain/models/trading_sent_model.dart';
 import '../../../domain/services/upload_product_service.dart';
 import '../../../infrastructure/repositories/upload_product_repository.dart';
 import '../home/home_controller.dart';
@@ -22,6 +24,7 @@ class ManageController extends GetxController {
   RxInt tabInt = 0.obs;
   final ManageService _manageService = Get.find();
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingGroup = false.obs;
   final RxBool isLoadingTrade = false.obs;
   final RxBool isLoadingConfirmTrade = false.obs;
   final RxBool isLoadingRequestTrade = false.obs;
@@ -35,11 +38,12 @@ class ManageController extends GetxController {
   final Rxn<TradeModel> tradeList = Rxn<TradeModel>();
   final Rxn<TradeResultModel> tradeResult = Rxn<TradeResultModel>();
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
-  final Rxn<List<DataTrade>> tradingReceivedLst = Rxn<List<DataTrade>>();
-  final Rxn<List<DataTrade>> tradingSentLst = Rxn<List<DataTrade>>();
+  final Rxn<List<TradingSentResultModel>> tradingReceivedLst = Rxn<List<TradingSentResultModel>>();
+  final Rxn<List<TradingSentResultModel>> tradingSentLst = Rxn<List<TradingSentResultModel>>();
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
   final Rxn<PostRequestedResultModel> postRequestedLst = Rxn<PostRequestedResultModel>();
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
   RxString searchStr = ''.obs;
   // final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
@@ -90,6 +94,67 @@ class ManageController extends GetxController {
     Get.toNamed(ManageTradePage.routeName);
   }
 
+  Future<String> postGroup({required String description, required List<String> lstPostID}) async {
+    //TODO use test
+    String valueReturn = '';
+    final Either<ErrorObject, GroupPostResultModel> res = await _manageService.postGroup(description: description, lstPostID: lstPostID);
+    res.fold(
+          (failure) {
+      },
+          (value) async {
+            valueReturn = value.id;
+      },
+    );
+    return valueReturn;
+  }
+
+  void tradeGroup(BuildContext context) async {
+    isLoadingGroup.call(true);
+    List<String> lstOwnerPost = [];
+    lstOwnerPost.add(ownerPostID.value);
+
+    String fromPostId = await postGroup(description: descController.text, lstPostID: selectedProductIDs);
+    String toPostId = await postGroup(description: '', lstPostID: lstOwnerPost);
+    if(fromPostId != '' && toPostId != ''){
+      await postTrading(fromPostId: fromPostId, toPostId: toPostId);
+      descController.clear();
+      selectedProductIDs.clear();
+      isLoadingGroup.call(false);
+      if(tradeResult.value != null){
+        Get.snackbar('Thông báo', 'Trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }else{
+        Get.snackbar('Thông báo', 'Không thể trao đổi', backgroundColor: kSecondaryRed, colorText: kTextColor);
+      }
+
+    }else{
+      isLoadingGroup.call(false);
+      Get.snackbar('Thông báo', 'Không thể nhóm các bài post lại do không cùng chủ sở hữu', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+  }
+
+  void tradeGroupMultiMulti({required BuildContext context, required String desc, required List<String> lstFromPostID, required List<String> lstToPostID}) async {
+    isLoadingGroup.call(true);
+
+    String fromPostId = await postGroup(description: desc, lstPostID: lstFromPostID);
+    String toPostId = await postGroup(description: '', lstPostID: lstToPostID);
+    if(fromPostId != '' && toPostId != ''){
+      postTrading(fromPostId: fromPostId, toPostId: toPostId);
+      isLoadingGroup.call(false);
+      if(tradeResult.value != null){
+        Get.snackbar('Thông báo', 'Trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        Navigator.pop(context);
+      }else{
+        Get.snackbar('Thông báo', 'Không thể trao đổi', backgroundColor: kSecondaryRed, colorText: kTextColor);
+      }
+    }else{
+      isLoadingGroup.call(false);
+      Get.snackbar('Thông báo', 'Không thể nhóm các bài post lại do không cùng chủ sở hữu', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+  }
+  
   Future<void> getPersonalPosts() async {
     //TODO use test
     isLoading.call(true);
@@ -111,7 +176,7 @@ class ManageController extends GetxController {
   Future<void> getTradingReceived() async {
     //TODO use test
     isLoadingTradingReceived.call(true);
-    final Either<ErrorObject, List<DataTrade>> res = await _manageService.getTradingReceived();
+    final Either<ErrorObject, List<TradingSentResultModel>> res = await _manageService.getTradingReceived();
 
     res.fold(
           (failure) {
@@ -127,7 +192,7 @@ class ManageController extends GetxController {
   Future<void> getTradingSent() async {
     //TODO use test
     isLoadingTradingSent.call(true);
-    final Either<ErrorObject, List<DataTrade>> res = await _manageService.getTradingSent();
+    final Either<ErrorObject, List<TradingSentResultModel>> res = await _manageService.getTradingSent();
 
     res.fold(
           (failure) {

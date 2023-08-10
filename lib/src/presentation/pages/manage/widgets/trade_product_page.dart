@@ -28,6 +28,35 @@ class TradeProductPage extends GetView<ManageController> {
             title: 'Danh sách sản phẩm trao đổi',
             isUseOnlyBack: true,
             actionRights: [
+              Stack(
+                children: [
+                  IconButton(
+                      onPressed: () => Get.toNamed(TradeCartProductPage.routeName),
+                      icon: const Icon(
+                        Icons.add_shopping_cart,
+                        color: Colors.white,
+                        size: 25.0,
+                      )
+                  ),
+                  Obx(() => Positioned(
+                      right: 0.0,
+                      child: Container(
+                        width: 20.0,
+                        height: 20.0,
+                        padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.0),
+                            color: kSecondaryRed
+                        ),
+                        child: Text(
+                          '${controller.selectedProductIDs.length}',
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                  ))
+                ],
+              ),
               IconButton(
                   onPressed: () => controller.goGoCreatePost(),
                   icon: const Icon(
@@ -36,14 +65,6 @@ class TradeProductPage extends GetView<ManageController> {
                     size: 25.0,
                   )
               ),
-              IconButton(
-                  onPressed: () => Get.toNamed(TradeCartProductPage.routeName),
-                  icon: const Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.white,
-                    size: 25.0,
-                  )
-              )
             ]
         ),
         backgroundColor: kBackgroundBottomBar,
@@ -210,8 +231,11 @@ class TradeProductPage extends GetView<ManageController> {
                               if(model.requestTradeCount == 0)...[
                                 Obx(() => GestureDetector(
                                   onTap: () {
-                                    controller.selectedProductList.add(model);
-                                    controller.selectedProductIDs.add(model.id);
+                                    if(!controller.selectedProductIDs.contains(model.id)){
+                                      controller.selectedProductList.add(model);
+                                      controller.selectedProductIDs.add(model.id);
+                                    }
+
                                   },
                                   //controller.idFromPost.value == model.id ? null : controller.postTrading(fromPostId: model.id, toPostId: controller.ownerPostID.value),
                                   child: Container(

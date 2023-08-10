@@ -4,6 +4,7 @@ import 'package:core_http/core/error_handling/failures.dart';
 import 'package:core_http/core_http.dart';
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/src/domain/models/group_post_result_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
@@ -13,6 +14,7 @@ import 'package:i_trade/src/domain/services/manage_service.dart';
 
 import '../../../core/initialize/core_url.dart';
 import '../../../core/utils/app_settings.dart';
+import '../../domain/models/trading_sent_model.dart';
 
 class ManageRepositories implements ManageService {
   final CoreHttp _coreHttp = Get.find();
@@ -258,7 +260,7 @@ class ManageRepositories implements ManageService {
   }
 
   @override
-  Future<Either<ErrorObject, List<DataTrade>>> getTradingReceived() async {
+  Future<Either<ErrorObject, List<TradingSentResultModel>>> getTradingReceived() async {
     try {
       const url = '${CoreUrl.baseURL}/Trading/TradingReceived';
 
@@ -267,8 +269,8 @@ class ManageRepositories implements ManageService {
 
       if (res != null) {
         final data = res
-            .map<DataTrade>(
-                (e) => DataTrade.fromJson(e))
+            .map<TradingSentResultModel>(
+                (e) => TradingSentResultModel.fromJson(e))
             .toList();
         return Right(data ?? []);
       }
@@ -338,7 +340,7 @@ class ManageRepositories implements ManageService {
   }
 
   @override
-  Future<Either<ErrorObject, List<DataTrade>>> getTradingSent() async {
+  Future<Either<ErrorObject, List<TradingSentResultModel>>> getTradingSent() async {
     try {
       const url = '${CoreUrl.baseURL}/Trading/TradingSent';
 
@@ -347,10 +349,44 @@ class ManageRepositories implements ManageService {
 
       if (res != null) {
         final data = res
-            .map<DataTrade>(
-                (e) => DataTrade.fromJson(e))
+            .map<TradingSentResultModel>(
+                (e) => TradingSentResultModel.fromJson(e))
             .toList();
         return Right(data ?? []);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, GroupPostResultModel>> postGroup({required String description, required List<String> lstPostID}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Group';
+
+      final Map<String, dynamic> queryParameters = {
+        'Description': description,
+        // 'PostIds': lstPostID
+      };
+      for(int i = 0; i < lstPostID.length; i++){
+        queryParameters['PostIds'] = lstPostID[i];
+      }
+      print(queryParameters);
+      print('zxvzxv11');
+      final res = await _coreHttp.postWithFile(url, queryParameters, [],
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = GroupPostResultModel.fromJson(res);
+        return Right(data);
       }
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const DataParsingFailure()));

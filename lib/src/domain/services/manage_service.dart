@@ -4,8 +4,10 @@ import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
 
+import '../models/group_post_result_model.dart';
 import '../models/product_model.dart';
 import '../models/trade_model.dart';
+import '../models/trading_sent_model.dart';
 
 
 abstract class ManageService {
@@ -25,12 +27,14 @@ abstract class ManageService {
 
   Future<Either<ErrorObject, RequestResultModel>> postDenyReques({required String tradeID});
 
-  Future<Either<ErrorObject, List<DataTrade>>> getTradingReceived();
+  Future<Either<ErrorObject, List<TradingSentResultModel>>> getTradingReceived();
 
-  Future<Either<ErrorObject, List<DataTrade>>> getTradingSent();
+  Future<Either<ErrorObject, List<TradingSentResultModel>>> getTradingSent();
 
   Future<Either<ErrorObject, RequestPostResultModel>> getRequestReceived();
 
   Future<Either<ErrorObject, PostRequestedResultModel>> getPostRequested();
+
+  Future<Either<ErrorObject, GroupPostResultModel>> postGroup({required String description, required List<String> lstPostID});
 
 }

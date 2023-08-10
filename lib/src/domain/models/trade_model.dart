@@ -1,3 +1,5 @@
+import 'package:i_trade/src/domain/models/trading_sent_model.dart';
+
 import 'category_model.dart';
 
 class TradeModel {
@@ -6,7 +8,7 @@ class TradeModel {
   late int totalPage;
   late int totalSize;
   late int pageSkip;
-  late List<DataTrade> data;
+  late List<TradingSentResultModel> data;
 
   TradeModel(
       {required this.pageIndex,
@@ -23,9 +25,9 @@ class TradeModel {
     totalSize = json['totalSize'] ?? 0;
     pageSkip = json['pageSkip'] ?? 0;
     if (json['data'] != null) {
-      data = <DataTrade>[];
+      data = <TradingSentResultModel>[];
       json['data'].forEach((v) {
-        data.add(DataTrade.fromJson(v));
+        data.add(TradingSentResultModel.fromJson(v));
       });
     }
   }
@@ -44,20 +46,20 @@ class TradeModel {
 
 class DataTrade {
   late String id;
-  late FromPost fromPost;
-  late FromPost toPost;
+  FromPost? fromPost;
+  FromPost? toPost;
   late String content;
   late String status;
 
-  DataTrade({required this.id, required this.fromPost, required this.toPost, required this.content, required this.status});
+  DataTrade({required this.id, this.fromPost, this.toPost, required this.content, required this.status});
 
   DataTrade.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? '';
-    fromPost = (json['fromPost'] != null
+    fromPost = json['fromPost'] != null
         ? FromPost.fromJson(json['fromPost'])
-        : null)!;
+        : null;
     toPost =
-    (json['toPost'] != null ? FromPost.fromJson(json['toPost']) : null)!;
+    json['toPost'] != null ? FromPost.fromJson(json['toPost']) : null;
     content = json['content'] ?? '';
     status = json['status'] ?? '';
   }
@@ -65,8 +67,8 @@ class DataTrade {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['fromPost'] = fromPost.toJson();
-    data['toPost'] = toPost.toJson();
+    data['fromPost'] = fromPost!.toJson();
+    data['toPost'] = toPost!.toJson();
     data['content'] = content;
     data['status'] = status;
     return data;

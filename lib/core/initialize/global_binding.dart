@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 import 'package:i_trade/src/infrastructure/repositories/login_repository.dart';
 import 'package:i_trade/src/infrastructure/repositories/manage_repository.dart';
+import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 
 import '../../src/domain/services/home_service.dart';
 import '../../src/domain/services/manage_service.dart';
@@ -15,5 +16,6 @@ class ITradeGlobalBinding extends Bindings {
     Get.put<HomeService>(HomeRepositories());
     Get.put<ManageService>(ManageRepositories());
     Get.put<LoginService>(LoginRepositories());
+    Get.put(ManageController());
   }
 }

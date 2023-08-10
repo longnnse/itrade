@@ -55,7 +55,7 @@ class TradeCartProductPage extends GetView<ManageController> {
                 ],
               ),
             ),
-            Obx(() => controller.isLoadingRequestTrade.value == true ?
+            Obx(() => controller.isLoadingGroup.value == true ?
             Positioned(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -74,7 +74,7 @@ class TradeCartProductPage extends GetView<ManageController> {
         children: [
 
           GestureDetector(
-            onTap: (){},
+            onTap: () => controller.tradeGroup(context),
             child: Container(
               padding: const EdgeInsets.all(13.0),
               alignment: Alignment.center,

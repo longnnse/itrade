@@ -216,27 +216,59 @@ class ProductDetailPage extends GetView<HomeController> {
                       ),
                     ),
                     if(content.type != '')
-                      GestureDetector(
-                        onTap: () => controller.funcButton(content.type, content.id, context),
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 5.0, right: 10.0),
-                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: kPrimaryLightColor,
-                                  width: 2.0
+                      if(content.user.id != AppSettings.getValue(KeyAppSetting.userId))
+                        Row(
+                          children: [
+
+                              Obx(() => GestureDetector(
+                                onTap: () {
+                                  if(!controller.selectedProductIDs.contains(content.id)){
+                                    controller.selectedProductList.add(content);
+                                    controller.selectedProductIDs.add(content.id);
+                                  }
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(top: 5.0, right: 10.0),
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: !controller.selectedProductIDs.contains(content.id) ? kPrimaryLightColor : kBackground,
+                                          width: 2.0
+                                      ),
+                                      borderRadius: BorderRadius.circular(5.0)
+                                  ),
+                                  child: Text(
+                                    'Thêm',
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                        color: !controller.selectedProductIDs.contains(content.id) ? kPrimaryLightColor : kBackground,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              )),
+                            GestureDetector(
+                              onTap: () => controller.funcButton(content.type, content.id, context),
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 5.0, right: 10.0),
+                                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: kPrimaryLightColor,
+                                        width: 2.0
+                                    ),
+                                    borderRadius: BorderRadius.circular(5.0)
+                                ),
+                                child: Text(
+                                  content.type == 'Trade' ? 'Trao đổi' :
+                                  content.type == 'Sell' ? 'Bán' :
+                                  content.type == 'Free' ? 'Miễn phí' :
+                                  '',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(5.0)
-                          ),
-                          child: Text(
-                            content.type == 'Trade' ? 'Trao đổi' :
-                            content.type == 'Sell' ? 'Bán' :
-                            content.type == 'Free' ? 'Miễn phí' :
-                            '',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      )
+                            )
+                          ],
+                        )
+
                   ],
                 ),
                 // SizedBox(
@@ -746,6 +778,8 @@ class ProductDetailPage extends GetView<HomeController> {
                                         child: Text(
                                           cont.title,
                                           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       // SizedBox(
@@ -863,6 +897,8 @@ class ProductDetailPage extends GetView<HomeController> {
                                       child: Text(
                                         cont.title,
                                         style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     // SizedBox(

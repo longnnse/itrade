@@ -8,6 +8,7 @@ import '../../../../../core/initialize/core_url.dart';
 import '../../../../../core/initialize/theme.dart';
 import '../../../../../core/utils/format_datetime.dart';
 import '../../../../domain/models/sell_free_result_model.dart';
+import '../../../../domain/models/trading_sent_model.dart';
 import '../../../widgets/appbar_customize.dart';
 import '../../information/widgets/bao_cao_vi_pham_page.dart';
 import '../../search/widgets/search_product_shimmer_widget.dart';
@@ -169,7 +170,7 @@ class ManageHistoryPage extends GetView<ManageController> {
     ));
   }
 
-  Widget _buildHistoryTradeItem({required BuildContext context, required DataTrade dataTrade}){
+  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade}){
     return Container(
       margin: const EdgeInsets.only(top: 15.0),
       decoration: BoxDecoration(
@@ -194,8 +195,21 @@ class ManageHistoryPage extends GetView<ManageController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildItemTrade(context, dataTrade.fromPost, true),
-                    _buildItemTrade(context, dataTrade.toPost, false),
+                    if(dataTrade.fromGroup != null)...[
+                      if(dataTrade.fromGroup!.groupPosts!.isNotEmpty)...[
+                        for(var cont in dataTrade.fromGroup!.groupPosts!)...[
+                          _buildItemTrade(context, cont, true),
+                        ]
+                      ]
+                    ],
+                    if(dataTrade.toGroup != null)...[
+                      if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
+                        for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                          _buildItemTrade(context, cont, false),
+                        ]
+                      ]
+                    ]
+
                   ],
                 ),
               ),
@@ -363,23 +377,23 @@ class ManageHistoryPage extends GetView<ManageController> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            // child: RichText(
-            //   // text: TextSpan(
-            //   //   text: 'Giá: ',
-            //   //   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
-            //   //   children: <TextSpan>[
-            //   //     TextSpan(
-            //   //         text: dataRequest.price != null ? dataRequest.price.toString().split('.').first : '0đ',
-            //   //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            //   //             color: kPrimaryLightColor,
-            //   //             fontWeight: FontWeight.w700)
-            //   //     ),
-            //   //   ],
-            //   // ),
-            // ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 10.0),
+          //   child: RichText(
+          //     // text: TextSpan(
+          //     //   text: 'Giá: ',
+          //     //   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+          //     //   children: <TextSpan>[
+          //     //     TextSpan(
+          //     //         text: dataRequest.price != null ? dataRequest.price.toString().split('.').first : '0đ',
+          //     //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          //     //             color: kPrimaryLightColor,
+          //     //             fontWeight: FontWeight.w700)
+          //     //     ),
+          //     //   ],
+          //     // ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: RichText(
@@ -420,9 +434,9 @@ class ManageHistoryPage extends GetView<ManageController> {
     );
   }
 
-  Widget _buildItemTrade(BuildContext context, FromPost cont, bool isLine){
+  Widget _buildItemTrade(BuildContext context, GroupPosts cont, bool isLine){
     return GestureDetector(
-      onTap: () => controller.goDetail(id: cont.id),
+      onTap: () => controller.goDetail(id: cont.id!),
       child: Container(
         decoration: BoxDecoration(
           border: Border(
@@ -445,8 +459,8 @@ class ManageHistoryPage extends GetView<ManageController> {
                       borderRadius: BorderRadius.circular(5.0),
                       color: kBackground
                   ),
-                  child: cont.resources.isNotEmpty ? Image.network(
-                      CoreUrl.baseImageURL + cont.resources[0].id + cont.resources[0].extension,
+                  child: cont.post!.resources.isNotEmpty ? Image.network(
+                      CoreUrl.baseImageURL + cont.post!.resources[0].id + cont.post!.resources[0].extension,
                       fit: BoxFit.contain
                   ) : const SizedBox(),
                 ),
@@ -473,7 +487,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                                   color: Colors.white,
                                 ),
                                 child: Text(
-                                  cont.resources.length.toString(),
+                                  cont.post!.resources.length.toString(),
                                   style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
                                   textAlign: TextAlign.center,
                                 ),
