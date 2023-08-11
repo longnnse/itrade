@@ -401,7 +401,7 @@ class ManageRepositories implements ManageService {
   @override
   Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroupPersonal({required int pageIndex, required int pageSize, String? searchValue}) async {
     try {
-      const url = '${CoreUrl.baseURL}/Group/Personal';
+      const url = '${CoreUrl.baseURL}/Group';
       final Map<String, dynamic> queryParameters = {
         'PageIndex': pageIndex,
         'PageSize': pageSize,
