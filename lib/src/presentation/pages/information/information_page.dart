@@ -117,18 +117,23 @@ class InformationPage extends GetView<InformationController> {
                                   children: [
                                     const SizedBox(height: 30.0,),
                                     if(controller.email.value != '')
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.email,
-                                            color: kTextColorGrey,
-                                          ),
-                                          const SizedBox(width: 5.0,),
-                                          Text(
-                                            controller.email.value,
-                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
-                                          )
-                                        ],
+                                      SizedBox(
+                                        width: Get.width * 0.5,
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.email,
+                                              color: kTextColorGrey,
+                                            ),
+                                            const SizedBox(width: 5.0,),
+                                            Expanded(
+                                              child: Text(
+                                                controller.email.value,
+                                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey, fontWeight: FontWeight.w500),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     const SizedBox(height: 5.0,),
                                     if(controller.phoneNumber.value != '')
