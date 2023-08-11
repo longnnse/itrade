@@ -90,7 +90,7 @@ class ManagePage extends GetView<ManageController> {
                         ],
                       ),
                     ),
-                    _buildSearch(context: context),
+                    Obx(() => controller.isTradeLst.value == false ? _buildSearch(context: context) : const SizedBox()),
                     Obx(() {
                       if(controller.isTradeLst.value == false){
                         if (controller.isLoading.value) {
