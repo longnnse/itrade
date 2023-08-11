@@ -221,8 +221,8 @@ class MultiCartProductPage extends GetView<HomeController> {
             onTap: () => controller.manageController.tradeGroupMultiMulti(
                 context: context,
                 desc: '',
-                lstFromPostID: controller.selectedProductIDs,
-                lstToPostID: controller.selectedMyProductIDs),
+                lstFromPostID: controller.selectedMyProductIDs,
+                lstToPostID: controller.selectedProductIDs),
             child: Container(
               padding: const EdgeInsets.all(13.0),
               alignment: Alignment.center,
