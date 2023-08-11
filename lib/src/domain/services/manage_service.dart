@@ -1,5 +1,6 @@
 import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:dartz/dartz.dart';
+import 'package:i_trade/src/domain/models/manage_personal_group_model.dart';
 import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
@@ -36,5 +37,7 @@ abstract class ManageService {
   Future<Either<ErrorObject, PostRequestedResultModel>> getPostRequested();
 
   Future<Either<ErrorObject, GroupPostResultModel>> postGroup({required String description, required List<String> lstPostID});
+
+  Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroupPersonal({required int pageIndex,required int pageSize, String searchValue});
 
 }

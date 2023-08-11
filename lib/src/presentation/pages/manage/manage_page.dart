@@ -286,7 +286,7 @@ class ManagePage extends GetView<ManageController> {
               children: [
                 if(model.type == 'Trade')...[
                   GestureDetector(
-                    onTap: () => controller.goTradePage(model.id, true),
+                    onTap: () => controller.goGroupPersonalPage(model.id),
                     child: Container(
                       width: MediaQuery.of(context).size.width - 10,
                       padding: const EdgeInsets.all(10.0),
@@ -299,7 +299,7 @@ class ManagePage extends GetView<ManageController> {
                             color: kPrimaryLightColor,
                           ),
                           Text(
-                            'Trao đổi SP',
+                            'Danh sách nhóm trao đổi sản phẩm',
                             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(width: 10.0,)

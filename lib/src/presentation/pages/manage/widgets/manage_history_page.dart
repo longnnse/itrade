@@ -195,6 +195,10 @@ class ManageHistoryPage extends GetView<ManageController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Danh sách sản phẩm from',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     if(dataTrade.fromGroup != null)...[
                       if(dataTrade.fromGroup!.groupPosts!.isNotEmpty)...[
                         for(var cont in dataTrade.fromGroup!.groupPosts!)...[
@@ -202,6 +206,10 @@ class ManageHistoryPage extends GetView<ManageController> {
                         ]
                       ]
                     ],
+                    Text(
+                      'Danh sách sản phẩm to',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     if(dataTrade.toGroup != null)...[
                       if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
                         for(var cont in dataTrade.toGroup!.groupPosts!)...[

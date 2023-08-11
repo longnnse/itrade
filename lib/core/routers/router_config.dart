@@ -27,6 +27,7 @@ import 'package:i_trade/src/presentation/pages/login/login_page.dart';
 import 'package:i_trade/src/presentation/pages/login/widget/register_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_personal_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.dart';
 import 'package:i_trade/src/presentation/pages/search/search_controller.dart';
 import 'package:i_trade/src/presentation/pages/search/search_page.dart';
@@ -84,6 +85,15 @@ class ITradeRouterConfigs {
           Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
               permanent: true);
           Get.put<ManageService>(ManageRepositories());
+          Get.lazyPut(() => ManageController());
+        },
+      ),
+    ),
+    GetPage(
+      name: ManageGroupPersonalPage.routeName,
+      page: () => const ManageGroupPersonalPage(),
+      binding: BindingsBuilder(
+            () {
           Get.lazyPut(() => ManageController());
         },
       ),

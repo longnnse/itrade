@@ -3,12 +3,14 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/src/domain/models/group_post_result_model.dart';
+import 'package:i_trade/src/domain/models/manage_personal_group_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/domain/models/request_post_result_model.dart';
 import 'package:i_trade/src/domain/models/request_result_model.dart';
 import 'package:i_trade/src/domain/models/trade_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_personal_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 
@@ -25,6 +27,7 @@ class ManageController extends GetxController {
   final ManageService _manageService = Get.find();
   final RxBool isLoading = false.obs;
   final RxBool isLoadingGroup = false.obs;
+  final RxBool isLoadingGroupPersonal = false.obs;
   final RxBool isLoadingTrade = false.obs;
   final RxBool isLoadingConfirmTrade = false.obs;
   final RxBool isLoadingRequestTrade = false.obs;
@@ -40,6 +43,7 @@ class ManageController extends GetxController {
   final Rxn<List<RequestResultModel>> requestLst = Rxn<List<RequestResultModel>>();
   final Rxn<List<TradingSentResultModel>> tradingReceivedLst = Rxn<List<TradingSentResultModel>>();
   final Rxn<List<TradingSentResultModel>> tradingSentLst = Rxn<List<TradingSentResultModel>>();
+  final Rxn<ManagePersonalGroupModel> managePersonalGroup = Rxn<ManagePersonalGroupModel>();
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
   final Rxn<PostRequestedResultModel> postRequestedLst = Rxn<PostRequestedResultModel>();
   final TextEditingController searchController = TextEditingController();
@@ -86,6 +90,11 @@ class ManageController extends GetxController {
     }else{
       getTradingSent();
     }
+  }
+
+  void goGroupPersonalPage(String id){
+    productID.call(id);
+    Get.toNamed(ManageGroupPersonalPage.routeName);
   }
 
   void goTradePage(String id, bool isTradeVal){
@@ -252,6 +261,30 @@ class ManageController extends GetxController {
         tradeResult.call(value);
         // idFromPost.call(value.fromPostId);
         isLoadingRequestTrade.call(false);
+      },
+    );
+  }
+
+  Future<void> getGroupPersonal(
+      {required int pageIndex,
+        required int pageSize,
+        String searchValue = ''}) async {
+    //TODO use test
+    isLoadingGroupPersonal.call(true);
+
+    final Either<ErrorObject, ManagePersonalGroupModel> res = await _manageService.getGroupPersonal(
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+      searchValue: searchValue
+    );
+
+    res.fold(
+          (failure) {
+            isLoadingGroupPersonal.call(false);
+      },
+          (value) async {
+        managePersonalGroup.call(value);
+        isLoadingGroupPersonal.call(false);
       },
     );
   }
