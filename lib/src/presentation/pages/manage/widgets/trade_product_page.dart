@@ -249,7 +249,7 @@ class TradeProductPage extends GetView<ManageController> {
                                         borderRadius: BorderRadius.circular(5.0)
                                     ),
                                     child: Text(
-                                      controller.selectedProductIDs.contains(model.id) ? 'Đã yêu cầu' : 'Trao đổi',
+                                      controller.selectedProductIDs.contains(model.id) ? 'Đã yêu cầu' : 'Thêm',
                                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                           color: controller.selectedProductIDs.contains(model.id) ? kBackground : kPrimaryLightColor,
                                           fontWeight: FontWeight.w500),

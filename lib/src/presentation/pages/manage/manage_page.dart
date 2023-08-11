@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
@@ -196,15 +197,39 @@ class ManagePage extends GetView<ManageController> {
                     ),
                     if(dataTrade.fromGroup != null)...[
                       if(dataTrade.fromGroup!.groupPosts!.isNotEmpty)...[
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for(var cont in dataTrade.fromGroup!.groupPosts!)...[
-                                _buildItemTrade(context: context,model:  cont, idTraoDoi: cont.id!),
-                              ]
-                            ],
-                          ),
+                        Stack(
+                          children: [
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for(var cont in dataTrade.fromGroup!.groupPosts!)...[
+                                    _buildItemTrade(context: context,model:  cont, idTraoDoi: cont.id!),
+                                  ]
+                                ],
+                              ),
+                            ),
+                            if(dataTrade.fromGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  left: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_left,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              ),
+                            if(dataTrade.fromGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                right: 0.0,
+                                top: 40.0,
+                                child: Icon(
+                                  Icons.arrow_circle_right,
+                                  size: 25.0,
+                                  color: Colors.black.withOpacity(0.4),
+                                )
+                              )
+                          ],
                         )
                       ]
                     ],
@@ -214,15 +239,39 @@ class ManagePage extends GetView<ManageController> {
                     ),
                     if(dataTrade.toGroup != null)...[
                       if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for(var cont in dataTrade.toGroup!.groupPosts!)...[
-                                _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
-                              ]
-                            ],
-                          ),
+                        Stack(
+                          children: [
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                                    _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
+                                  ]
+                                ],
+                              ),
+                            ),
+                            if(dataTrade.toGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  left: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_left,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              ),
+                            if(dataTrade.toGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  right: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_right,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              )
+                          ],
                         )
                       ]
                     ]

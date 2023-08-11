@@ -24,7 +24,7 @@ class ProductDetailPage extends GetView<HomeController> {
     controller.countImage.call(0);
     controller.getPostByID(id: controller.idPost.value);
     controller.getPersonalPosts();
-    controller.getPosts(pageIndex: 1, pageSize: 10, categoryIds: '');
+    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
             context: context,

@@ -37,7 +37,7 @@ class TradeResultModel {
     id = json['id'] ?? '';
     dateCreated = json['dateCreated'] ?? '';
     dateUpdated = json['dateUpdated'] ?? '';
-    isDeleted = json['isDeleted'];
+    isDeleted = json['isDeleted'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

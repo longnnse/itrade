@@ -87,6 +87,7 @@ class DashboardPage extends GetView<DashboardController> {
       ) : null,
       floatingActionButtonLocation: CenterDockedFloatingActionButtonLocation(controller.itemCount.value),
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn1",
         onPressed: () {},
         child: Container(
           width: 60,

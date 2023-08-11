@@ -159,7 +159,7 @@ class ManageController extends GetxController {
     String fromPostId = await postGroup(description: desc, lstPostID: lstFromPostID);
     String toPostId = await postGroup(description: '', lstPostID: lstToPostID);
     if(fromPostId != '' && toPostId != ''){
-      postTrading(fromPostId: fromPostId, toPostId: toPostId);
+      await postTrading(fromPostId: fromPostId, toPostId: toPostId);
       isLoadingGroup.call(false);
       if(tradeResult.value != null){
         Get.snackbar('Thông báo', 'Trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
