@@ -53,6 +53,7 @@ class ManageController extends GetxController {
   final RxString productID = ''.obs;
   final RxString ownerPostID = ''.obs;
   final RxBool isTrade = false.obs;
+  final RxBool isTradeLst = false.obs;
   final List<String> lstDropdown = ['Ẩn', 'Chỉnh sửa'];
   RxList<String> lstHide = RxList<String>();
   @override
@@ -79,11 +80,19 @@ class ManageController extends GetxController {
     Get.toNamed(ProductDetailPage.routeName);
   }
 
+  void updateStatusIsTradeLst(){
+    if(isTradeLst.value == false){
+      isTradeLst.call(true);
+      getTradingReceived();
+    }else{
+      isTradeLst.call(false);
+      getPersonalPosts();
+    }
+  }
+
   void updateStatus(int countTab){
     tabInt.call(countTab);
     if(tabInt.value == 0){
-      getTradingReceived();
-    }if(tabInt.value == 1){
       getRequestReceived();
     }if(tabInt.value == 1){
       getPostRequestedReceived();
@@ -321,7 +330,7 @@ class ManageController extends GetxController {
     );
   }
 
-  Future<void> postAcceptTrade({required String tradeID, required BuildContext context}) async {
+  Future<void> postAcceptTrade({required String tradeID, required BuildContext context, bool isManagePage = false}) async {
     //TODO use test
     isLoadingConfirmTrade.call(true);
     final Either<ErrorObject, DataTrade> res = await _manageService.postAcceptTrade(tradeID: tradeID);
@@ -335,12 +344,16 @@ class ManageController extends GetxController {
 
         Get.snackbar('Thông báo', 'Trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
         isLoadingConfirmTrade.call(false);
-        Navigator.pop(context, true);
+        if(isManagePage == false){
+          Navigator.pop(context, true);
+        }else{
+          getTradingReceived();
+        }
       },
     );
   }
 
-  Future<void> postDenyTrade({required String tradeID, required BuildContext context}) async {
+  Future<void> postDenyTrade({required String tradeID, required BuildContext context, bool isManagePage = false}) async {
     //TODO use test
     isLoadingConfirmTrade.call(true);
     final Either<ErrorObject, DataTrade> res = await _manageService.postDenyTrade(tradeID: tradeID);
@@ -354,7 +367,11 @@ class ManageController extends GetxController {
 
         Get.snackbar('Thông báo', 'Từ chối trao đổi thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
         isLoadingConfirmTrade.call(false);
-        Navigator.pop(context, true);
+        if(isManagePage == false){
+          Navigator.pop(context, true);
+        }else{
+          getTradingReceived();
+        }
       },
     );
   }

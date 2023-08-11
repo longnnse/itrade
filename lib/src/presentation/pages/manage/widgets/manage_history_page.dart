@@ -24,7 +24,6 @@ class ManageHistoryPage extends GetView<ManageController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getTradingReceived();
     controller.getRequestReceived();
     controller.getPostRequestedReceived();
     controller.getTradingSent();
@@ -49,32 +48,58 @@ class ManageHistoryPage extends GetView<ManageController> {
           child: Column(
             children: [
               Obx(() {
-                if (controller.isLoadingTradingReceived.value) {
+                if (controller.isLoadingRequestReceived.value) {
                   return const SearchProductShimmerWidget(
                     columnCount: 2,
                   );
                 }
-                if(controller.tradingReceivedLst.value != null) {
+                if(controller.requestReceivedLst.value != null) {
                   return Column(
                     children: [
                       _buildTab(context,
-                        controller.tradingReceivedLst.value!.length,
                         controller.requestReceivedLst.value!.data.length,
                         controller.postRequestedLst.value!.data.length,
-                        controller.tradingSentLst.value!.length,
+                        controller.tradingSentLst.value!.length
                       ),
                       if(controller.tabInt.value == 0)...[
-                        for(var cont in controller.tradingReceivedLst.value!)
-                          _buildHistoryTradeItem(context: context, dataTrade: cont)
+                        if(controller.requestReceivedLst.value!.data.isNotEmpty)...[
+                          for(var cont in controller.requestReceivedLst.value!.data)
+                            _buildHistoryRequestItem(context: context, dataRequest: cont)
+                        ]else...[
+                          Center(
+                              child: Text(
+                                'Chưa có lịch sử',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                              )
+                          )
+                        ]
+
                       ]else if(controller.tabInt.value == 1)...[
-                        for(var cont in controller.requestReceivedLst.value!.data)
-                          _buildHistoryRequestItem(context: context, dataRequest: cont)
-                      ]else if(controller.tabInt.value == 2)...[
-                        for(var cont in controller.postRequestedLst.value!.data)
-                          _buildPostRequestedItem(context: context, dataRequest: cont)
+                        if(controller.postRequestedLst.value!.data.isNotEmpty)...[
+                          for(var cont in controller.postRequestedLst.value!.data)
+                            _buildPostRequestedItem(context: context, dataRequest: cont)
+                        ]else...[
+                          Center(
+                              child: Text(
+                                'Chưa có lịch sử',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                              )
+                          )
+                        ]
+
                       ]else...[
-                        for(var cont in controller.tradingSentLst.value!)
-                          _buildHistoryTradeItem(context: context, dataTrade: cont)
+                        if(controller.tradingSentLst.value!.isNotEmpty)...[
+                          for(var cont in controller.tradingSentLst.value!)
+                            _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!)
+                        ]else...[
+                          Center(
+                              child: Text(
+                                'Chưa có lịch sử',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                              )
+                          )
+                        ]
+
                       ]
 
                     ],
@@ -93,7 +118,7 @@ class ManageHistoryPage extends GetView<ManageController> {
         ));
   }
 
-  Widget _buildTab(BuildContext context, int slTraoDoi, int slRequest, int slPost, int slSent){
+  Widget _buildTab(BuildContext context, int slRequest, int slPost, int slSent){
     return Obx(() => SizedBox(
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
@@ -109,7 +134,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 0 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã trao đổi ($slTraoDoi)',
+                  'Đã cho ($slRequest)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 0 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -125,7 +150,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 1 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã cho ($slRequest)',
+                  'Đã xin ($slPost)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 1 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -141,25 +166,9 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 2 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã xin ($slPost)',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
-                      color: controller.tabInt.value == 2 ? Colors.white : Colors.black),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () => controller.updateStatus(3),
-              child: Container(
-                //width: MediaQuery.of(context).size.width * 0.4,
-                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
-                decoration: BoxDecoration(
-                  gradient: controller.tabInt.value == 3 ? kDefaultGradient : null,
-                ),
-                child: Text(
                   'Đã gửi trao đổi ($slSent)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
-                      color: controller.tabInt.value == 3 ? Colors.white : Colors.black),
+                      color: controller.tabInt.value == 2 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -170,7 +179,7 @@ class ManageHistoryPage extends GetView<ManageController> {
     ));
   }
 
-  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade}){
+  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost}){
     return Container(
       margin: const EdgeInsets.only(top: 15.0),
       decoration: BoxDecoration(
@@ -184,94 +193,136 @@ class ManageHistoryPage extends GetView<ManageController> {
             children: [
               Container(
                 margin: const EdgeInsets.only(left: 10.0),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        left: BorderSide(
-                            width: 5.0,
-                            color: kPrimaryLightColor
-                        )
-                    )
-                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Danh sách sản phẩm from',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                     ),
                     if(dataTrade.fromGroup != null)...[
                       if(dataTrade.fromGroup!.groupPosts!.isNotEmpty)...[
-                        for(var cont in dataTrade.fromGroup!.groupPosts!)...[
-                          _buildItemTrade(context, cont, true),
-                        ]
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for(var cont in dataTrade.fromGroup!.groupPosts!)...[
+                                _buildItemTrade(context: context,cont:  cont, idTraoDoi: cont.id!),
+                              ]
+                            ],
+                          ),
+                        )
                       ]
                     ],
                     Text(
                       'Danh sách sản phẩm to',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                     ),
                     if(dataTrade.toGroup != null)...[
                       if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
-                        for(var cont in dataTrade.toGroup!.groupPosts!)...[
-                          _buildItemTrade(context, cont, false),
-                        ]
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                                _buildItemTrade(context: context, cont: cont, idTraoDoi: cont.id!),
+                              ]
+                            ],
+                          ),
+                        )
                       ]
                     ]
 
                   ],
                 ),
               ),
-              Positioned(
-                top: 0.0,
-                child: Column(
-                  children: [
-                    Container(
-                      width: 10.0,
-                      height: 30.0,
-                      color: kBackgroundBottomBar,
-                    ),
-                    const Icon(
-                      Icons.circle,
-                      color: kPrimaryLightColor,
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 0.0,
-                child: Column(
-                  children: [
-                    const Icon(
-                      Icons.circle,
-                      color: kPrimaryLightColor,
-                    ),
-                    Container(
-                      width: 10.0,
-                      height: 40.0,
-                      color: kBackgroundBottomBar,
-                    )
-                  ],
-                ),
-              ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: RichText(
-              text: TextSpan(
-                text: 'Trạng thái: ',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: dataTrade.status,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: dataTrade.status == 'Accept' ? kSecondaryGreen :
-                               dataTrade.status == 'Deny' ? kSecondaryRed : kSecondaryYellow,
-                        fontWeight: FontWeight.w700)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Trạng thái: ',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: dataTrade.status,
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: dataTrade.status == 'Accept' ? kSecondaryGreen :
+                              dataTrade.status == 'Deny' ? kSecondaryRed : kSecondaryYellow,
+                              fontWeight: FontWeight.w700)
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              Row(
+                children: [
+                  if(dataTrade.status == 'Accept' || dataTrade.status == 'Deny')...[
+                    Container(
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: kBackground,
+                              width: 2.0
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: kBackground
+                      ),
+                      child: Text(
+                        dataTrade.status ?? '',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    )
+                  ]else...[
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: kSecondaryGreen,
+                                    width: 2.0
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                                color: kSecondaryGreen
+                            ),
+                            child: Text(
+                              'Đồng ý',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10.0,),
+                        GestureDetector(
+                          onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: kSecondaryRed,
+                                    width: 2.0
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                                color: kSecondaryRed
+                            ),
+                            child: Text(
+                              'Từ chối',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ]
+                ],
+              )
+            ],
           ),
           const SizedBox(height: 10.0,),
         ],
@@ -442,124 +493,125 @@ class ManageHistoryPage extends GetView<ManageController> {
     );
   }
 
-  Widget _buildItemTrade(BuildContext context, GroupPosts cont, bool isLine){
+  Widget _buildItemTrade({required BuildContext context, required GroupPosts cont, required String idTraoDoi}){
     return GestureDetector(
       onTap: () => controller.goDetail(id: cont.id!),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  color: isLine == true ? kBackground : kBackgroundBottomBar
-              )
-          ),
-        ),
-        height: MediaQuery.of(context).size.width * 0.25,
-        margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-        child: Row(
+        width: MediaQuery.of(context).size.width,
+        color: kBackgroundBottomBar,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.width * 0.25,
-                  margin: const EdgeInsets.only(bottom: 5.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: kBackground
-                  ),
-                  child: cont.post!.resources.isNotEmpty ? Image.network(
-                      CoreUrl.baseImageURL + cont.post!.resources[0].id + cont.post!.resources[0].extension,
-                      fit: BoxFit.contain
-                  ) : const SizedBox(),
-                ),
-                Positioned(
-                    right: 10.0,
-                    top: 10.0,
-                    child: Stack(
-                      children: [
-                        const Icon(
-                          Icons.camera_alt,
-                          size: 30.0,
-                          color: Colors.grey,
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.width * 0.25,
+                        margin: const EdgeInsets.only(bottom: 5.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: kBackground
                         ),
-                        Positioned(
-                          child: SizedBox(
-                            width: 30.0,
-                            height: 30.0,
-                            child: Center(
-                              child: Container(
-                                width: 15.0,
-                                height: 15.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.white,
+                        child: cont.post!.resources.isNotEmpty ? Image.network(
+                            CoreUrl.baseImageURL + cont.post!.resources[0].id + cont.post!.resources[0].extension,
+                            fit: BoxFit.contain
+                        ) : const SizedBox(),
+                      ),
+                      Positioned(
+                          right: 10.0,
+                          top: 10.0,
+                          child: Stack(
+                            children: [
+                              const Icon(
+                                Icons.camera_alt,
+                                size: 30.0,
+                                color: Colors.grey,
+                              ),
+                              Positioned(
+                                child: SizedBox(
+                                  width: 30.0,
+                                  height: 30.0,
+                                  child: Center(
+                                    child: Container(
+                                      width: 15.0,
+                                      height: 15.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        color: Colors.white,
+                                      ),
+                                      child: Text(
+                                        cont.post!.resources.length.toString(),
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
                                 ),
+                              )
+                            ],
+                          )
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 10.0,),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
                                 child: Text(
-                                  cont.post!.resources.length.toString(),
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                  textAlign: TextAlign.center,
+                                  cont.title,
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                 ),
                               ),
-                            ),
+                              // SizedBox(
+                              //   child: Text(
+                              //     '${cont.price.toString().split('.').first} đ',
+                              //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                              //   ),
+                              // )
+                            ],
                           ),
-                        )
-                      ],
-                    )
-                ),
-              ],
-            ),
-            const SizedBox(width: 5.0,),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          child: Text(
-                            cont.title,
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        // SizedBox(
-                        //   child: Text(
-                          //     '${cont.price.toString().split('.').first} đ',
-                        //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                        //   ),
-                        // )
-                      ],
-                    ),
-                    SizedBox(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ShaderMask(
-                            blendMode: BlendMode.srcIn,
-                            shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                            child: const Icon(
-                                Icons.person,
-                                color: kPrimaryLightColor,
-                                size: 15.0
-                            ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              'Đã đăng ${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
-                              style: Theme.of(context).textTheme.bodySmall,
+                          SizedBox(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ShaderMask(
+                                  blendMode: BlendMode.srcIn,
+                                  shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
+                                  child: const Icon(
+                                      Icons.person,
+                                      color: kPrimaryLightColor,
+                                      size: 15.0
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    'Đã đăng ${FormatDateTime.getHourFormat(cont.dateUpdated)} ${FormatDateTime.getDateFormat(cont.dateUpdated)}',
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
-            )
-
+            ),
           ],
         ),
       ),
