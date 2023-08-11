@@ -55,8 +55,8 @@ class ManageRepositories implements ManageService {
       final Map<String, dynamic> queryParameters = {
         'PageIndex': pageIndex,
         'PageSize': pageSize,
-        'FromPostID': fromPostID,
-        'ToPostID': toPostID,
+        'FromGroupId': fromPostID,
+        'ToGroupId': toPostID,
       };
 
 
@@ -146,8 +146,8 @@ class ManageRepositories implements ManageService {
       const url = '${CoreUrl.baseURL}/Trading';
 
       final Map<String, dynamic> queryParameters = {
-        'fromPostId': fromPostId,
-        'toPostId': toPostId,
+        'fromGroupId': fromPostId,
+        'toGroupId': toPostId,
       };
 
 
@@ -374,14 +374,10 @@ class ManageRepositories implements ManageService {
 
       final Map<String, dynamic> queryParameters = {
         'Description': description,
-        // 'PostIds': lstPostID
+        'PostIds': lstPostID
       };
-      for(int i = 0; i < lstPostID.length; i++){
-        queryParameters['PostIds'] = lstPostID[i];
-      }
-      print(queryParameters);
-      print('zxvzxv11');
-      final res = await _coreHttp.postWithFile(url, queryParameters, [],
+
+      final res = await _coreHttp.post(url, queryParameters,
           headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {

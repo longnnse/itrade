@@ -2,9 +2,9 @@ import 'package:i_trade/src/domain/models/trade_model.dart';
 
 class TradeResultModel {
   late String fromPostId;
-  late Post fromPost;
+  Post? fromPost;
   late String toPostId;
-  late Post toPost;
+  Post? toPost;
   String? content;
   late String status;
   late String id;
@@ -14,9 +14,9 @@ class TradeResultModel {
 
   TradeResultModel(
       {required this.fromPostId,
-        required this.fromPost,
+        this.fromPost,
         required this.toPostId,
-        required this.toPost,
+        this.toPost,
         this.content,
         required this.status,
         required this.id,
@@ -25,27 +25,27 @@ class TradeResultModel {
         required this.isDeleted});
 
   TradeResultModel.fromJson(Map<String, dynamic> json) {
-    fromPostId = json['fromPostId'];
-    fromPost = (json['fromPost'] != null
+    fromPostId = json['fromPostId'] ?? '';
+    fromPost = json['fromPost'] != null
         ? Post.fromJson(json['fromPost'])
-        : null)!;
-    toPostId = json['toPostId'];
+        : null;
+    toPostId = json['toPostId'] ?? '';
     toPost =
-    (json['toPost'] != null ? Post.fromJson(json['toPost']) : null)!;
-    content = json['content'];
-    status = json['status'];
-    id = json['id'];
-    dateCreated = json['dateCreated'];
-    dateUpdated = json['dateUpdated'];
+    json['toPost'] != null ? Post.fromJson(json['toPost']) : null;
+    content = json['content'] ?? '';
+    status = json['status'] ?? '';
+    id = json['id'] ?? '';
+    dateCreated = json['dateCreated'] ?? '';
+    dateUpdated = json['dateUpdated'] ?? '';
     isDeleted = json['isDeleted'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['fromPostId'] = fromPostId;
-    data['fromPost'] = fromPost.toJson();
+    data['fromPost'] = fromPost!.toJson();
     data['toPostId'] = toPostId;
-    data['toPost'] = toPost.toJson();
+    data['toPost'] = toPost!.toJson();
     data['content'] = content ?? '';
     data['status'] = status;
     data['id'] = id;
