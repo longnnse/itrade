@@ -146,8 +146,8 @@ class ManageRepositories implements ManageService {
       const url = '${CoreUrl.baseURL}/Trading';
 
       final Map<String, dynamic> queryParameters = {
-        'fromPostId': fromPostId,
-        'toPostId': toPostId,
+        'fromGroupId': fromPostId,
+        'toGroupId': toPostId,
       };
 
 
@@ -374,7 +374,7 @@ class ManageRepositories implements ManageService {
 
       final Map<String, dynamic> queryParameters = {
         'Description': description,
-        // 'PostIds': lstPostID
+         'PostIds': lstPostID
       };
       for(int i = 0; i < lstPostID.length; i++){
         queryParameters['PostIds'] = lstPostID[i];
