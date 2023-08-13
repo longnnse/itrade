@@ -197,7 +197,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Danh sách sản phẩm from',
+                      'Danh sách gửi yêu cầu',
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                     ),
                     if(dataTrade.fromGroup != null)...[
@@ -215,7 +215,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                       ]
                     ],
                     Text(
-                      'Danh sách sản phẩm to',
+                      'Danh sách sản phẩm đăng của bạn',
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                     ),
                     if(dataTrade.toGroup != null)...[

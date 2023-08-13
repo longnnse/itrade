@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/models/category_model.dart';
+import 'package:i_trade/src/domain/models/noti_result_model.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/domain/models/sell_free_result_model.dart';
 import 'package:i_trade/src/domain/services/home_service.dart';
@@ -139,6 +140,36 @@ class HomeRepositories implements HomeService {
           failure: const ServerFailure(),
           title: 'Thông báo',
           mess: 'Không thể yêu cầu mua hoặc nhận miễn phí do đã tồn tại yêu cầu hoặc bài đăng này là của bạn'));
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, NotiResultModel>> getNoti({required int pageIndex, required int pageSize}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Notification';
+
+      final Map<String, dynamic> queryParameters = {
+        'PageIndex': pageIndex,
+        'PageSize': pageSize
+      };
+
+      final res = await _coreHttp.get(url, queryParameters: queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = NotiResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
     } on NoConnectionException {
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const NoConnectionFailure()));

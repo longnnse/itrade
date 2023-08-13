@@ -20,7 +20,7 @@ class FABBottomAppBar extends StatefulWidget {
     required this.notchedShape,
     required this.onTabSelected,
   }) {
-    assert(items.length == 2 || items.length == 4|| items.length == 5);
+    assert(items.length == 2 || items.length == 4 || items.length == 5 || items.length == 6);
   }
   final List<FABBottomAppBarItem> items;
   final double height;

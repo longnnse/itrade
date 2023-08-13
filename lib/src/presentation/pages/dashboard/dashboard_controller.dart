@@ -11,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 
 import '../information/information_page.dart';
+import '../manage/widgets/manage_trade_list_page.dart';
 
 class DashboardController extends GetxController {
   final RxBool isLoading = false.obs;
@@ -30,30 +31,36 @@ class DashboardController extends GetxController {
     itemCount.call(index == 0
         ? 20.0
         : index == 1
-            ? 3.5
-            : index == 2
-                ? 2.0
+            ? 4.5
+              : index == 2
+              ? 2.5
                 : index == 3
-                    ? 1.35
-                    : 1.05);
+                    ? 1.65
+                    : index == 4
+                        ? 1.25
+                        : 1.03);
     icon.call(index == 0
         ? const Icon(Icons.home, size: 30.0)
         : index == 1
             ? const Icon(Icons.dashboard, size: 30.0)
             : index == 2
-                ? const Icon(Icons.search, size: 30.0)
-                : index == 3
-                    ? const Icon(Icons.chat, size: 30.0)
-                    : const Icon(Icons.person, size: 30.0));
+              ? const Icon(Icons.list_alt, size: 30.0)
+              : index == 3
+                  ? const Icon(Icons.search, size: 30.0)
+                  : index == 4
+                      ? const Icon(Icons.chat, size: 30.0)
+                      : const Icon(Icons.person, size: 30.0));
     appBarTitle.call(index == 0
         ? 'Trang chủ'
         : index == 1
             ? 'Quản lý'
-            : index == 2
-                ? 'Tìm kiếm'
+              : index == 2
+              ? 'Danh sách trao đổi sản phẩm'
                 : index == 3
-                    ? 'Trao đổi'
-                    : 'Cá nhân');
+                    ? 'Tìm kiếm'
+                    : index == 4
+                        ? 'Trao đổi'
+                        : 'Cá nhân');
   }
 
   Widget changePage() {
@@ -66,12 +73,15 @@ class DashboardController extends GetxController {
         content = const ManagePage();
         break;
       case 'TAB: 2':
-        content = const SearchPage();
+        content = const ManageTradeListPage();
         break;
       case 'TAB: 3':
-        content = const ExchangePage();
+        content = const SearchPage();
         break;
       case 'TAB: 4':
+        content = const ExchangePage();
+        break;
+      case 'TAB: 5':
         content = const InformationPage();
         break;
     }

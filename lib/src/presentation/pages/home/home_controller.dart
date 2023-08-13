@@ -10,6 +10,7 @@ import 'package:i_trade/core/initialize/theme.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/entities/base.dart';
 import 'package:i_trade/src/domain/models/category_model.dart';
+import 'package:i_trade/src/domain/models/noti_result_model.dart';
 import 'package:i_trade/src/domain/models/sell_free_result_model.dart';
 import 'package:i_trade/src/domain/services/home_service.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
@@ -26,6 +27,7 @@ class HomeController extends GetxController {
   RxBool isMore = false.obs;
   RxInt countImage = 0.obs;
   final RxBool isLoading = false.obs;
+  final RxBool isNotiResultLoading = false.obs;
   final RxBool isLoadingPersonalPost = false.obs;
   final RxBool isLoadingRequest = false.obs;
   final RxBool isLoadingProduct = false.obs;
@@ -35,6 +37,7 @@ class HomeController extends GetxController {
   final ManageService _manageService = Get.find();
   final ManageController manageController = Get.find();
   final Rxn<List<CategoryModel>> categoryList = Rxn<List<CategoryModel>>();
+  final Rxn<NotiResultModel> notiResult = Rxn<NotiResultModel>();
   final RxList<Data> selectedProductList = RxList<Data>();
   final RxList<String> selectedProductIDs = RxList<String>();
   final RxList<Data> selectedMyProductList = RxList<Data>();
@@ -222,6 +225,24 @@ class HomeController extends GetxController {
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
         sellFreeResultModel.call(value);
         isLoadingRequest.call(false);
+      },
+    );
+  }
+
+  Future<void> getNoti(
+      {required int pageIndex, required int pageSize}) async {
+    //TODO use test
+    isNotiResultLoading.call(true);
+    final Either<ErrorObject, NotiResultModel> res = await _homeService
+        .getNoti(pageSize: pageSize, pageIndex: pageIndex);
+
+    res.fold(
+          (failure) {
+        isNotiResultLoading.call(false);
+      },
+          (value) async {
+        notiResult.call(value);
+        isNotiResultLoading.call(false);
       },
     );
   }
