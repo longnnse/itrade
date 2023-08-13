@@ -335,7 +335,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                       color: kPrimaryLightColor
                   ),
                   child: Text(
-                    'Trao đổi',
+                    'Bắt đầu chat',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
                   ),
                 ),
