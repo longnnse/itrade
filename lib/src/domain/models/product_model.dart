@@ -197,6 +197,7 @@ class User {
   late String lastName;
   late String email;
   late String address;
+  late String? userAva;
 
   User(
       {required this.id,
@@ -215,6 +216,7 @@ class User {
     lastName = json['lastName'] ?? '';
     email = json['email'] ?? '';
     address = json['address'] ?? '';
+    userAva = json['userAva'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
