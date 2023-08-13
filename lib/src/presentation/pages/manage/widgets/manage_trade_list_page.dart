@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
+import 'package:i_trade/src/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_product_shimmer_widget.dart';
 
@@ -177,6 +178,7 @@ class ManageTradeListPage extends GetView<ManageController> {
               ),
             ],
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -260,7 +262,25 @@ class ManageTradeListPage extends GetView<ManageController> {
                     )
                   ]
                 ],
-              )
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: kPrimaryLightColor,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: kPrimaryLightColor
+                  ),
+                  child: Text(
+                    'Bắt đầu chat',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10.0,),

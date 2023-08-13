@@ -321,7 +321,25 @@ class ManageHistoryPage extends GetView<ManageController> {
                     )
                   ]
                 ],
-              )
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: kPrimaryLightColor,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: kPrimaryLightColor
+                  ),
+                  child: Text(
+                    'Trao đổi',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10.0,),
