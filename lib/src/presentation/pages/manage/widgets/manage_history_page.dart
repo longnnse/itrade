@@ -323,7 +323,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                 ],
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => controller.gochat(dataTrade),
                 child: Container(
                   padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                   decoration: BoxDecoration(
