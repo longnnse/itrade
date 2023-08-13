@@ -172,7 +172,7 @@ class HomePage extends GetView<HomeController> {
         for(var cont in productModel.data)
           if(cont.isConfirmed == true)...[
             GestureDetector(
-              onTap: () => controller.goDetail(id: cont.id),
+              onTap: () => controller.goDetail(id: cont.id, ownerID: cont.user.id),
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Column(
@@ -236,13 +236,13 @@ class HomePage extends GetView<HomeController> {
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width * 0.4,
-                    //   child: Text(
-                    //     '${cont.price.toString().split('.').first} đ',
-                    //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                    //   ),
-                    // ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Text(
+                        '${cont.user.lastName} ${cont.user.firstName}',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                      ),
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: Row(

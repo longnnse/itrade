@@ -49,6 +49,38 @@ class ManageRepositories implements ManageService {
   }
 
   @override
+  Future<Either<ErrorObject, List<Data>>> getPersonalPostsByID({required String userID}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Post/ByUserId';
+
+      final Map<String, dynamic> queryParameters = {
+        'userId ': userID
+      };
+
+      final res = await _coreHttp.get(url, queryParameters: queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = res
+            .map<Data>(
+                (e) => Data.fromJson(e))
+            .toList();
+        return Right(data ?? []);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
   Future<Either<ErrorObject, TradeModel>> getTradePosts({required int pageIndex, required int pageSize, required String fromPostID, required String toPostID}) async {
     try {
       const url = '${CoreUrl.baseURL}/Trading';
@@ -427,5 +459,7 @@ class ManageRepositories implements ManageService {
           failure: const NoConnectionFailure()));
     }
   }
+
+
 
 }

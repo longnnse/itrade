@@ -184,9 +184,9 @@ class ManageTradeListPage extends GetView<ManageController> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
-                child: RichText(
+                    child: RichText(
                   text: TextSpan(
-                    text: 'Trạng thái: ',
+                  text: 'Trạng thái: ',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
                     children: <TextSpan>[
                       TextSpan(
@@ -200,88 +200,99 @@ class ManageTradeListPage extends GetView<ManageController> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  if(dataTrade.status == 'Accept' || dataTrade.status == 'Deny')...[
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: kBackground,
-                              width: 2.0
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: kBackground
-                      ),
-                      child: Text(
-                        dataTrade.status ?? '',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                    )
-                  ]else...[
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kSecondaryGreen,
-                                    width: 2.0
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: kSecondaryGreen
+
+            ],
+          ),
+          const SizedBox(height: 10.0,),
+          SizedBox(
+            width: Get.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    if(dataTrade.status == 'Accept' || dataTrade.status == 'Deny')...[
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: kBackground,
+                                width: 2.0
                             ),
-                            child: Text(
-                              'Đồng ý',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                            ),
-                          ),
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: kBackground
                         ),
-                        const SizedBox(width: 10.0,),
-                        GestureDetector(
-                          onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kSecondaryRed,
-                                    width: 2.0
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: kSecondaryRed
-                            ),
-                            child: Text(
-                              'Từ chối',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                        child: Text(
+                          dataTrade.status ?? '',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                        ),
+                      )
+                    ]else...[
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: kSecondaryGreen,
+                                      width: 2.0
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: kSecondaryGreen
+                              ),
+                              child: Text(
+                                'Đồng ý',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
-                        )
-                      ],
-                    )
-                  ]
-                ],
-              ),
-              GestureDetector(
-                onTap: () => controller.gochat(dataTrade),
-                child: Container(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: kPrimaryLightColor,
-                          width: 2.0
-                      ),
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: kPrimaryLightColor
-                  ),
-                  child: Text(
-                    'Bắt đầu chat',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                          const SizedBox(width: 10.0,),
+                          GestureDetector(
+                            onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: kSecondaryRed,
+                                      width: 2.0
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: kSecondaryRed
+                              ),
+                              child: Text(
+                                'Từ chối',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ]
+                  ],
+                ),
+                const SizedBox(width: 10.0,),
+                GestureDetector(
+                  onTap: () => controller.gochat(dataTrade),
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: kPrimaryLightColor,
+                            width: 2.0
+                        ),
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: kPrimaryLightColor
+                    ),
+                    child: Text(
+                      'Bắt đầu chat',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 10.0,),
         ],

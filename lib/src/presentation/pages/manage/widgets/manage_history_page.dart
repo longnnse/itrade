@@ -259,69 +259,6 @@ class ManageHistoryPage extends GetView<ManageController> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  if(dataTrade.status == 'Accept' || dataTrade.status == 'Deny')...[
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: kBackground,
-                              width: 2.0
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: kBackground
-                      ),
-                      child: Text(
-                        dataTrade.status ?? '',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                    )
-                  ]else...[
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kSecondaryGreen,
-                                    width: 2.0
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: kSecondaryGreen
-                            ),
-                            child: Text(
-                              'Đồng ý',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10.0,),
-                        GestureDetector(
-                          onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kSecondaryRed,
-                                    width: 2.0
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: kSecondaryRed
-                            ),
-                            child: Text(
-                              'Từ chối',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                  ]
-                ],
-              ),
               GestureDetector(
                 onTap: () => controller.gochat(dataTrade),
                 child: Container(

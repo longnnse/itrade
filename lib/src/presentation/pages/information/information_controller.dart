@@ -15,6 +15,7 @@ import '../../../domain/models/product_model.dart';
 import '../../../domain/models/request_post_result_model.dart';
 import '../../../domain/services/manage_service.dart';
 import '../edit_profile/edit_profile_page.dart';
+import '../home/home_controller.dart';
 import '../login/login_page.dart';
 import '../upload_post/upload_post_page.dart';
 import 'widgets/iTrade_policy_page.dart';
@@ -133,6 +134,10 @@ class InformationController extends GetxController {
     // if(AppSettings.getValue(KeyAppSetting.isDangNhap) == true){
     //
     // }
+    HomeController ctl = Get.find();
+    ctl.selectedProductList.clear();
+    ctl.selectedMyProductList.clear();
+    ctl.selectedMyProductIDs.clear();
     AppSettings.clearAllSharePref();
     Get.offNamedUntil('LoginPage', (route) => false);
     // final result = Get.toNamed(LoginPage.routeName);

@@ -18,12 +18,18 @@ import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/trade_product_page.dart';
 
 import '../../../domain/models/product_model.dart';
+import '../../../domain/services/upload_product_service.dart';
+import '../../../infrastructure/repositories/upload_product_repository.dart';
+import '../upload_post/upload_post_controller.dart';
+import '../upload_post/upload_post_page.dart';
 import 'widgets/product_detail.dart';
 
 class HomeController extends GetxController {
   RxString title = ''.obs;
   RxString idPost = ''.obs;
   RxString idCate = ''.obs;
+  RxString idOwner = ''.obs;
+  RxBool isNeedOwnerID = false.obs;
   RxBool isMore = false.obs;
   RxInt countImage = 0.obs;
   final RxBool isLoading = false.obs;
@@ -47,7 +53,8 @@ class HomeController extends GetxController {
       Rxn<SellFreeResultModel>();
   final Rxn<Data> productByIDModel = Rxn<Data>();
   final Rxn<List<Data>> personalProductList = Rxn<List<Data>>();
-
+  RxString searchStr = ''.obs;
+  final TextEditingController searchController = TextEditingController();
   TextEditingController descControler = TextEditingController();
   void dependencies() {
     Get.put(HomeController);
@@ -81,8 +88,15 @@ class HomeController extends GetxController {
     countImage.call(count);
   }
 
-  void goDetail({required String id}) {
+  void goDetail({required String id,required String ownerID}) {
     idPost.call(id);
+    if(ownerID == AppSettings.getValue(KeyAppSetting.userId)){
+      isNeedOwnerID.call(false);
+    }else{
+      isNeedOwnerID.call(true);
+    }
+
+    idOwner.call(ownerID);
     Get.toNamed(ProductDetailPage.routeName);
   }
 
@@ -189,6 +203,18 @@ class HomeController extends GetxController {
       },
     );
   }
+  void goGoCreatePost() async {
+    Get.put<UploadProductService>(UploadProdcutRepositories());
+    Get.put(UploadPostController());
+    // final UploadPostController uploadPostController = Get.find();
+    // uploadPostController.isPostToTrade.call(true);
+    // uploadPostController.toPostID.call(ownerPostID.value);
+    var result = await Get.toNamed(UploadPostPage.routeName);
+    if (result == true) {
+      getPersonalPosts();
+    }
+  }
+
 
   Future<void> getPersonalPosts() async {
     //TODO use test
@@ -201,6 +227,23 @@ class HomeController extends GetxController {
         isLoadingPersonalPost.call(false);
       },
       (value) async {
+        personalProductList.call(value);
+        isLoadingPersonalPost.call(false);
+      },
+    );
+  }
+
+  Future<void> getPersonalPostsByID(String userID) async {
+    //TODO use test
+    isLoadingPersonalPost.call(true);
+    final Either<ErrorObject, List<Data>> res =
+    await _manageService.getPersonalPostsByID(userID: userID);
+
+    res.fold(
+          (failure) {
+        isLoadingPersonalPost.call(false);
+      },
+          (value) async {
         personalProductList.call(value);
         isLoadingPersonalPost.call(false);
       },

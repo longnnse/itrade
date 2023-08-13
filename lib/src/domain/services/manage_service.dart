@@ -14,6 +14,8 @@ import '../models/trading_sent_model.dart';
 abstract class ManageService {
   Future<Either<ErrorObject, List<Data>>> getPersonalPosts();
 
+  Future<Either<ErrorObject, List<Data>>> getPersonalPostsByID({required String userID});
+
   Future<Either<ErrorObject, TradeModel>> getTradePosts({required int pageIndex,required int pageSize, required String fromPostID, required String toPostID});
 
   Future<Either<ErrorObject, DataTrade>> postAcceptTrade({required String tradeID});

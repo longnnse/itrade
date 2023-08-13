@@ -280,11 +280,11 @@ class TradeProductPage extends GetView<ManageController> {
 
                             ],
                           ),
-                          const SizedBox(height: 5.0,),
-                          Text(
-                            '${model.price.toString().split('.').first} đ',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                          ),
+                          // const SizedBox(height: 5.0,),
+                          // Text(
+                          //   '${model.price.toString().split('.').first} đ',
+                          //   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                          // ),
                           const SizedBox(height: 5.0,),
                           Text(
                             'Đã đăng ${FormatDateTime.getHourFormat(model.dateUpdated)} ${FormatDateTime.getDateFormat(model.dateUpdated)}',

@@ -183,6 +183,10 @@ class ManageController extends GetxController {
       if (tradeResult.value != null) {
         Get.snackbar('Thông báo', 'Trao đổi thành công',
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        HomeController ctl = Get.find();
+        ctl.selectedProductList.clear();
+        ctl.selectedMyProductList.clear();
+        ctl.selectedMyProductIDs.clear();
         Navigator.pop(context);
       } else {
         Get.snackbar('Thông báo', 'Không thể trao đổi',

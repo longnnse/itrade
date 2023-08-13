@@ -311,12 +311,12 @@ class SearchPage extends GetView<SearchControllerCustom> {
                                                 style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                                               ),
                                             ),
-                                            SizedBox(
-                                              child: Text(
-                                                '${cont.price.toString().split('.').first} đ',
-                                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                              ),
-                                            )
+                                            // SizedBox(
+                                            //   child: Text(
+                                            //     '${cont.price.toString().split('.').first} đ',
+                                            //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                            //   ),
+                                            // )
                                           ],
                                         ),
                                         SizedBox(

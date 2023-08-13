@@ -119,7 +119,7 @@ class ProductListPage extends GetView<HomeController> {
           for(var cont in productModel.data)
             if(cont.isConfirmed == true)...[
               GestureDetector(
-                onTap: () => controller.goDetail(id: cont.id),
+                onTap: () => controller.goDetail(id: cont.id, ownerID: cont.user.id),
                 child: Container(
                   decoration: const  BoxDecoration(
                     border: Border(

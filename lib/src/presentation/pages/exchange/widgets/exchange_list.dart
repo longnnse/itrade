@@ -7,6 +7,7 @@ import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/entities/trading.dart';
 
+import '../../../../../core/initialize/theme.dart';
 import '../index.dart';
 
 class ExchangeList extends GetView<ExchangeController> {
@@ -124,17 +125,23 @@ class ExchangeList extends GetView<ExchangeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 0.w, horizontal: 20.w),
-              sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                var item = controller.state.tradingList[index];
-                return _buildListItem(item);
-              }, childCount: controller.state.tradingList.length)),
-            )
-          ],
-        ));
+    // return Obx(() => CustomScrollView(
+    //       slivers: [
+    //         SliverPadding(
+    //           padding: EdgeInsets.symmetric(vertical: 0.w, horizontal: 20.w),
+    //           sliver: SliverList(
+    //               delegate: SliverChildBuilderDelegate((context, index) {
+    //             var item = controller.state.tradingList[index];
+    //             return _buildListItem(item);
+    //           }, childCount: controller.state.tradingList.length)),
+    //         )
+    //       ],
+    //     ));
+    return Center(
+        child: Text(
+          'Không có dữ liệu trao đổi',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+        )
+    );
   }
 }

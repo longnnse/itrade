@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/common/values/colors.dart';
 import 'package:i_trade/core/initialize/core_url.dart';
+import 'package:i_trade/core/initialize/theme.dart';
 import 'package:i_trade/src/presentation/pages/chat/widgets/chat_list.dart';
+import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 
 import 'controller.dart';
 
@@ -73,6 +75,7 @@ class ChatPage extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    ManageController ctl = Get.find();
     return Scaffold(
         appBar: _buildAppBar(),
         body: Obx(() => SafeArea(
@@ -174,7 +177,7 @@ class ChatPage extends GetView<ChatController> {
                     ? Positioned(
                         right: 20.w,
                         bottom: 100.h,
-                        height: 200.w,
+                        height: 240.w,
                         width: 40.w,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,6 +262,56 @@ class ChatPage extends GetView<ChatController> {
                               ),
                               onTap: () {
                                 // controller.videoCall();
+                              },
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: 40.w,
+                                height: 40.w,
+                                padding: EdgeInsets.all(5.w),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40.w),
+                                    color: AppColors.primayBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: const Offset(1, 1))
+                                    ]),
+                                child: const Icon(
+                                  Icons.check_circle_outline,
+                                  size: 35.0,
+                                  color: kSecondaryGreen,
+                                ),
+                              ),
+                              onTap: () {
+                                ctl.postAcceptTrade(tradeID: controller.trading_id, context: context, isManagePage: true);
+                              },
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                width: 40.w,
+                                height: 40.w,
+                                padding: EdgeInsets.all(5.w),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40.w),
+                                    color: AppColors.primayBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: const Offset(1, 1))
+                                    ]),
+                                child: const Icon(
+                                  Icons.cancel_outlined,
+                                  size: 35.0,
+                                  color: kSecondaryRed,
+                                ),
+                              ),
+                              onTap: () {
+                                ctl.postDenyTrade(tradeID: controller.trading_id, context: context, isManagePage: true);
                               },
                             )
                           

@@ -70,6 +70,20 @@ class UploadPostPage extends GetView<UploadPostController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                RichText(
+                  text: TextSpan(
+                    text: 'Loại danh mục',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '*',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: kSecondaryRed, fontWeight: FontWeight.w900)),
+                    ],
+                  ),
+                ),
                 Obx(() {
                   if (controller.isLoading.value) {
                     return const Center(
@@ -168,7 +182,7 @@ class UploadPostPage extends GetView<UploadPostController> {
                 const SizedBox(height: 10.0,),
                 RichText(
                   text: TextSpan(
-                    text: 'Loại đồ muốn trao đổi',
+                    text: 'Tôi muốn đổi với',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                     children: <TextSpan>[
                       TextSpan(
