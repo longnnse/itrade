@@ -67,25 +67,34 @@ class ManagePage extends GetView<ManageController> {
                                   ),
                                 ),
                               ),
-                              // GestureDetector(
-                              //   onTap: () => controller.updateStatusIsTradeLst(),
-                              //   child: Container(
-                              //     margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
-                              //     padding: const EdgeInsets.all(8.0),
-                              //     decoration: BoxDecoration(
-                              //         borderRadius: BorderRadius.circular(5.0),
-                              //         border: Border.all(
-                              //             color: kPrimaryLightColor,
-                              //             width: 2.0
-                              //         ),
-                              //       color: kPrimaryLightColor
-                              //     ),
-                              //     child: Obx(() => Text(
-                              //       controller.isTradeLst.value == true ? 'Bài đăng của tôi' : 'Đã trao đổi',
-                              //       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
-                              //     )),
-                              //   ),
-                              // ),
+                              Obx(() {
+                                if(controller.selectedProductIDs.isNotEmpty){
+                                  return GestureDetector(
+                                    onTap: () => controller.postGroup2(description: '', lstPostID: controller.selectedProductIDs),
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        border: Border.all(
+                                            color: kPrimaryLightColor,
+                                            width: 2.0
+                                        ),
+                                        color: kPrimaryLightColor,
+                                        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+                                      ),
+                                      child: Text(
+                                        'Gom bài đăng',
+                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
+                                      ),
+                                    ),
+                                  );
+                                }else{
+                                  return const SizedBox();
+                                }
+
+                              })
+
                             ],
                           )
                         ],
@@ -186,8 +195,15 @@ class ManagePage extends GetView<ManageController> {
 
   Widget _buildItem({required BuildContext context, required Data model}){
     return Container(
+      decoration: BoxDecoration(
+        border: controller.selectedProductIDs.contains(model.id) ? Border.all(
+            color: kPrimaryLightColor,
+            width: 2.0
+        ) : null,
+        color: kBackgroundBottomBar,
+      ),
       width: MediaQuery.of(context).size.width,
-      color: kBackgroundBottomBar,
+
       margin: const EdgeInsets.only(top: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,6 +303,14 @@ class ManagePage extends GetView<ManageController> {
                       if(value == 'Ẩn'){
                         controller.lstHide.call().add(model.id);
                         controller.getPersonalPosts();
+                      }else if(value == 'Thêm nhóm'){
+                        if(!controller.selectedProductIDs.contains(model.id)){
+                          controller.selectedProductList.add(model);
+                          controller.selectedProductIDs.add(model.id);
+                        }else{
+                          controller.selectedProductIDs.removeWhere( (item) => item == model.id);
+                          controller.selectedProductList.removeWhere( (item) => item.id == model.id);
+                        }
                       }
                     },
                     items: controller.lstDropdown.map<DropdownMenuItem<String>>((String value) {

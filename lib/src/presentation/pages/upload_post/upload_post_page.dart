@@ -387,30 +387,30 @@ class UploadPostPage extends GetView<UploadPostController> {
                         ),
                       ),
                     ),
-                    if(controller.isPostToTrade.value == false)...[
-                      const SizedBox(width: 10.0,),
-                      GestureDetector(
-                        onTap: () {
-                          controller.isSell.call(true);
-                          controller.isFree.call(false);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: controller.isFree.value == false ?  controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground : kBackground
-                          ),
-                          child: Text(
-                            'Bán',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                color: controller.isFree.value == false ? controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody : kTextColorBody,
-                                fontWeight: FontWeight.w500
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                    ],
+                    // if(controller.isPostToTrade.value == false)...[
+                    //   const SizedBox(width: 10.0,),
+                    //   GestureDetector(
+                    //     onTap: () {
+                    //       controller.isSell.call(true);
+                    //       controller.isFree.call(false);
+                    //     },
+                    //     child: Container(
+                    //       padding: const EdgeInsets.all(10.0),
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(10.0),
+                    //           color: controller.isFree.value == false ?  controller.isSell.value == true ?  kPrimaryLightColor2 : kBackground : kBackground
+                    //       ),
+                    //       child: Text(
+                    //         'Bán',
+                    //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    //             color: controller.isFree.value == false ? controller.isSell.value == true ? kPrimaryLightColor : kTextColorBody : kTextColorBody,
+                    //             fontWeight: FontWeight.w500
+                    //         ),
+                    //         textAlign: TextAlign.center,
+                    //       ),
+                    //     ),
+                    //   )
+                    // ],
                     const SizedBox(width: 10.0,),
                     GestureDetector(
                       onTap: () => controller.isFree.call(controller.isFree.value == false ? true : false),

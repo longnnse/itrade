@@ -7,6 +7,8 @@ import 'package:i_trade/src/presentation/pages/home/widgets/home_category_shimme
 import 'package:i_trade/src/presentation/pages/home/widgets/home_product_shimmer_widget.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_detail.dart';
 import 'package:i_trade/src/presentation/pages/home/widgets/product_list.dart';
+import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_page.dart';
 
 import '../../../../core/initialize/theme.dart';
 import '../../../domain/models/category_model.dart';
@@ -74,9 +76,30 @@ class HomePage extends GetView<HomeController> {
                           ],
                         ),
                       ),
-                      Text(
-                        'Nổi bật',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Nổi bật',
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                          GestureDetector(
+                            onTap: () =>  Get.toNamed(ManageGroupPage.routeName),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Nhóm bài đăng trao đổi',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600,color: kPrimaryLightColor),
+                                ),
+                               const Icon(
+                                  Icons.arrow_right,
+                                  size: 25.0,
+                                  color: kPrimaryLightColor,
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 10.0,),
                       Obx(() {

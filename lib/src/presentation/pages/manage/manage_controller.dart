@@ -13,6 +13,7 @@ import 'package:i_trade/src/domain/models/trade_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
 import 'package:i_trade/src/presentation/pages/chat/index.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_personal_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
@@ -31,6 +32,7 @@ class ManageController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isLoadingGroup = false.obs;
   final RxBool isLoadingGroupPersonal = false.obs;
+  final RxBool isLoadingGroupList = false.obs;
   final RxBool isLoadingTrade = false.obs;
   final RxBool isLoadingConfirmTrade = false.obs;
   final RxBool isLoadingRequestTrade = false.obs;
@@ -51,6 +53,8 @@ class ManageController extends GetxController {
       Rxn<List<TradingSentResultModel>>();
   final Rxn<ManagePersonalGroupModel> managePersonalGroup =
       Rxn<ManagePersonalGroupModel>();
+  final Rxn<ManagePersonalGroupModel> managePersonal =
+  Rxn<ManagePersonalGroupModel>();
   final Rxn<RequestPostResultModel> requestReceivedLst =
       Rxn<RequestPostResultModel>();
   final Rxn<PostRequestedResultModel> postRequestedLst =
@@ -63,7 +67,7 @@ class ManageController extends GetxController {
   final RxString ownerPostID = ''.obs;
   final RxBool isTrade = false.obs;
   final RxBool isTradeLst = false.obs;
-  final List<String> lstDropdown = ['Ẩn', 'Chỉnh sửa'];
+  final List<String> lstDropdown = ['Ẩn', 'Chỉnh sửa', 'Thêm nhóm'];
   RxList<String> lstHide = RxList<String>();
   @override
   void onInit() {
@@ -115,10 +119,32 @@ class ManageController extends GetxController {
     Get.toNamed(ManageGroupPersonalPage.routeName);
   }
 
+  void goGroup(String id) {
+    productID.call(id);
+    Get.toNamed(ManageGroupPage.routeName);
+  }
+
   void goTradePage(String id, bool isTradeVal) {
     productID.call(id);
     isTrade.call(isTradeVal);
     Get.toNamed(ManageTradePage.routeName);
+  }
+
+  Future<void> postGroup2(
+      {required String description, required List<String> lstPostID}) async {
+    //TODO use test
+    final Either<ErrorObject, GroupPostResultModel> res = await _manageService
+        .postGroup(description: description, lstPostID: lstPostID);
+    res.fold(
+          (failure) {
+            Get.snackbar('Thông báo', 'Nhóm bài đăng thất bại',
+                backgroundColor: kSecondaryRed, colorText: kTextColor);
+          },
+          (value) async {
+            Get.snackbar('Thông báo', 'Nhóm bài đăng thành công',
+                backgroundColor: kSecondaryGreen, colorText: kTextColor);
+      },
+    );
   }
 
   Future<String> postGroup(
@@ -326,6 +352,28 @@ class ManageController extends GetxController {
       (value) async {
         managePersonalGroup.call(value);
         isLoadingGroupPersonal.call(false);
+      },
+    );
+  }
+
+  Future<void> getGroup(
+      {required int pageIndex,
+        required int pageSize,
+        String searchValue = ''}) async {
+    //TODO use test
+    isLoadingGroupList.call(true);
+
+    final Either<ErrorObject, ManagePersonalGroupModel> res =
+    await _manageService.getGroup(
+        pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue);
+
+    res.fold(
+          (failure) {
+            isLoadingGroupList.call(false);
+      },
+          (value) async {
+        managePersonal.call(value);
+        isLoadingGroupList.call(false);
       },
     );
   }

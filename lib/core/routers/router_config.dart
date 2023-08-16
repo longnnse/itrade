@@ -40,6 +40,7 @@ import '../../src/presentation/pages/dashboard/dashboard_page.dart';
 import '../../src/presentation/pages/home/widgets/multi_trade_cart_product_page.dart';
 import '../../src/presentation/pages/home/widgets/noti_page.dart';
 import '../../src/presentation/pages/login/widget/forget_password_page.dart';
+import '../../src/presentation/pages/manage/widgets/manage_group_page.dart';
 import '../../src/presentation/pages/manage/widgets/manage_trade_list_page.dart';
 import '../../src/presentation/pages/manage/widgets/trade_cart_product_page.dart';
 import '../../src/presentation/pages/manage/widgets/trade_product_page.dart';
@@ -115,6 +116,15 @@ class ITradeRouterConfigs {
     GetPage(
       name: ManageGroupPersonalPage.routeName,
       page: () => const ManageGroupPersonalPage(),
+      binding: BindingsBuilder(
+            () {
+          Get.lazyPut(() => ManageController());
+        },
+      ),
+    ),
+    GetPage(
+      name: ManageGroupPage.routeName,
+      page: () => const ManageGroupPage(),
       binding: BindingsBuilder(
             () {
           Get.lazyPut(() => ManageController());

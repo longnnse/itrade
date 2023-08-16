@@ -433,6 +433,36 @@ class ManageRepositories implements ManageService {
   @override
   Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroupPersonal({required int pageIndex, required int pageSize, String? searchValue}) async {
     try {
+      const url = '${CoreUrl.baseURL}/Group/Personal';
+      final Map<String, dynamic> queryParameters = {
+        'PageIndex': pageIndex,
+        'PageSize': pageSize,
+        'SearchValue': searchValue
+      };
+
+      final res = await _coreHttp.get(url, queryParameters: queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = ManagePersonalGroupModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroup({required int pageIndex, required int pageSize, String? searchValue}) async{
+    try {
       const url = '${CoreUrl.baseURL}/Group';
       final Map<String, dynamic> queryParameters = {
         'PageIndex': pageIndex,
