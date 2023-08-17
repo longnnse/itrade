@@ -308,8 +308,8 @@ class ManagePage extends GetView<ManageController> {
                           controller.selectedProductList.add(model);
                           controller.selectedProductIDs.add(model.id);
                         }else{
-                          controller.selectedProductIDs.removeWhere( (item) => item == model.id);
-                          controller.selectedProductList.removeWhere( (item) => item.id == model.id);
+                          Get.snackbar('Thông báo', 'Sản phẩm đã được thêm',
+                              backgroundColor: kSecondaryRed, colorText: kTextColor);
                         }
                       }
                     },
@@ -324,68 +324,32 @@ class ManagePage extends GetView<ManageController> {
               ],
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: kBackground
+          if(controller.selectedProductIDs.contains(model.id))
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: kBackground
+                ),
+                color: kBackgroundBottomBar,
+                boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
               ),
-              color: kBackgroundBottomBar,
-              boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
-            ),
-            child: Row(
-              children: [
-                if(model.type == 'Trade')...[
-                  GestureDetector(
-                    onTap: () => controller.goGroupPersonalPage(model.id),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 10,
-                      padding: const EdgeInsets.all(10.0),
-
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Icons.chat,
-                            color: kPrimaryLightColor,
-                          ),
-                          Text(
-                            'Danh sách nhóm trao đổi sản phẩm',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(width: 10.0,)
-                        ],
-                      ),
-                    ),
+              child: GestureDetector(
+                onTap: () {
+                  controller.selectedProductIDs.removeWhere( (item) => item == model.id);
+                  controller.selectedProductList.removeWhere( (item) => item.id == model.id);
+                },
+                child: Container(
+                  width: Get.width,
+                  padding: const EdgeInsets.all(10.0),
+                  color: kSecondaryRed,
+                  child: Text(
+                    'Xóa',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500, color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
-                ]else...[
-                  GestureDetector(
-                    onTap: () => controller.goTradePage(model.id, false),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width -10,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: const BoxDecoration(
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Icons.free_cancellation,
-                            color: kPrimaryLightColor,
-                          ),
-                          Text(
-                            'Mua/miễn phí SP',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(width: 10.0,)
-                        ],
-                      ),
-                    ),
-                  )
-                ]
-
-              ],
-            ),
-          )
+                ),
+              )
+            )
 
         ],
       ),

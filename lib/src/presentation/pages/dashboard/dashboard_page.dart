@@ -105,7 +105,7 @@ class DashboardPage extends GetView<DashboardController> {
           items: [
             FABBottomAppBarItem(iconData: Icons.home, text: 'Trang chủ'),
             FABBottomAppBarItem(iconData: Icons.dashboard, text: 'Quản lý'),
-            FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Trade'),
+            FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Giao dịch'),
             FABBottomAppBarItem(iconData: Icons.search, text: 'Tìm kiếm'),
             FABBottomAppBarItem(iconData: Icons.chat, text: 'Trao đổi'),
             FABBottomAppBarItem(iconData: Icons.person, text: 'Cá nhân'),
@@ -192,54 +192,54 @@ class DashboardPage extends GetView<DashboardController> {
                     ],
                   ),
                 ),
-                Obx(() =>  Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(color: kBackground))),
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Giá từ ',
-                            style: Theme.of(context).textTheme.titleMedium,
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${controller.formatNum.format(controller.currentRangeValues.value.start.round())} đ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(fontWeight: FontWeight.w500)),
-                              TextSpan(
-                                  text: ' đến ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium),
-                              TextSpan(
-                                  text: '${controller.formatNum.format(controller.currentRangeValues.value.end.round())} đ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(fontWeight: FontWeight.w500)),
-                            ],
-                          ),
-                        ),
-                        RangeSlider(
-                          values: controller.currentRangeValues.value,
-                          max: 30000000,
-                          divisions: 300,
-                          // labels: RangeLabels(
-                          //   controller.currentRangeValues.value.start.round().toString(),
-                          //   controller.currentRangeValues.value.end.round().toString(),
-                          // ),
-                          onChanged: (RangeValues values) {
-                            controller.currentRangeValues.call(values);
-                          },
-                        )
-                      ],
-                    )
-                ),),
+                // Obx(() =>  Container(
+                //     decoration: const BoxDecoration(
+                //         border: Border(
+                //             bottom: BorderSide(color: kBackground))),
+                //     padding: const EdgeInsets.all(10.0),
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         RichText(
+                //           text: TextSpan(
+                //             text: 'Giá từ ',
+                //             style: Theme.of(context).textTheme.titleMedium,
+                //             children: <TextSpan>[
+                //               TextSpan(
+                //                   text: '${controller.formatNum.format(controller.currentRangeValues.value.start.round())} đ',
+                //                   style: Theme.of(context)
+                //                       .textTheme
+                //                       .titleMedium!
+                //                       .copyWith(fontWeight: FontWeight.w500)),
+                //               TextSpan(
+                //                   text: ' đến ',
+                //                   style: Theme.of(context)
+                //                       .textTheme
+                //                       .titleMedium),
+                //               TextSpan(
+                //                   text: '${controller.formatNum.format(controller.currentRangeValues.value.end.round())} đ',
+                //                   style: Theme.of(context)
+                //                       .textTheme
+                //                       .titleMedium!
+                //                       .copyWith(fontWeight: FontWeight.w500)),
+                //             ],
+                //           ),
+                //         ),
+                //         RangeSlider(
+                //           values: controller.currentRangeValues.value,
+                //           max: 30000000,
+                //           divisions: 300,
+                //           // labels: RangeLabels(
+                //           //   controller.currentRangeValues.value.start.round().toString(),
+                //           //   controller.currentRangeValues.value.end.round().toString(),
+                //           // ),
+                //           onChanged: (RangeValues values) {
+                //             controller.currentRangeValues.call(values);
+                //           },
+                //         )
+                //       ],
+                //     )
+                // ),),
 
               ],
             ),

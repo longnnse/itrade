@@ -6,6 +6,7 @@ import 'package:i_trade/src/presentation/pages/search/widgets/search_product_shi
 
 import '../../../../../core/initialize/core_url.dart';
 import '../../../../../core/initialize/theme.dart';
+import '../../../../domain/models/trading_sent_model.dart';
 import '../../../widgets/appbar_customize.dart';
 
 
@@ -19,44 +20,37 @@ class ManageTradePage extends GetView<ManageController> {
 
   @override
   Widget build(BuildContext context) {
-    if(controller.isTrade.value == true){
-      controller.getTradePosts(pageIndex: 1, pageSize: 20, fromPostID: '', toPostID: controller.productID.value);
-    }else{
-      controller.getRequestByID(postID: controller.productID.value);
-    }
-
+    controller.getTradePosts(pageIndex: 1, pageSize: 20, fromPostID: controller.fromProductID.value, toPostID: controller.toProductID.value);
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
-          title: 'Danh sách sản phẩm ${controller.isTrade.value == true ? 'trao đổi' : 'Mua/Miễn phí'}',
+          title: 'Chi tiết sản phẩm trao đổi',
           isUseOnlyBack: true,
         ),
         backgroundColor: kBackground,
         body: Stack(
           children: [
-            Column(
-              children: [
-                Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildSearch(context: context),
-                        Expanded(child: _buildItemList(context: context))
-                      ],
-                    )
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10.0),
-                        topLeft: Radius.circular(10.0)
-                    ),
-                    color: kBackground,
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildItemList(context: context)
+                    ],
                   ),
-
-                  height: 5.0,
-                )
-              ],
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10.0),
+                          topLeft: Radius.circular(10.0)
+                      ),
+                      color: kBackground,
+                    ),
+                    height: 5.0,
+                  )
+                ],
+              ),
             ),
             Obx(() => controller.isLoadingConfirmTrade.value == true ?
             Positioned(
@@ -68,39 +62,6 @@ class ManageTradePage extends GetView<ManageController> {
                 )) : const SizedBox())
           ],
         )
-    );
-  }
-
-  Widget _buildSearch({required BuildContext context}){
-    return Container(
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: kBackgroundBottomBar,
-        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
-      ),
-      child: TextFormField(
-        //initialValue: number.toString(),
-        //controller: blocQLDTTNMT.keySearchTextEditingController,
-        decoration: InputDecoration(
-            suffixIcon: const Icon(
-                Icons.search
-            ),
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            contentPadding: const EdgeInsets.only(top: 10.0),
-            disabledBorder: InputBorder.none,
-            hintText: 'Nhập bài đăng cần tìm...',
-            hintStyle: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(color: kTextColorGrey)),
-        onChanged: (value) {},
-        onFieldSubmitted: (value) {},
-      ),
     );
   }
 
@@ -118,336 +79,15 @@ class ManageTradePage extends GetView<ManageController> {
                   columnCount: 1,
                 );
               }
-              if(controller.isTrade.value == true ? controller.tradeList.value != null : controller.requestLst.value != null){
-                if(controller.isTrade.value == true ? controller.tradeList.value!.data.isNotEmpty : controller.requestLst.value!.isNotEmpty) {
+              if(controller.tradeList.value != null){
+                if(controller.tradeList.value!.data.isNotEmpty) {
                   return Column(
                     children: [
-                      if(controller.isTrade.value == true)...[
-                        for(var cont in controller.tradeList.value!.data)
-                          if(cont.fromGroup != null)...[
-                            if(cont.fromGroup!.groupPosts!.isNotEmpty)
-                              GestureDetector(
-                                onTap: () => controller.goDetail(id: cont.id!),
-                                child: Container(
-                                  decoration: const  BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: kBackground
-                                        )
-                                    ),
-                                  ),
-                                  height: MediaQuery.of(context).size.width * 0.25,
-                                  margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                                  child: Row(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            height: MediaQuery.of(context).size.width * 0.25,
-                                            margin: const EdgeInsets.only(bottom: 5.0),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.0),
-                                                color: kBackground
-                                            ),
-                                            child: cont.fromGroup!.groupPosts!.isNotEmpty ? cont.fromGroup!.groupPosts![0].post != null ? cont.fromGroup!.groupPosts![0].post!.resources.isNotEmpty ? Image.network(
-                                                CoreUrl.baseImageURL + cont.fromGroup!.groupPosts![0].post!.resources[0].id + cont.fromGroup!.groupPosts![0].post!.resources[0].extension,
-                                                fit: BoxFit.contain
-                                            ) : const SizedBox() : const SizedBox() : const SizedBox(),
-                                          ),
-                                          Positioned(
-                                              right: 10.0,
-                                              top: 10.0,
-                                              child: Stack(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.camera_alt,
-                                                    size: 30.0,
-                                                    color: Colors.grey,
-                                                  ),
-                                                  Positioned(
-                                                    child: SizedBox(
-                                                      width: 30.0,
-                                                      height: 30.0,
-                                                      child: Center(
-                                                        child: Container(
-                                                          width: 15.0,
-                                                          height: 15.0,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                            color: Colors.white,
-                                                          ),
-                                                          child: Text(
-                                                            cont.fromGroup!.groupPosts![0].post!.resources.length.toString(),
-                                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                                            textAlign: TextAlign.center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(width: 5.0,),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 10.0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    child: Text(
-                                                      cont.fromGroup!.groupPosts![0].title,
-                                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                  // SizedBox(
-                                                  //   child: Text(
-                                                  //     '${cont.fromPost.price.toString().split('.').first} đ',
-                                                  //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                                  //   ),
-                                                  // )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    ShaderMask(
-                                                      blendMode: BlendMode.srcIn,
-                                                      shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                                                      child: const Icon(
-                                                          Icons.person,
-                                                          color: kPrimaryLightColor,
-                                                          size: 15.0
-                                                      ),
-                                                    ),
-                                                    Flexible(
-                                                      child: Text(
-                                                        'Đã đăng ${FormatDateTime.getHourFormat(cont.fromGroup!.groupPosts![0].dateUpdated)} ${FormatDateTime.getDateFormat(cont.fromGroup!.groupPosts![0].dateUpdated)}',
-                                                        style: Theme.of(context).textTheme.bodySmall,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              if(cont.status == 'Accept' || cont.status == 'Deny')...[
-                                                Expanded(
-                                                  child: Container(
-                                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: kBackground,
-                                                            width: 2.0
-                                                        ),
-                                                        borderRadius: BorderRadius.circular(5.0),
-                                                        color: kBackground
-                                                    ),
-                                                    child: Text(
-                                                      cont.fromGroup!.groupPosts![0].post!.content! != '' ? cont.fromGroup!.groupPosts![0].post!.content! : cont.status!,
-                                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                )
-                                              ]else...[
-                                                Row(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () => controller.postAcceptTrade(tradeID: cont.id!, context: context),
-                                                      child: Container(
-                                                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: kSecondaryGreen,
-                                                                width: 2.0
-                                                            ),
-                                                            borderRadius: BorderRadius.circular(5.0),
-                                                            color: kSecondaryGreen
-                                                        ),
-                                                        child: Text(
-                                                          'Đồng ý',
-                                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 10.0,),
-                                                    GestureDetector(
-                                                      onTap: () => controller.postDenyTrade(tradeID: cont.id!, context: context),
-                                                      child: Container(
-                                                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: kSecondaryRed,
-                                                                width: 2.0
-                                                            ),
-                                                            borderRadius: BorderRadius.circular(5.0),
-                                                            color: kSecondaryRed
-                                                        ),
-                                                        child: Text(
-                                                          'Từ chối',
-                                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                )
-                                              ]
-                                            ],
-                                          ),
-                                        ),
-                                      )
-
-                                    ],
-                                  ),
-                                ),
-                              )
-                          ]
-
-                      ],
-                      if(controller.isTrade.value == false)...[
-                        for(var cont in controller.requestLst.value!)
-                          GestureDetector(
-                            onTap: () => controller.goDetail(id: cont.id),
-                            child: Container(
-                              decoration: const  BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: kBackground
-                                    )
-                                ),
-                              ),
-                              //height: MediaQuery.of(context).size.width * 0.25,
-                              margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 10.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                child: Text(
-                                                  cont.post.title,
-                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                child: Text(
-                                                  cont.description,
-                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                              // SizedBox(
-                                              //   child: Text(
-                                              //     '${cont.post.price.toString().split('.').first} đ',
-                                              //     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                                              //   ),
-                                              // )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                ShaderMask(
-                                                  blendMode: BlendMode.srcIn,
-                                                  shaderCallback: (Rect bounds) => kDefaultIconGradient.createShader(bounds),
-                                                  child: const Icon(
-                                                      Icons.person,
-                                                      color: kPrimaryLightColor,
-                                                      size: 15.0
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                    'Đã đăng ${FormatDateTime.getHourFormat(cont.post.dateUpdated)} ${FormatDateTime.getDateFormat(cont.post.dateUpdated)}',
-                                                    style: Theme.of(context).textTheme.bodySmall,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          if(cont.status == 'Accept' || cont.status == 'Deny')...[
-                                            Container(
-                                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: kBackground,
-                                                      width: 2.0
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(5.0),
-                                                  color: kBackground
-                                              ),
-                                              child: Text(
-                                                cont.status,
-                                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                              ),
-                                            )
-                                          ]else...[
-                                            Row(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () => controller.postAcceptRequest(tradeID: cont.id, context: context),
-                                                  child: Container(
-                                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: kSecondaryGreen,
-                                                            width: 2.0
-                                                        ),
-                                                        borderRadius: BorderRadius.circular(5.0),
-                                                        color: kSecondaryGreen
-                                                    ),
-                                                    child: Text(
-                                                      'Đồng ý',
-                                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 10.0,),
-                                                GestureDetector(
-                                                  onTap: () => controller.postDenyRequest(tradeID: cont.id, context: context),
-                                                  child: Container(
-                                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: kSecondaryRed,
-                                                            width: 2.0
-                                                        ),
-                                                        borderRadius: BorderRadius.circular(5.0),
-                                                        color: kSecondaryRed
-                                                    ),
-                                                    child: Text(
-                                                      'Từ chối',
-                                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                          ]
-                                        ],
-                                      ),
-                                    ),
-                                  )
-
-                                ],
-                              ),
-                            ),
-                          )
-                      ]
+                      for(var cont in controller.tradeList.value!.data)
+                        if(cont.fromGroup != null)...[
+                          if(cont.fromGroup!.groupPosts!.isNotEmpty)
+                            _buildDetailTradeItem(context: context, dataTrade: cont, idPost: cont.id!)
+                        ]
                     ],
                   );
                 } else {
@@ -470,6 +110,447 @@ class ManageTradePage extends GetView<ManageController> {
             }),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDetailTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost}){
+    return Container(
+      margin: const EdgeInsets.only(top: 5.0),
+      decoration: BoxDecoration(
+        color: kBackgroundBottomBar,
+        boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Danh sách gửi yêu cầu',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                    if(dataTrade.fromGroup != null)...[
+                      if(dataTrade.fromGroup!.groupPosts!.isNotEmpty)...[
+                        Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for(var cont in dataTrade.fromGroup!.groupPosts!)...[
+                                        _buildItemTrade(context: context,model:  cont, idTraoDoi: cont.id!),
+                                      ]
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: kBackground.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(5.0)
+                                  ),
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.person,
+                                                    size: 20.0,
+                                                    color: kPrimaryLightColor2,
+                                                  ),
+                                                  const SizedBox(width: 5.0,),
+                                                  Text(
+                                                    '${dataTrade.fromGroup!.groupPosts![0].post!.user!.lastName} ${dataTrade.fromGroup!.groupPosts![0].post!.user!.firstName}',
+                                                    style: Theme.of(context).textTheme.titleMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5.0,),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.mail,
+                                                    size: 20.0,
+                                                    color: kSecondaryRed,
+                                                  ),
+                                                  const SizedBox(width: 5.0,),
+                                                  Text(
+                                                    dataTrade.fromGroup!.groupPosts![0].post!.user!.email ?? '',
+                                                    style: Theme.of(context).textTheme.titleMedium,
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5.0,),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.phone,
+                                                    size: 20.0,
+                                                    color: kPrimaryLightColor,
+                                                  ),
+                                                  const SizedBox(width: 5.0,),
+                                                  Text(
+                                                    dataTrade.fromGroup!.groupPosts![0].post!.user!.phoneNumber ?? '',
+                                                    style: Theme.of(context).textTheme.titleMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5.0,),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on,
+                                                    size: 20.0,
+                                                    color: kSecondaryRed,
+                                                  ),
+                                                  const SizedBox(width: 5.0,),
+                                                  Text(
+                                                    dataTrade.fromGroup!.groupPosts![0].post!.user!.address ?? '',
+                                                    style: Theme.of(context).textTheme.titleMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            // padding: const EdgeInsets.all(8.0),
+                                            width: 50.0,
+                                            height: 50.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(70.0),
+                                              color: kBackgroundBottomBar,
+                                            ),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(60.0),
+                                                boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                                              ),
+                                              child: CircleAvatar(
+                                                radius: 50.0,
+                                                backgroundImage:
+                                                NetworkImage(CoreUrl.baseAvaURL + dataTrade.fromGroup!.groupPosts![0].post!.user!.userAva!),
+                                                backgroundColor: Colors.transparent,
+                                              ),
+                                            ),
+                                          )
+
+                                        ],
+                                      ),
+
+
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if(dataTrade.fromGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  left: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_left,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              ),
+                            if(dataTrade.fromGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  right: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_right,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              )
+                          ],
+                        )
+                      ]
+                    ],
+                    Text(
+                      'Danh sách sản phẩm đăng của bạn',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                    ),
+                    if(dataTrade.toGroup != null)...[
+                      if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
+                        Stack(
+                          children: [
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                                    _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
+                                  ]
+                                ],
+                              ),
+                            ),
+                            if(dataTrade.toGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  left: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_left,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              ),
+                            if(dataTrade.toGroup!.groupPosts!.length > 1)
+                              Positioned(
+                                  right: 0.0,
+                                  top: 40.0,
+                                  child: Icon(
+                                    Icons.arrow_circle_right,
+                                    size: 25.0,
+                                    color: Colors.black.withOpacity(0.4),
+                                  )
+                              )
+                          ],
+                        )
+                      ]
+                    ]
+
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Trạng thái: ',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: dataTrade.status,
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: dataTrade.status == 'Accept' ? kSecondaryGreen :
+                              dataTrade.status == 'Deny' ? kSecondaryRed : kSecondaryYellow,
+                              fontWeight: FontWeight.w700)
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+          const SizedBox(height: 10.0,),
+          SizedBox(
+            width: Get.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    if(dataTrade.status == 'Accept' || dataTrade.status == 'Deny')...[
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: kBackground,
+                                width: 2.0
+                            ),
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: kBackground
+                        ),
+                        child: Text(
+                          dataTrade.status ?? '',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                        ),
+                      )
+                    ]else...[
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: kSecondaryGreen,
+                                      width: 2.0
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: kSecondaryGreen
+                              ),
+                              child: Text(
+                                'Đồng ý',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10.0,),
+                          GestureDetector(
+                            onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: kSecondaryRed,
+                                      width: 2.0
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: kSecondaryRed
+                              ),
+                              child: Text(
+                                'Từ chối',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ]
+                  ],
+                ),
+                const SizedBox(width: 10.0,),
+                GestureDetector(
+                  onTap: () => controller.gochat(dataTrade),
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: kPrimaryLightColor,
+                            width: 2.0
+                        ),
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: kPrimaryLightColor
+                    ),
+                    child: Text(
+                      'Bắt đầu chat',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10.0,),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemTrade({required BuildContext context, required GroupPosts model, required String idTraoDoi}){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      color: kBackgroundBottomBar,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: Get.width* 0.9,
+                      height: Get.height * 0.2,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: kBackground
+                      ),
+                      child: model.post!.resources.isNotEmpty ? Image.network(
+                          CoreUrl.baseImageURL + model.post!.resources[0].id + model.post!.resources[0].extension,
+                          fit: BoxFit.contain
+                      ) : const SizedBox(),
+                    ),
+                    Positioned(
+                        right: 10.0,
+                        top: 10.0,
+                        child: Stack(
+                          children: [
+                            const Icon(
+                              Icons.camera_alt,
+                              size: 30.0,
+                              color: Colors.grey,
+                            ),
+                            Positioned(
+                              child: SizedBox(
+                                width: 30.0,
+                                height: 30.0,
+                                child: Center(
+                                  child: Container(
+                                    width: 15.0,
+                                    height: 15.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Colors.white,
+                                    ),
+                                    child: Text(
+                                      model.post!.resources.length.toString(),
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 10.0,),
+                SizedBox(
+                  // height: MediaQuery.of(context).size.width * 0.21,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        model.post!.title,
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 5.0,),
+                      Text(
+                        model.post!.content ?? '',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey),
+                      ),
+                      const SizedBox(height: 5.0,),
+                      Text(
+                        'Đã đăng ${FormatDateTime.getHourFormat(model.post!.dateUpdated)} ${FormatDateTime.getDateFormat(model.post!.dateUpdated)}',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

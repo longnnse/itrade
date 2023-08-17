@@ -159,17 +159,6 @@ class SearchPage extends GetView<SearchControllerCustom> {
                 ),
               ),
               const SizedBox(width: 10.0,),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: kBackground,
-                  borderRadius: BorderRadius.circular(5.0)
-                ),
-                child: Text(
-                  'Giá +',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              )
             ],
           )
         ],
@@ -445,54 +434,54 @@ class SearchPage extends GetView<SearchControllerCustom> {
                     ],
                   ),
                 ),
-               Obx(() =>  Container(
-                   decoration: const BoxDecoration(
-                       border: Border(
-                           bottom: BorderSide(color: kBackground))),
-                   padding: const EdgeInsets.all(10.0),
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       RichText(
-                         text: TextSpan(
-                           text: 'Giá từ ',
-                           style: Theme.of(context).textTheme.titleMedium,
-                           children: <TextSpan>[
-                             TextSpan(
-                                 text: '${controller.formatNum.format(controller.currentRangeValues.value.start.round())} đ',
-                                 style: Theme.of(context)
-                                     .textTheme
-                                     .titleMedium!
-                                     .copyWith(fontWeight: FontWeight.w500)),
-                             TextSpan(
-                                 text: ' đến ',
-                                 style: Theme.of(context)
-                                     .textTheme
-                                     .titleMedium),
-                             TextSpan(
-                                 text: '${controller.formatNum.format(controller.currentRangeValues.value.end.round())} đ',
-                                 style: Theme.of(context)
-                                     .textTheme
-                                     .titleMedium!
-                                     .copyWith(fontWeight: FontWeight.w500)),
-                           ],
-                         ),
-                       ),
-                       RangeSlider(
-                         values: controller.currentRangeValues.value,
-                         max: 30000000,
-                         divisions: 300,
-                         // labels: RangeLabels(
-                         //   controller.currentRangeValues.value.start.round().toString(),
-                         //   controller.currentRangeValues.value.end.round().toString(),
-                         // ),
-                         onChanged: (RangeValues values) {
-                           controller.currentRangeValues.call(values);
-                         },
-                       )
-                     ],
-                   )
-               ),),
+               // Obx(() =>  Container(
+               //     decoration: const BoxDecoration(
+               //         border: Border(
+               //             bottom: BorderSide(color: kBackground))),
+               //     padding: const EdgeInsets.all(10.0),
+               //     child: Column(
+               //       crossAxisAlignment: CrossAxisAlignment.start,
+               //       children: [
+               //         RichText(
+               //           text: TextSpan(
+               //             text: 'Giá từ ',
+               //             style: Theme.of(context).textTheme.titleMedium,
+               //             children: <TextSpan>[
+               //               TextSpan(
+               //                   text: '${controller.formatNum.format(controller.currentRangeValues.value.start.round())} đ',
+               //                   style: Theme.of(context)
+               //                       .textTheme
+               //                       .titleMedium!
+               //                       .copyWith(fontWeight: FontWeight.w500)),
+               //               TextSpan(
+               //                   text: ' đến ',
+               //                   style: Theme.of(context)
+               //                       .textTheme
+               //                       .titleMedium),
+               //               TextSpan(
+               //                   text: '${controller.formatNum.format(controller.currentRangeValues.value.end.round())} đ',
+               //                   style: Theme.of(context)
+               //                       .textTheme
+               //                       .titleMedium!
+               //                       .copyWith(fontWeight: FontWeight.w500)),
+               //             ],
+               //           ),
+               //         ),
+               //         RangeSlider(
+               //           values: controller.currentRangeValues.value,
+               //           max: 30000000,
+               //           divisions: 300,
+               //           // labels: RangeLabels(
+               //           //   controller.currentRangeValues.value.start.round().toString(),
+               //           //   controller.currentRangeValues.value.end.round().toString(),
+               //           // ),
+               //           onChanged: (RangeValues values) {
+               //             controller.currentRangeValues.call(values);
+               //           },
+               //         )
+               //       ],
+               //     )
+               // ),),
 
               ],
             ),

@@ -246,7 +246,7 @@ class ManageGroupPersonalPage extends GetView<ManageController> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => controller.goTradePage(idTraoDoi, true),
+                  onTap: () {},
                   child: Container(
                     width: MediaQuery.of(context).size.width - 10,
                     padding: const EdgeInsets.all(10.0),

@@ -106,8 +106,13 @@ class MyProfilePage extends GetView<InformationController> {
       child: Column(
         children: [
           Container(
-            color: kBackground,
+            color: Colors.white,
+            width: Get.width,
             height: MediaQuery.of(context).size.height * 0.12,
+            child: Image.network(
+                'https://m.media-amazon.com/images/G/31/Amazon-Global-Selling-IN/what_is_international_trade.jpg',
+                fit: BoxFit.cover
+            ),
           ),
           const SizedBox(height: 70.0,),
           Padding(

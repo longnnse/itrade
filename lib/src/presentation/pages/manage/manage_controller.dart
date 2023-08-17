@@ -64,6 +64,8 @@ class ManageController extends GetxController {
   RxString searchStr = ''.obs;
   // final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
+  final RxString fromProductID = ''.obs;
+  final RxString toProductID = ''.obs;
   final RxString ownerPostID = ''.obs;
   final RxBool isTrade = false.obs;
   final RxBool isTradeLst = false.obs;
@@ -124,9 +126,9 @@ class ManageController extends GetxController {
     Get.toNamed(ManageGroupPage.routeName);
   }
 
-  void goTradePage(String id, bool isTradeVal) {
-    productID.call(id);
-    isTrade.call(isTradeVal);
+  void goTradePage(String fromID, String toID) {
+    fromProductID.call(fromID);
+    toProductID.call(toID);
     Get.toNamed(ManageTradePage.routeName);
   }
 
@@ -162,6 +164,41 @@ class ManageController extends GetxController {
     return valueReturn;
   }
 
+  void tradeMultiGroup(BuildContext context, String toGroupID) async {
+    if(selectedProductIDs.isEmpty){
+      Get.snackbar('Thông báo', 'Vui lòng chọn nhóm sản phẩm của bạn để trao đổi',
+          backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }else{
+      isLoadingGroup.call(true);
+      List<String> lstOwnerPost = [];
+      lstOwnerPost.add(toGroupID);
+
+      String fromPostId = await postGroup(
+          description: descController.text, lstPostID: selectedProductIDs);
+
+      if (fromPostId != '') {
+        await postTrading(fromPostId: fromPostId, toPostId: toGroupID);
+
+        isLoadingGroup.call(false);
+        if (tradeResult.value != null) {
+          descController.clear();
+          selectedProductIDs.clear();
+          Get.snackbar('Thông báo', 'Trao đổi thành công',
+              backgroundColor: kSecondaryGreen, colorText: kTextColor);
+          Navigator.pop(context);
+        } else {
+          Get.snackbar('Thông báo', 'Không thể trao đổi',
+              backgroundColor: kSecondaryRed, colorText: kTextColor);
+        }
+      } else {
+        isLoadingGroup.call(false);
+        Get.snackbar('Thông báo',
+            'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
+            backgroundColor: kSecondaryRed, colorText: kTextColor);
+      }
+    }
+  }
+
   void tradeGroup(BuildContext context) async {
     isLoadingGroup.call(true);
     List<String> lstOwnerPost = [];
@@ -172,10 +209,11 @@ class ManageController extends GetxController {
     String toPostId = await postGroup(description: '', lstPostID: lstOwnerPost);
     if (fromPostId != '' && toPostId != '') {
       await postTrading(fromPostId: fromPostId, toPostId: toPostId);
-      descController.clear();
-      selectedProductIDs.clear();
+
       isLoadingGroup.call(false);
       if (tradeResult.value != null) {
+        descController.clear();
+        selectedProductIDs.clear();
         Get.snackbar('Thông báo', 'Trao đổi thành công',
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
         Navigator.pop(context);

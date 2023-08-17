@@ -88,9 +88,29 @@ class ManageTradeListPage extends GetView<ManageController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Danh sách gửi yêu cầu',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Danh sách gửi yêu cầu',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                        ),
+                        GestureDetector(
+                          onTap: ()=> controller.goTradePage(dataTrade.fromGroup!.id!, dataTrade.toGroup!.id!),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 5.0, right: 10.0),
+                            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(5.0)
+                            ),
+                             child: Text(
+                                'Chi tiết',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+                              )
+                          ),
+                        )
+                      ],
                     ),
                     if(dataTrade.fromGroup != null)...[
                       if(dataTrade.fromGroup!.groupPosts!.isNotEmpty)...[

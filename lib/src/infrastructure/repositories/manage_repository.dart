@@ -51,13 +51,11 @@ class ManageRepositories implements ManageService {
   @override
   Future<Either<ErrorObject, List<Data>>> getPersonalPostsByID({required String userID}) async {
     try {
-      const url = '${CoreUrl.baseURL}/Post/ByUserId';
+      var url = '${CoreUrl.baseURL}/Post/ByUserId/$userID';
 
-      final Map<String, dynamic> queryParameters = {
-        'userId ': userID
-      };
 
-      final res = await _coreHttp.get(url, queryParameters: queryParameters,
+
+      final res = await _coreHttp.get(url,
           headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
 
       if (res != null) {
@@ -463,7 +461,7 @@ class ManageRepositories implements ManageService {
   @override
   Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroup({required int pageIndex, required int pageSize, String? searchValue}) async{
     try {
-      const url = '${CoreUrl.baseURL}/Group';
+      const url = '${CoreUrl.baseURL}/Group/ForTrade';
       final Map<String, dynamic> queryParameters = {
         'PageIndex': pageIndex,
         'PageSize': pageSize,
