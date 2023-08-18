@@ -434,6 +434,7 @@ class ManageTradePage extends GetView<ManageController> {
                   ],
                 ),
                 const SizedBox(width: 10.0,),
+                if(dataTrade.status != 'Deny')
                 GestureDetector(
                   onTap: () => controller.gochat(dataTrade),
                   child: Container(

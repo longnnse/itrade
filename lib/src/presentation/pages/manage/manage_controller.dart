@@ -25,7 +25,7 @@ import '../../../infrastructure/repositories/upload_product_repository.dart';
 import '../home/home_controller.dart';
 import '../home/widgets/product_detail.dart';
 import '../upload_post/upload_post_page.dart';
-
+final RxString groupID = ''.obs;
 class ManageController extends GetxController {
   RxInt tabInt = 0.obs;
   final ManageService _manageService = Get.find();
@@ -64,6 +64,7 @@ class ManageController extends GetxController {
   RxString searchStr = ''.obs;
   // final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
+
   final RxString fromProductID = ''.obs;
   final RxString toProductID = ''.obs;
   final RxString ownerPostID = ''.obs;
@@ -143,6 +144,9 @@ class ManageController extends GetxController {
                 backgroundColor: kSecondaryRed, colorText: kTextColor);
           },
           (value) async {
+            groupID.call(value.id);
+            selectedProductIDs.clear();
+            selectedProductList.clear();
             Get.snackbar('Thông báo', 'Nhóm bài đăng thành công',
                 backgroundColor: kSecondaryGreen, colorText: kTextColor);
       },
@@ -165,7 +169,7 @@ class ManageController extends GetxController {
   }
 
   void tradeMultiGroup(BuildContext context, String toGroupID) async {
-    if(selectedProductIDs.isEmpty){
+    if(groupID.value == ''){
       Get.snackbar('Thông báo', 'Vui lòng chọn nhóm sản phẩm của bạn để trao đổi',
           backgroundColor: kSecondaryRed, colorText: kTextColor);
     }else{
@@ -173,11 +177,8 @@ class ManageController extends GetxController {
       List<String> lstOwnerPost = [];
       lstOwnerPost.add(toGroupID);
 
-      String fromPostId = await postGroup(
-          description: descController.text, lstPostID: selectedProductIDs);
-
-      if (fromPostId != '') {
-        await postTrading(fromPostId: fromPostId, toPostId: toGroupID);
+      if (groupID.value != '') {
+        await postTrading(fromPostId: groupID.value, toPostId: toGroupID);
 
         isLoadingGroup.call(false);
         if (tradeResult.value != null) {

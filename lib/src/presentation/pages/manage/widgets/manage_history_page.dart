@@ -259,6 +259,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   ),
                 ),
               ),
+              if(dataTrade.status != 'Deny')
               GestureDetector(
                 onTap: () => controller.gochat(dataTrade),
                 child: Container(
