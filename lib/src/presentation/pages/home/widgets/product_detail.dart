@@ -3,12 +3,14 @@ import 'package:get/get.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
 import 'package:i_trade/src/domain/models/product_model.dart';
+import 'package:i_trade/src/presentation/pages/information/information_controller.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/my_profile_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart';
 
 import '../../../../../core/initialize/core_url.dart';
 import '../../../../../core/initialize/theme.dart';
 import '../../../widgets/appbar_customize.dart';
+import '../../information/widgets/bao_cao_vi_pham_page.dart';
 import '../home_controller.dart';
 
 class ProductDetailPage extends GetView<HomeController> {
@@ -24,10 +26,8 @@ class ProductDetailPage extends GetView<HomeController> {
     controller.countImage.call(0);
     controller.getPostByID(id: controller.idPost.value);
     if(controller.isNeedOwnerID.value == false){
-      print(11111);
       controller.getPersonalPosts();
     }else{
-      print(22222);
       controller.getPersonalPostsByID(controller.idOwner.value);
     }
     controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
@@ -36,6 +36,33 @@ class ProductDetailPage extends GetView<HomeController> {
             context: context,
             title: 'Chi tiết sản phẩm',
             isUseOnlyBack: true,
+            actionRights: [
+              Stack(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Get.put(InformationController());
+                        InformationController ctl = Get.find();
+                        ctl.postID.call(controller.idPost.value);
+                        Get.toNamed(BaoCaoViPhamPage.routeName);
+                      },
+                      icon: const Icon(
+                        Icons.report,
+                        color: Colors.white,
+                        size: 25.0,
+                      )
+                  ),
+                ],
+              ),
+              IconButton(
+                  onPressed: () => controller.goGoCreatePost(),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 25.0,
+                  )
+              ),
+            ]
         ),
         backgroundColor: kBackground,
         body: Obx(() {

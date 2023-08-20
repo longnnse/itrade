@@ -51,10 +51,10 @@ class EditProfilePage extends GetView<EditProfileController> {
                     borderRadius: BorderRadius.circular(60.0),
                     boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
                   ),
-                  child: const CircleAvatar(
+                  child: CircleAvatar(
                     radius: 60.0,
                     backgroundImage:
-                    NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDK4gXyt3wzCyT9ekbDsR-thEKFtWuQoFraQ&usqp=CAU'),
+                    NetworkImage(AppSettings.getValue(KeyAppSetting.userAva)),
                     backgroundColor: Colors.transparent,
                   ),
                 ),

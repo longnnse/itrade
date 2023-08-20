@@ -43,4 +43,8 @@ abstract class ManageService {
   Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroupPersonal({required int pageIndex,required int pageSize, String searchValue});
 
   Future<Either<ErrorObject, ManagePersonalGroupModel>> getGroup({required int pageIndex,required int pageSize, String searchValue});
+
+  Future<Either<ErrorObject, RequestResultModel>> postSendReport({required String postId,required String description});
+
+
 }

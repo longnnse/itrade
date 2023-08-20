@@ -488,6 +488,36 @@ class ManageRepositories implements ManageService {
     }
   }
 
+  @override
+  Future<Either<ErrorObject, RequestResultModel>> postSendReport({required String postId, required String description}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Report/SendReport';
+
+      final Map<String, dynamic> queryParameters = {
+        'postId': postId,
+        'description': description
+      };
+
+      final res = await _coreHttp.post(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = RequestResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
 
 
 }

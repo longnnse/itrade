@@ -91,27 +91,33 @@ class InformationPage extends GetView<InformationController> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  width: 140.0,
-                                  height: 140.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(70.0),
-                                    color: kBackgroundBottomBar,
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(60.0),
-                                      boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 60.0,
-                                      backgroundImage:
-                                      NetworkImage(AppSettings.getValue(KeyAppSetting.userAva)),
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                  ),
-                                ),
+                                Obx(() {
+                                  if(controller.isLoadingUpdateAva.value == true){
+                                    return CircularProgressIndicator();
+                                  }else{
+                                    return Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      width: 140.0,
+                                      height: 140.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(70.0),
+                                        color: kBackgroundBottomBar,
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(60.0),
+                                          boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: 60.0,
+                                          backgroundImage:
+                                          NetworkImage(AppSettings.getValue(KeyAppSetting.userAva)),
+                                          backgroundColor: Colors.transparent,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }),
                                 Obx(() => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -188,7 +194,7 @@ class InformationPage extends GetView<InformationController> {
                       )
                     ],
                   ),
-                  _buildButtonFunc(context: context, iconData: Icons.report_outlined, title: 'Báo cáo vi phạm', iTradePolicy: ITradePolicy.baoCaoViPham),
+                  // _buildButtonFunc(context: context, iconData: Icons.report_outlined, title: 'Báo cáo vi phạm', iTradePolicy: ITradePolicy.baoCaoViPham),
                   _buildButtonFunc(context: context, iconData: Icons.feedback_outlined, title: 'Đánh giá từ tôi', iTradePolicy: ITradePolicy.danhGiaTuToi),
                   // _buildButtonFunc(context: context, iconData: Icons.wallet, title: 'Ví của tôi', iTradePolicy: ITradePolicy.viCuaToi),
                   _buildButtonFunc(context: context, iconData: Icons.question_mark, title: 'Hướng dẫn sử dụng', iTradePolicy: ITradePolicy.huongDanSuDung),
@@ -225,7 +231,7 @@ class InformationPage extends GetView<InformationController> {
 
   Widget _buildIconButton({required BuildContext context, required IconData iconData, required ProfileEnums profileEnums}){
     return GestureDetector(
-      onTap: () => controller.goProfle(profileEnums),
+      onTap: () => controller.goProfle(profileEnums, context),
       child: Container(
         width: 30.0,
         height: 30.0,

@@ -526,7 +526,7 @@ class MyProfilePage extends GetView<InformationController> {
 
   Widget _buildIconButton({required BuildContext context, required IconData iconData, required ProfileEnums profileEnums}){
     return GestureDetector(
-      onTap: () => controller.goProfle(profileEnums),
+      onTap: () => controller.goProfle(profileEnums, context),
       child: Container(
         width: 30.0,
         height: 30.0,

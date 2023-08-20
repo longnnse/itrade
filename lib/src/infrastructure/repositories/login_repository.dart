@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:core_http/core/error_handling/error_object.dart';
 import 'package:core_http/core/error_handling/exceptions.dart';
 import 'package:core_http/core/error_handling/failures.dart';
@@ -11,6 +13,7 @@ import 'package:i_trade/src/domain/models/params/register_account_param.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 
 import '../../../core/utils/app_settings.dart';
+import '../../domain/models/update_ava_result_model.dart';
 
 
 class LoginRepositories implements LoginService {
@@ -136,6 +139,36 @@ class LoginRepositories implements LoginService {
           failure: const ServerFailure(),
           title: 'Thông báo',
           mess: 'Sai thông tin nhập, vui lòng kiểm tra lại số email')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, UpdateAvaResultModel>> postUpdateAva({required List<File> file}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/User/UploadAvatar';
+
+      final Map<String, dynamic> queryParameters = {
+        'File': file,
+      };
+
+      final res = await _coreHttp.postWithFile(url, queryParameters, file, fileKey: 'File',
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = UpdateAvaResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo',
+          mess: 'Không thể cập nhật avatar')
       );
     } on NoConnectionException {
       return Left(ErrorObject.mapFailureToErrorObject(

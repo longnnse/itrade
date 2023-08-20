@@ -54,10 +54,9 @@ class LoginController extends GetxController {
           Get.snackbar('Thông báo', 'Đăng nhập thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
           emailController.clear();
           passwordController.clear();
-          userEntity.call(UserEntity.fromJson(Jwt.parseJwt(loginModel.value!.accessToken)));
-          print(Jwt.parseJwt(loginModel.value!.accessToken));
-          print('zxvzxv');
-          await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken, loginModel.value!.userAva);
+          userEntity.call(UserEntity.fromJson(Jwt.parseJwt(loginModel.value!.accessToken ?? '')));
+
+          await AppSettings.saveSharePrefByUser(userEntity.value!, loginModel.value!.accessToken ?? '', loginModel.value!.userAva);
           isLoading.call(false);
           Get.toNamed(DashboardPage.routeName);
         },
