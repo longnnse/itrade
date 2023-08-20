@@ -30,6 +30,7 @@ class ManageController extends GetxController {
   RxInt tabInt = 0.obs;
   final ManageService _manageService = Get.find();
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingDelete = false.obs;
   final RxBool isLoadingGroup = false.obs;
   final RxBool isLoadingGroupPersonal = false.obs;
   final RxBool isLoadingGroupList = false.obs;
@@ -278,6 +279,26 @@ class ManageController extends GetxController {
       (value) async {
         productList.call(value);
         isLoading.call(false);
+      },
+    );
+  }
+
+  Future<void> deletePost(String postID) async {
+    //TODO use test
+    isLoadingDelete.call(true);
+    final Either<ErrorObject, String> res =
+    await _manageService.deletePost(postId: postID);
+
+    res.fold(
+          (failure) {
+            Get.snackbar('Thông báo', 'Ẩn bài đăng thất bại',
+                backgroundColor: kSecondaryRed, colorText: kTextColor);
+            isLoadingDelete.call(false);
+      },
+          (value) async {
+        Get.snackbar('Thông báo', 'Ẩn thành công',
+            backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        isLoadingDelete.call(false);
       },
     );
   }

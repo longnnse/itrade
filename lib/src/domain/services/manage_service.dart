@@ -46,5 +46,6 @@ abstract class ManageService {
 
   Future<Either<ErrorObject, RequestResultModel>> postSendReport({required String postId,required String description});
 
+  Future<Either<ErrorObject, String>> deletePost({required String postId});
 
 }

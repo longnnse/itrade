@@ -518,6 +518,31 @@ class ManageRepositories implements ManageService {
     }
   }
 
+  @override
+  Future<Either<ErrorObject, String>> deletePost({required String postId}) async {
+    try {
+      var url = '${CoreUrl.baseURL}/Post/$postId';
+
+
+      final res = await _coreHttp.delete(url,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        return Right(res);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
 
 
 }
