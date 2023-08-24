@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/entities/user_entity.dart';
 import 'package:i_trade/src/domain/models/params/register_account_param.dart';
+import 'package:i_trade/src/domain/models/update_user_result_model.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 import 'package:i_trade/src/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -39,6 +40,8 @@ class LoginController extends GetxController {
   void showPass(bool isShowPass){
     isShow.call(isShowPass == false ? true : false);
   }
+
+
   Future<void> postLogin({required String email, required String password, required BuildContext context}) async {
     //TODO use test
     isLoading.call(true);

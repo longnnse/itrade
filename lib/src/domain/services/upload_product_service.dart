@@ -8,4 +8,5 @@ import '../models/product_model.dart';
 abstract class UploadProductService {
   Future<Either<ErrorObject, Data>> postUploadProduct({required UploadProductParam param});
   Future<Either<ErrorObject, List<CategoryModel>>> getCategories({required int pageIndex,required int pageSize});
+  Future<Either<ErrorObject, Data>> putPost({required UploadProductParam param, required String id});
 }

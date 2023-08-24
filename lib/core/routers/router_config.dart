@@ -33,6 +33,7 @@ import 'package:i_trade/src/presentation/pages/search/search_controller.dart';
 import 'package:i_trade/src/presentation/pages/search/search_page.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
 import 'package:i_trade/src/presentation/pages/upload_post/upload_post_page.dart';
+import 'package:i_trade/src/presentation/pages/upload_post/widgets/edit_post_page.dart';
 
 import '../../src/domain/services/manage_service.dart';
 import '../../src/infrastructure/repositories/manage_repository.dart';
@@ -246,6 +247,15 @@ class ITradeRouterConfigs {
           Get.put<CoreHttp>(CoreHttpImplement(appName: 'appName'),
               permanent: true);
           Get.put<UploadProductService>(UploadProdcutRepositories());
+          Get.lazyPut(() => UploadPostController());
+        },
+      ),
+    ),
+    GetPage(
+      name: EditPostPage.routeName,
+      page: () => const EditPostPage(),
+      binding: BindingsBuilder(
+            () {
           Get.lazyPut(() => UploadPostController());
         },
       ),

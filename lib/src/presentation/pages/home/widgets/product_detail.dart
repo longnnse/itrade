@@ -79,7 +79,7 @@ class ProductDetailPage extends GetView<HomeController> {
                       _buildDetail(context, controller.productByIDModel.value!),
                       _buildSpecifications(context, controller.productByIDModel.value!),
                       _buildProfile(context, controller.productByIDModel.value!),
-                      _buildOtherItem(context: context, name: '${controller.productByIDModel.value!.user.firstName} ${controller.productByIDModel.value!.user.lastName}'),
+                      _buildOtherItem(context: context, name: '${controller.productByIDModel.value!.user!.firstName} ${controller.productByIDModel.value!.user!.lastName}'),
                       _buildOtherItem(context: context, isSimilar: true),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.07,)
                     ],
@@ -249,7 +249,7 @@ class ProductDetailPage extends GetView<HomeController> {
                       ),
                     ),
                     if(content.type != '')
-                      if(content.user.id != AppSettings.getValue(KeyAppSetting.userId))
+                      if(content.user!.id != AppSettings.getValue(KeyAppSetting.userId))
                         Row(
                           children: [
 
@@ -325,7 +325,7 @@ class ProductDetailPage extends GetView<HomeController> {
                     ),
                     const SizedBox(width: 5.0,),
                     Text(
-                      content.user.address,
+                      content.user!.address,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
                     )
                   ],
@@ -416,8 +416,8 @@ class ProductDetailPage extends GetView<HomeController> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Text(
-                    'Liên hệ ngay: ${content.user.phoneNumber.substring(0,6).replaceAll(RegExp(r'.'), '*') +
-                        content.user.phoneNumber.substring(7,content.user.phoneNumber.length)}',
+                    'Liên hệ ngay: ${content.user!.phoneNumber.substring(0,6).replaceAll(RegExp(r'.'), '*') +
+                        content.user!.phoneNumber.substring(7,content.user!.phoneNumber.length)}',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w400),
                   ),
                 ),
@@ -625,7 +625,7 @@ class ProductDetailPage extends GetView<HomeController> {
                   children: [
                     Expanded(
                       child: Text(
-                        '${content.user.firstName} ${content.user.lastName}',
+                        '${content.user!.firstName} ${content.user!.lastName}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:i_trade/common/apis/chat.dart';
-import 'package:i_trade/src/presentation/pages/exchange/index.dart';
+
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
 import 'package:i_trade/src/presentation/pages/search/search_page.dart';
-import 'package:i_trade/core/utils/app_settings.dart';
-import 'package:i_trade/src/domain/entities/base.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 
 import '../information/information_page.dart';
@@ -31,14 +27,12 @@ class DashboardController extends GetxController {
     itemCount.call(index == 0
         ? 20.0
         : index == 1
-            ? 4.5
+            ? 3.5
               : index == 2
-              ? 2.5
+              ? 2.0
                 : index == 3
-                    ? 1.65
-                    : index == 4
-                        ? 1.25
-                        : 1.03);
+                    ? 1.35
+                        : 1.05);
     icon.call(index == 0
         ? const Icon(Icons.home, size: 30.0)
         : index == 1
@@ -47,8 +41,6 @@ class DashboardController extends GetxController {
               ? const Icon(Icons.list_alt, size: 30.0)
               : index == 3
                   ? const Icon(Icons.search, size: 30.0)
-                  : index == 4
-                      ? const Icon(Icons.chat, size: 30.0)
                       : const Icon(Icons.person, size: 30.0));
     appBarTitle.call(index == 0
         ? 'Trang chủ'
@@ -58,8 +50,6 @@ class DashboardController extends GetxController {
               ? 'Danh sách trao đổi sản phẩm'
                 : index == 3
                     ? 'Tìm kiếm'
-                    : index == 4
-                        ? 'Trao đổi'
                         : 'Cá nhân');
   }
 
@@ -79,9 +69,6 @@ class DashboardController extends GetxController {
         content = const SearchPage();
         break;
       case 'TAB: 4':
-        content = const ExchangePage();
-        break;
-      case 'TAB: 5':
         content = const InformationPage();
         break;
     }

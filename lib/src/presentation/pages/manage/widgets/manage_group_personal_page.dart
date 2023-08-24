@@ -6,16 +6,16 @@ import 'package:i_trade/src/presentation/pages/search/widgets/search_product_shi
 
 import '../../../../../core/initialize/core_url.dart';
 import '../../../../../core/initialize/theme.dart';
+import '../../../../../core/utils/app_settings.dart';
 import '../../../../domain/models/group_post_result_model.dart';
 import '../../../widgets/appbar_customize.dart';
 
 
 class ManageGroupPersonalPage extends GetView<ManageController> {
   static const String routeName = '/ManageGroupPersonalPage';
-  final Widget? leading;
+
   const ManageGroupPersonalPage({
     Key? key,
-    this.leading,
   }) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class ManageGroupPersonalPage extends GetView<ManageController> {
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
-          title: 'Danh sách nhóm sản phẩm trao đổi',
+          title: 'Nhóm sản phẩm trao đổi của tôi',
           isUseOnlyBack: true,
         ),
         backgroundColor: kBackground,
@@ -112,8 +112,7 @@ class ManageGroupPersonalPage extends GetView<ManageController> {
                     children: [
                       for(var cont in controller.managePersonalGroup.value!.data)
                         if(cont.groupPosts.isNotEmpty)...[
-                          for(var temp in cont.groupPosts)
-                          _buildItem(context: context, model: temp, idTraoDoi: cont.id)
+                          _buildItem(context: context, lstModel: cont.groupPosts, idTraoDoi: cont.id, ownerID: cont.user.id)
                         ]
                     ],
                   );
@@ -141,137 +140,260 @@ class ManageGroupPersonalPage extends GetView<ManageController> {
     );
   }
 
-  Widget _buildItem({required BuildContext context, required GroupPosts model, required String idTraoDoi}){
+  Widget _buildItem({required BuildContext context, required List<GroupPosts> lstModel, required String idTraoDoi, required String ownerID}){
     return Container(
       width: MediaQuery.of(context).size.width,
-      color: kBackgroundBottomBar,
+
+      decoration: BoxDecoration(
+        boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+        color: kBackgroundBottomBar,
+      ),
       margin: const EdgeInsets.only(top: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
+          Stack(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.width * 0.2,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: kBackground
-                      ),
-                      child: model.post.resources.isNotEmpty ? Image.network(
-                          CoreUrl.baseImageURL + model.post.resources[0].id + model.post.resources[0].extension,
-                          fit: BoxFit.contain
-                      ) : const SizedBox(),
-                    ),
-                    Positioned(
-                        right: 10.0,
-                        top: 10.0,
-                        child: Stack(
-                          children: [
-                            const Icon(
-                              Icons.camera_alt,
-                              size: 30.0,
-                              color: Colors.grey,
-                            ),
-                            Positioned(
-                              child: SizedBox(
-                                width: 30.0,
-                                height: 30.0,
-                                child: Center(
-                                  child: Container(
-                                    width: 15.0,
-                                    height: 15.0,
+                    if(lstModel.isNotEmpty)...[
+                      for(var cont in lstModel)
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Stack(
+                                children: [
+                                  Container(
+                                    width: Get.width * 0.3,
+                                    height: Get.width * 0.2,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      color: Colors.white,
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        color: kBackground
                                     ),
-                                    child: Text(
-                                      model.post.resources.length.toString(),
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    child: cont.post.resources.isNotEmpty ? Image.network(
+                                        CoreUrl.baseImageURL + cont.post.resources[0].id + cont.post.resources[0].extension,
+                                        fit: BoxFit.contain
+                                    ) : const SizedBox(),
                                   ),
+                                  Positioned(
+                                      right: 10.0,
+                                      top: 10.0,
+                                      child: Stack(
+                                        children: [
+                                          const Icon(
+                                            Icons.camera_alt,
+                                            size: 30.0,
+                                            color: Colors.grey,
+                                          ),
+                                          Positioned(
+                                            child: SizedBox(
+                                              width: 30.0,
+                                              height: 30.0,
+                                              child: Center(
+                                                child: Container(
+                                                  width: 15.0,
+                                                  height: 15.0,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    color: Colors.white,
+                                                  ),
+                                                  child: Text(
+                                                    cont.post.resources.length.toString(),
+                                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w900),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(width: 10.0,),
+                              SizedBox(
+                                height: Get.width * 0.21,
+                                width: Get.width * 0.6,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      cont.post.title,
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                                    ),
+                                    const SizedBox(height: 5.0,),
+                                    // Text(
+                                    //   '${model.price.toString().split('.').first} đ',
+                                    //   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                                    // ),
+                                    const SizedBox(height: 5.0,),
+                                    Expanded(
+                                      child: Text(
+                                        'Đã đăng ${FormatDateTime.getHourFormat(cont.post.dateUpdated)} ${FormatDateTime.getDateFormat(cont.post.dateUpdated)}',
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                            )
-                          ],
-                        )
-                    ),
+                            ],
+                          ),
+                        ),
+                    ]
                   ],
                 ),
-                const SizedBox(width: 10.0,),
-                Expanded(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.21,
-                    child: Column(
+              ),
+              if(lstModel.length > 1)
+                Positioned(
+                    left: 0.0,
+                    top: 40.0,
+                    child: Icon(
+                      Icons.arrow_circle_left,
+                      size: 25.0,
+                      color: Colors.black.withOpacity(0.4),
+                    )
+                ),
+              if(lstModel.length > 1)
+                Positioned(
+                    right: 0.0,
+                    top: 40.0,
+                    child: Icon(
+                      Icons.arrow_circle_right,
+                      size: 25.0,
+                      color: Colors.black.withOpacity(0.4),
+                    )
+                )
+            ],
+          ),
+
+          Container(
+            decoration: BoxDecoration(
+                color: kBackground.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(5.0)
+            ),
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          model.post.title,
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.person,
+                              size: 20.0,
+                              color: kPrimaryLightColor2,
+                            ),
+                            const SizedBox(width: 5.0,),
+                            Text(
+                              '${lstModel[0].post.user!.lastName} ${lstModel[0].post.user!.firstName}',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 5.0,),
-                        // Text(
-                        //   '${model.price.toString().split('.').first} đ',
-                        //   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                        // ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.mail,
+                              size: 20.0,
+                              color: kSecondaryRed,
+                            ),
+                            const SizedBox(width: 5.0,),
+                            Text(
+                              lstModel[0].post.user!.email ?? '',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            )
+                          ],
+                        ),
                         const SizedBox(height: 5.0,),
-                        Expanded(
-                          child: Text(
-                            'Đã đăng ${FormatDateTime.getHourFormat(model.post.dateUpdated)} ${FormatDateTime.getDateFormat(model.post.dateUpdated)}',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
-                          ),
-                        )
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.phone,
+                              size: 20.0,
+                              color: kPrimaryLightColor,
+                            ),
+                            const SizedBox(width: 5.0,),
+                            Text(
+                              lstModel[0].post.user!.phoneNumber ?? '',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5.0,),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              size: 20.0,
+                              color: kSecondaryRed,
+                            ),
+                            const SizedBox(width: 5.0,),
+                            Text(
+                              lstModel[0].post.user!.address ?? '',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ),
+                    Container(
+                      // padding: const EdgeInsets.all(8.0),
+                      width: 50.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70.0),
+                        color: kBackgroundBottomBar,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.0),
+                          boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
+                        ),
+                        child: CircleAvatar(
+                          radius: 50.0,
+                          backgroundImage:
+                          NetworkImage(CoreUrl.baseAvaURL + lstModel[0].post.user!.userAva!),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    )
+
+                  ],
                 ),
+
+
               ],
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: kBackground
+          GestureDetector(
+            onTap: () => controller.tradeMultiGroup(context, idTraoDoi),
+            child: Container(
+              width: Get.width,
+              padding: const EdgeInsets.all(10.0),
+              decoration: const BoxDecoration(
+                  gradient: kDefaultGradient
               ),
-              color: kBackgroundBottomBar,
-              boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+              child: Text(
+                'Trao đổi',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
             ),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: MediaQuery.of(context).size.width - 10,
-                    padding: const EdgeInsets.all(10.0),
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.chat,
-                          color: kPrimaryLightColor,
-                        ),
-                        Text(
-                          'Trao đổi SP',
-                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(width: 10.0,)
-                      ],
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
-          )
-
+          ),
         ],
       ),
     );

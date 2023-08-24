@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/core/utils/format_datetime.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
+import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_personal_page.dart';
 import 'package:i_trade/src/presentation/pages/search/widgets/search_product_shimmer_widget.dart';
 
 import '../../../../../core/initialize/core_url.dart';
@@ -110,7 +111,7 @@ class ManageGroupPage extends GetView<ManageController> {
         child: Column(
           children: [
             Obx(() {
-              if (controller.isLoadingGroupPersonal.value) {
+              if (controller.isLoadingGroup.value) {
                 return const SearchProductShimmerWidget(
                   columnCount: 1,
                 );
@@ -391,7 +392,7 @@ class ManageGroupPage extends GetView<ManageController> {
           Visibility(
             visible: lstModel[0].post.user!.id == AppSettings.getValue(KeyAppSetting.userId) ? false : true,
             child: GestureDetector(
-              onTap: () => controller.tradeMultiGroup(context, idTraoDoi),
+              onTap: () => controller.goGroupPersonalPage(idTraoDoi),
               child: Container(
                 width: Get.width,
                 padding: const EdgeInsets.all(10.0),
@@ -399,7 +400,7 @@ class ManageGroupPage extends GetView<ManageController> {
                     gradient: kDefaultGradient
                 ),
                 child: Text(
-                  'Trao đổi',
+                  'Trao đổi với nhóm sản phẩm này',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),

@@ -195,7 +195,7 @@ class HomePage extends GetView<HomeController> {
         for(var cont in productModel.data)
           if(cont.isConfirmed == true)...[
             GestureDetector(
-              onTap: () => controller.goDetail(id: cont.id, ownerID: cont.user.id),
+              onTap: () => controller.goDetail(id: cont.id, ownerID: cont.user!.id),
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Column(
@@ -262,7 +262,7 @@ class HomePage extends GetView<HomeController> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: Text(
-                        '${cont.user.lastName} ${cont.user.firstName}',
+                        '${cont.user!.lastName} ${cont.user!.firstName}',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                       ),
                     ),

@@ -48,13 +48,14 @@ class Data {
   late List<Resources> resources;
   late List<PostCategories> postCategories;
   late String id;
-  late User user;
+  User? user;
   late String title;
   late String content;
   late String location;
   late double price;
   bool? isConfirmed;
   bool? isCompleted;
+  bool? isUsed;
   late String type;
   late String dateCreated;
   late String dateUpdated;
@@ -65,13 +66,14 @@ class Data {
         required this.resources,
         required this.postCategories,
         required this.id,
-        required this.user,
+        this.user,
         required this.title,
         required this.content,
         required this.location,
         required this.price,
         this.isConfirmed,
         this.isCompleted,
+        this.isUsed,
         required this.type,
         required this.dateCreated,
         required this.dateUpdated});
@@ -92,13 +94,14 @@ class Data {
       });
     }
     id = json['id'] ?? '';
-    user = (json['user'] != null ? User.fromJson(json['user']) : null)!;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     title = json['title'] ?? '';
     content = json['content'] ?? '';
     location = json['location'] ?? '';
     price = json['price'] ?? 0.0;
     isConfirmed = json['isConfirmed'] ?? false;
     isCompleted = json['isCompleted'] ?? false;
+    isUsed = json['isUsed'] ?? false;
     type = json['type'] ?? '';
     dateCreated = json['dateCreated'] ?? '';
     dateUpdated = json['dateUpdated'] ?? '';
@@ -112,13 +115,14 @@ class Data {
     data['postCategories'] =
         postCategories.map((v) => v.toJson()).toList();
     data['id'] = id;
-    data['user'] = user.toJson();
+    data['user'] = user!.toJson();
     data['title'] = title;
     data['content'] = content;
     data['location'] = location;
     data['price'] = price;
     data['isConfirmed'] = isConfirmed;
     data['isCompleted'] = isCompleted;
+    data['isUsed'] = isUsed;
     data['type'] = type;
     data['dateCreated'] = dateCreated;
     data['dateUpdated'] = dateUpdated;

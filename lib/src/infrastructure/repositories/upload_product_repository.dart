@@ -86,4 +86,38 @@ class UploadProdcutRepositories implements UploadProductService {
           failure: const NoConnectionFailure()));
     }
   }
+
+  @override
+  Future<Either<ErrorObject, Data>> putPost({required UploadProductParam param, required String id}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/Post';
+
+      final Map<String, dynamic> queryParameters = {
+        "id": id,
+        'title': param.title,
+        'content': param.content,
+        'location': param.location,
+        'type': param.type,
+      };
+
+      final res = await _coreHttp.put(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = Data.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo',
+          mess: 'Sai thông tin nhập, vui lòng kiểm tra lại')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
 }

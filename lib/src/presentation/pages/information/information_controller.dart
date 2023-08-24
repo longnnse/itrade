@@ -244,10 +244,13 @@ class InformationController extends GetxController {
     }
   }
 
-  void goProfle(ProfileEnums profileEnums, BuildContext context){
+  void goProfle(ProfileEnums profileEnums, BuildContext context) async {
     switch (profileEnums){
       case ProfileEnums.edit:
-        Get.toNamed(EditProfilePage.routeName);
+        var result = await Get.toNamed(EditProfilePage.routeName);
+        if(result == true){
+          checkInfoUser();
+        }
         break;
       case ProfileEnums.camera:
         mediaSelection(index: 1, context: context);

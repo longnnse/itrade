@@ -9,7 +9,7 @@ import 'package:i_trade/src/presentation/widgets/floating_action_button.dart';
 import '../../../../core/initialize/theme.dart';
 import '../home/widgets/multi_trade_cart_product_page.dart';
 import '../home/widgets/noti_page.dart';
-import '../upload_post/upload_post_page.dart';
+
 
 class DashboardPage extends GetView<DashboardController> {
   static const String routeName = '/DashboardPage';
@@ -24,7 +24,7 @@ class DashboardPage extends GetView<DashboardController> {
     Get.put(HomeController());
     HomeController ctrler = Get.find();
     return Obx(() => Scaffold(
-      appBar: controller.lastSelected.value != 'TAB: 5' ? AppbarCustomize.buildAppbar(
+      appBar: controller.lastSelected.value != 'TAB: 4' ? AppbarCustomize.buildAppbar(
         context: context,
         title: controller.appBarTitle.value,
         isUseOnlyBack: false,
@@ -107,7 +107,6 @@ class DashboardPage extends GetView<DashboardController> {
             FABBottomAppBarItem(iconData: Icons.dashboard, text: 'Quản lý'),
             FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Giao dịch'),
             FABBottomAppBarItem(iconData: Icons.search, text: 'Tìm kiếm'),
-            FABBottomAppBarItem(iconData: Icons.chat, text: 'Trao đổi'),
             FABBottomAppBarItem(iconData: Icons.person, text: 'Cá nhân'),
           ],
           backgroundColor: kBackgroundBottomBar,

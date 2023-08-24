@@ -169,35 +169,28 @@ class ManageController extends GetxController {
     return valueReturn;
   }
 
-  void tradeMultiGroup(BuildContext context, String toGroupID) async {
-    if(groupID.value == ''){
-      Get.snackbar('Thông báo', 'Vui lòng chọn nhóm sản phẩm của bạn để trao đổi',
-          backgroundColor: kSecondaryRed, colorText: kTextColor);
-    }else{
-      isLoadingGroup.call(true);
-      List<String> lstOwnerPost = [];
-      lstOwnerPost.add(toGroupID);
+  void tradeMultiGroup(BuildContext context, String fromGroupID) async {
+    isLoadingGroup.call(true);
 
-      if (groupID.value != '') {
-        await postTrading(fromPostId: groupID.value, toPostId: toGroupID);
+    if (groupID.value != '') {
+      await postTrading(fromPostId: fromGroupID, toPostId: productID.value);
 
-        isLoadingGroup.call(false);
-        if (tradeResult.value != null) {
-          descController.clear();
-          selectedProductIDs.clear();
-          Get.snackbar('Thông báo', 'Trao đổi thành công',
-              backgroundColor: kSecondaryGreen, colorText: kTextColor);
-          Navigator.pop(context);
-        } else {
-          Get.snackbar('Thông báo', 'Không thể trao đổi',
-              backgroundColor: kSecondaryRed, colorText: kTextColor);
-        }
+      isLoadingGroup.call(false);
+      if (tradeResult.value != null) {
+        descController.clear();
+        selectedProductIDs.clear();
+        Get.snackbar('Thông báo', 'Trao đổi thành công',
+            backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        Navigator.pop(context);
       } else {
-        isLoadingGroup.call(false);
-        Get.snackbar('Thông báo',
-            'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
+        Get.snackbar('Thông báo', 'Không thể trao đổi',
             backgroundColor: kSecondaryRed, colorText: kTextColor);
       }
+    } else {
+      isLoadingGroup.call(false);
+      Get.snackbar('Thông báo',
+          'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
+          backgroundColor: kSecondaryRed, colorText: kTextColor);
     }
   }
 

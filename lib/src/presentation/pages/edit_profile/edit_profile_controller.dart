@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:i_trade/core/utils/app_settings.dart';
 import 'package:i_trade/src/domain/models/params/edit_password_param.dart';
+import 'package:i_trade/src/domain/models/update_user_result_model.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 
 import '../../../../core/initialize/theme.dart';
@@ -14,10 +15,50 @@ class EditProfileController extends GetxController {
   final TextEditingController currentPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController reNewPasswordController = TextEditingController();
+
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController idenficationNumberController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+
+  final RxBool isLoadingUpdate = false.obs;
   final LoginService _loginService = Get.find();
   @override
   void onInit() {
     super.onInit();
+  }
+
+  Future<void> putProduct({required BuildContext context}) async {
+    isLoadingUpdate.call(true);
+    final Either<ErrorObject, UpdateUserResultModel> res = await _loginService.putUser(
+      id: AppSettings.getValue(KeyAppSetting.userId),
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      address: addressController.text,
+      phoneNumber: phoneController.text,
+      age: '22',
+    );
+
+    res.fold(
+          (failure) {
+        isLoadingUpdate.call(false);
+        Get.snackbar('Thông báo', failure.message, backgroundColor: kSecondaryRed, colorText: kTextColor);
+      },
+          (value) async {
+        Get.snackbar('Thông báo', 'Chỉnh sửa thông tin thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+        AppSettings.setValue(KeyAppSetting.fullName, '${firstNameController.text} ${lastNameController.text}');
+        AppSettings.setValue(KeyAppSetting.phoneNumber, phoneController.text);
+        firstNameController.clear();
+        lastNameController.clear();
+        phoneController.clear();
+        addressController.clear();
+        isLoadingUpdate.call(false);
+
+        Navigator.pop(context, true);
+      },
+    );
   }
 
   Future<void> postEditPassword({required BuildContext context}) async {

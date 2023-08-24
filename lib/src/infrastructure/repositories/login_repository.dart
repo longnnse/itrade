@@ -10,6 +10,7 @@ import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/models/login_model.dart';
 import 'package:i_trade/src/domain/models/params/edit_password_param.dart';
 import 'package:i_trade/src/domain/models/params/register_account_param.dart';
+import 'package:i_trade/src/domain/models/update_user_result_model.dart';
 import 'package:i_trade/src/domain/services/login_service.dart';
 
 import '../../../core/utils/app_settings.dart';
@@ -169,6 +170,41 @@ class LoginRepositories implements LoginService {
           failure: const ServerFailure(),
           title: 'Thông báo',
           mess: 'Không thể cập nhật avatar')
+      );
+    } on NoConnectionException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const NoConnectionFailure()));
+    }
+  }
+
+  @override
+  Future<Either<ErrorObject, UpdateUserResultModel>> putUser({required String id, required String firstName, required String lastName, required String address, required String phoneNumber, required String age}) async {
+    try {
+      const url = '${CoreUrl.baseURL}/User';
+
+      final Map<String, dynamic> queryParameters = {
+        "id": id,
+        'firstName': firstName,
+        'lastName': lastName,
+        'address': address,
+        'phoneNumber': phoneNumber,
+        'age': age
+      };
+
+      final res = await _coreHttp.put(url, queryParameters,
+          headers: {'Authorization': 'Bearer ${AppSettings.getValue(KeyAppSetting.token)}'});
+
+      if (res != null) {
+        final data = UpdateUserResultModel.fromJson(res);
+        return Right(data);
+      }
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const DataParsingFailure()));
+    } on ServerException {
+      return Left(ErrorObject.mapFailureToErrorObject(
+          failure: const ServerFailure(),
+          title: 'Thông báo',
+          mess: 'Sai thông tin nhập, vui lòng kiểm tra lại')
       );
     } on NoConnectionException {
       return Left(ErrorObject.mapFailureToErrorObject(

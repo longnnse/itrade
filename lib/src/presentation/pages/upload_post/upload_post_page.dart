@@ -432,7 +432,6 @@ class UploadPostPage extends GetView<UploadPostController> {
                     )
                   ],
                 )),
-                _buildTextFormField(context: context, title: 'Giá', maxLine: 1, textInputType: TextInputType.number, textController: controller.priceController, isPrice: true),
                 _buildTextFormField(context: context, title: 'Tiêu đề', maxLine: 1, textController: controller.titleController),
                 _buildTextFormField(context: context, title: 'Mô tả sản phẩm', maxLine: 5, textController: controller.contentController),
               ],

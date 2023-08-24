@@ -6,11 +6,15 @@ import 'package:i_trade/src/domain/models/product_model.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_controller.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_history_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_product_shimmer_widget.dart';
+import 'package:i_trade/src/presentation/pages/upload_post/upload_post_controller.dart';
+import 'package:i_trade/src/presentation/pages/upload_post/widgets/edit_post_page.dart';
 
 import '../../../../core/initialize/core_url.dart';
 import '../../../../core/initialize/theme.dart';
 import '../../../../core/utils/app_settings.dart';
 import '../../../domain/models/trading_sent_model.dart';
+import '../../../domain/services/upload_product_service.dart';
+import '../../../infrastructure/repositories/upload_product_repository.dart';
 
 
 class ManagePage extends GetView<ManageController> {
@@ -312,7 +316,7 @@ class ManagePage extends GetView<ManageController> {
                     ),
                     elevation: 16,
                     style: Theme.of(context).textTheme.titleMedium,
-                    onChanged: (String? value) {
+                    onChanged: (String? value) async {
                       if(value == 'Ẩn'){
                         controller.lstHide.call().add(model.id);
                         controller.getPersonalPosts();
@@ -324,6 +328,14 @@ class ManagePage extends GetView<ManageController> {
                         }else{
                           Get.snackbar('Thông báo', 'Sản phẩm đã được thêm',
                               backgroundColor: kSecondaryRed, colorText: kTextColor);
+                        }
+                      }else  {
+                        UploadPostController ctl = Get.find();
+                        ctl.productInfo.call(model);
+                        ctl.isFirst.call(true);
+                        var result = await Get.toNamed(EditPostPage.routeName);
+                        if(result == true){
+                          controller.getPersonalPosts();
                         }
                       }
                     },

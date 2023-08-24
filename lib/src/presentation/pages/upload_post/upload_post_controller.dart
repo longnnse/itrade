@@ -22,10 +22,11 @@ import 'package:http_parser/http_parser.dart';
 
 class UploadPostController extends GetxController {
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
+   TextEditingController titleController = TextEditingController();
+   TextEditingController contentController = TextEditingController();
+   TextEditingController addressController = TextEditingController();
 
+  final Rxn<Data> productInfo = Rxn<Data>();
   RxList<String>  items = ['Chọn danh mục'].obs;
   RxString selectedValue = 'Chọn danh mục'.obs;
   RxString selectedDesiredValue = 'Chọn danh mục'.obs;
@@ -38,6 +39,7 @@ class UploadPostController extends GetxController {
   RxBool isSell = false.obs;
   final ImagePicker picker = ImagePicker();
   final RxBool isLoading = false.obs;
+  final RxBool isLoadingUpdate = false.obs;
   final RxBool isFirst = true.obs;
   final RxString toPostID = ''.obs;
   final RxBool isPostToTrade = false.obs;
@@ -105,6 +107,55 @@ class UploadPostController extends GetxController {
           priceController.clear();
           addressController.clear();
           isLoading.call(false);
+          Navigator.pop(context, true);
+        },
+      );
+    }
+  }
+
+  Future<void> putProduct({required BuildContext context}) async {
+    //TODO use test
+    bool isValid = true;
+    if(contentController.text == ''){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng nhập nội dung', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+    if(addressController.text == ''){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng nhập địa chỉ', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+    if(titleController.text == ''){
+      isValid = false;
+      Get.snackbar('Thông báo', 'Vui lòng nhập tiêu đề', backgroundColor: kSecondaryRed, colorText: kTextColor);
+    }
+
+    if(isValid == true){
+      UploadProductParam param = UploadProductParam(
+        title: titleController.text,
+        content: contentController.text,
+        location: addressController.text,
+        price: 0,
+        isUsed: isNew.value == false ? true : false,
+        type: isFree.value == true ? 'Free' : 'Trade',
+        files: [],
+        categoryIds: [],
+        categoryDesiredIds: [],
+      );
+      isLoadingUpdate.call(true);
+      final Either<ErrorObject, Data> res = await _uploadProductService.putPost(param: param, id: productInfo.value!.id);
+
+      res.fold(
+            (failure) {
+              isLoadingUpdate.call(false);
+          Get.snackbar('Thông báo', failure.message, backgroundColor: kSecondaryRed, colorText: kTextColor);
+        },
+            (value) async {
+          Get.snackbar('Thông báo', 'Chỉnh sửa thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
+          titleController.clear();
+          contentController.clear();
+          priceController.clear();
+          addressController.clear();
+          isLoadingUpdate.call(false);
           Navigator.pop(context, true);
         },
       );

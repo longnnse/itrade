@@ -25,11 +25,12 @@ class EditProfilePage extends GetView<EditProfileController> {
                 children: [
                   _buildHeader(context),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.userName), iconData: Icons.person),
-                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.email), iconData: Icons.email),
-                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.phoneNumber), iconData: Icons.phone),
-                  _buildInput(context: context, title: 'Địa chỉ', iconData: Icons.location_on),
-                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.exp).toString(), iconData: Icons.credit_card),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.fullName).split(' ').first, iconData: Icons.person, controllerText: controller.firstNameController),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.fullName).split(' ').last, iconData: Icons.person, controllerText: controller.lastNameController),
+                 // _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.email), iconData: Icons.email, controllerText: controller.emailController),
+                  _buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.phoneNumber), iconData: Icons.phone, controllerText: controller.phoneController),
+                  _buildInput(context: context, title: 'Địa chỉ', iconData: Icons.location_on, controllerText: controller.addressController),
+                  //_buildInput(context: context, title: AppSettings.getValue(KeyAppSetting.exp).toString(), iconData: Icons.credit_card, controllerText: controller.idenficationNumberController),
                   const SizedBox(height: 50.0),
                   _buildButton(context)
                 ],
@@ -59,7 +60,15 @@ class EditProfilePage extends GetView<EditProfileController> {
                   ),
                 ),
               ),
-            )
+            ),
+            Obx(() => controller.isLoadingUpdate.value == true ?
+            Positioned(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: kBackground.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
+                )) : const SizedBox())
           ],
         ));
   }
@@ -97,7 +106,7 @@ class EditProfilePage extends GetView<EditProfileController> {
     );
   }
 
-  Widget _buildInput({required BuildContext context, required String title, required IconData iconData}){
+  Widget _buildInput({required BuildContext context, required String title, required IconData iconData, required TextEditingController controllerText}){
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -127,7 +136,7 @@ class EditProfilePage extends GetView<EditProfileController> {
           Expanded(
             child: TextFormField(
               //initialValue: number.toString(),
-              //controller: blocQLDTTNMT.keySearchTextEditingController,
+              controller: controllerText,
               decoration: InputDecoration(
                   suffixIcon: null,
                   border: InputBorder.none,
@@ -153,18 +162,21 @@ class EditProfilePage extends GetView<EditProfileController> {
   Widget _buildButton(BuildContext context){
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(13.0),
-          margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              gradient: kDefaultGradient
-          ),
-          child: Text(
-            'Cập nhật thông tin',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
+        GestureDetector(
+          onTap: () => controller.putProduct(context: context),
+          child: Container(
+            padding: const EdgeInsets.all(13.0),
+            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: kDefaultGradient
+            ),
+            child: Text(
+              'Cập nhật thông tin',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColor, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ],
