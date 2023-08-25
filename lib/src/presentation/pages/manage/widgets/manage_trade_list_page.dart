@@ -231,7 +231,7 @@ class ManageTradeListPage extends GetView<ManageController> {
               children: [
                 Row(
                   children: [
-                    if(dataTrade.status == 'Accept' || dataTrade.status == 'Deny')...[
+                    if(dataTrade.status == 'Finish' || dataTrade.status == 'Deny')...[
                       Container(
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                         decoration: BoxDecoration(
