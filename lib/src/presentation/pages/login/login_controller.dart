@@ -121,7 +121,7 @@ class LoginController extends GetxController {
           idenficationNumber: idenficationNumberController.text
       );
       isLoading.call(true);
-      final Either<ErrorObject, RegisterAccountParam> res = await _loginService.postRegister(param: param);
+      final Either<ErrorObject, String> res = await _loginService.postRegister(param: param);
 
       res.fold(
             (failure) {

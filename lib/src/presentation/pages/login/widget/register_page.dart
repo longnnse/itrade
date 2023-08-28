@@ -65,6 +65,14 @@ class RegisterPage extends GetView<LoginController> {
                 ],
               ),
             ),
+            Obx(() => controller.isLoading.value == true ?
+            Positioned(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: kBackground.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
+                )) : const SizedBox())
           ],
         ));
   }

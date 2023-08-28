@@ -50,7 +50,7 @@ class LoginRepositories implements LoginService {
   }
 
   @override
-  Future<Either<ErrorObject, RegisterAccountParam>> postRegister({required RegisterAccountParam param}) async {
+  Future<Either<ErrorObject, String>> postRegister({required RegisterAccountParam param}) async {
     try {
       const url = '${CoreUrl.baseURL}/User/Register';
 
@@ -69,8 +69,8 @@ class LoginRepositories implements LoginService {
       final res = await _coreHttp.post(url, queryParameters);
 
       if (res != null) {
-        final data = RegisterAccountParam.fromJson(res);
-        return Right(data);
+        //final data = RegisterAccountParam.fromJson(res);
+        return Right(res);
       }
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const DataParsingFailure()));
@@ -131,8 +131,10 @@ class LoginRepositories implements LoginService {
       final res = await _coreHttp.post(url, queryParameters);
 
       if (res != null) {
+
         return const Right('Mật khẩu reset email đã được gửi');
       }
+
       return Left(ErrorObject.mapFailureToErrorObject(
           failure: const DataParsingFailure()));
     } on ServerException {

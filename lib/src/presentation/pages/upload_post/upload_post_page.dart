@@ -583,8 +583,7 @@ class UploadPostPage extends GetView<UploadPostController> {
                       : 0;
 
                   return InkWell(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: Container(
                         margin: const EdgeInsets.only(right: 10.0),
                         height: 70,

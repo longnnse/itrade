@@ -209,6 +209,7 @@ class ManageController extends GetxController {
       if (tradeResult.value != null) {
         descController.clear();
         selectedProductIDs.clear();
+        selectedProductList.clear();
         Get.snackbar('Thông báo', 'Trao đổi thành công',
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
         Navigator.pop(context);
@@ -585,6 +586,7 @@ class ManageController extends GetxController {
                 tradingItem.fromGroup!.user!.id
             ? tradingItem.toGroup!.groupPosts![0].post!.user!.userAva!
             : tradingItem.fromGroup!.user!.userAva!,
+        "to_name": '${tradingItem.toGroup!.user!.firstName} ${tradingItem.toGroup!.user!.lastName}'
       });
     }
   }

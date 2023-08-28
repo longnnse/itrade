@@ -25,8 +25,8 @@ class ChatPage extends GetView<ChatController> {
             style: TextStyle(
                 fontFamily: "Avenir",
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryText,
-                fontSize: 16.sp),
+                color: AppColors.primaryElementText,
+                fontSize: 18.sp),
           ),
         );
       }),
@@ -177,30 +177,30 @@ class ChatPage extends GetView<ChatController> {
                     ? Positioned(
                         right: 20.w,
                         bottom: 100.h,
-                        height: 240.w,
+                        height: 140.w,
                         width: 40.w,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                width: 40.w,
-                                height: 40.w,
-                                padding: EdgeInsets.all(10.w),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(40.w),
-                                    color: AppColors.primayBackground,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 2,
-                                          blurRadius: 2,
-                                          offset: Offset(1, 1))
-                                    ]),
-                                child: Image.asset("assets/icons/file.png"),
-                              ),
-                              onTap: () {},
-                            ),
+                            // GestureDetector(
+                            //   child: Container(
+                            //     width: 40.w,
+                            //     height: 40.w,
+                            //     padding: EdgeInsets.all(10.w),
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(40.w),
+                            //         color: AppColors.primayBackground,
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //               color: Colors.grey.withOpacity(0.2),
+                            //               spreadRadius: 2,
+                            //               blurRadius: 2,
+                            //               offset: Offset(1, 1))
+                            //         ]),
+                            //     child: Image.asset("assets/icons/file.png"),
+                            //   ),
+                            //   onTap: () {},
+                            // ),
                             GestureDetector(
                               child: Container(
                                 width: 40.w,
@@ -222,48 +222,48 @@ class ChatPage extends GetView<ChatController> {
                                 controller.imgFromGallery();
                               },
                             ),
-                            GestureDetector(
-                              child: Container(
-                                width: 40.w,
-                                height: 40.w,
-                                padding: EdgeInsets.all(10.w),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(40.w),
-                                    color: AppColors.primayBackground,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 2,
-                                          blurRadius: 2,
-                                          offset: Offset(1, 1))
-                                    ]),
-                                child: Image.asset("assets/icons/call.png"),
-                              ),
-                              onTap: () {
-                                // controller.audioCall();
-                              },
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                width: 40.w,
-                                height: 40.w,
-                                padding: EdgeInsets.all(10.w),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(40.w),
-                                    color: AppColors.primayBackground,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 2,
-                                          blurRadius: 2,
-                                          offset: Offset(1, 1))
-                                    ]),
-                                child: Image.asset("assets/icons/video.png"),
-                              ),
-                              onTap: () {
-                                // controller.videoCall();
-                              },
-                            ),
+                            // GestureDetector(
+                            //   child: Container(
+                            //     width: 40.w,
+                            //     height: 40.w,
+                            //     padding: EdgeInsets.all(10.w),
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(40.w),
+                            //         color: AppColors.primayBackground,
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //               color: Colors.grey.withOpacity(0.2),
+                            //               spreadRadius: 2,
+                            //               blurRadius: 2,
+                            //               offset: Offset(1, 1))
+                            //         ]),
+                            //     child: Image.asset("assets/icons/call.png"),
+                            //   ),
+                            //   onTap: () {
+                            //     // controller.audioCall();
+                            //   },
+                            // ),
+                            // GestureDetector(
+                            //   child: Container(
+                            //     width: 40.w,
+                            //     height: 40.w,
+                            //     padding: EdgeInsets.all(10.w),
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(40.w),
+                            //         color: AppColors.primayBackground,
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //               color: Colors.grey.withOpacity(0.2),
+                            //               spreadRadius: 2,
+                            //               blurRadius: 2,
+                            //               offset: Offset(1, 1))
+                            //         ]),
+                            //     child: Image.asset("assets/icons/video.png"),
+                            //   ),
+                            //   onTap: () {
+                            //     // controller.videoCall();
+                            //   },
+                            // ),
                             GestureDetector(
                               child: Container(
                                 width: 40.w,

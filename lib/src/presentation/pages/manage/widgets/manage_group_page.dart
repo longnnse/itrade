@@ -80,7 +80,7 @@ class ManageGroupPage extends GetView<ManageController> {
       ),
       child: TextFormField(
         //initialValue: number.toString(),
-        //controller: blocQLDTTNMT.keySearchTextEditingController,
+        controller: controller.searchController,
         decoration: InputDecoration(
             suffixIcon: const Icon(
                 Icons.search
@@ -96,7 +96,7 @@ class ManageGroupPage extends GetView<ManageController> {
                 .textTheme
                 .titleMedium!
                 .copyWith(color: kTextColorGrey)),
-        onChanged: (value) {},
+        onChanged: (value) => controller.getGroup(pageIndex: 1, pageSize: 20, searchValue: value),
         onFieldSubmitted: (value) {},
       ),
     );

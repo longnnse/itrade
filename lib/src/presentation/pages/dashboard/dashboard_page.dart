@@ -105,7 +105,7 @@ class DashboardPage extends GetView<DashboardController> {
           items: [
             FABBottomAppBarItem(iconData: Icons.home, text: 'Trang chủ'),
             FABBottomAppBarItem(iconData: Icons.dashboard, text: 'Quản lý'),
-            FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Giao dịch'),
+            FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Trao đổi'),
             FABBottomAppBarItem(iconData: Icons.search, text: 'Tìm kiếm'),
             FABBottomAppBarItem(iconData: Icons.person, text: 'Cá nhân'),
           ],

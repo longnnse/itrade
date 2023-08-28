@@ -86,11 +86,11 @@ class MyProfilePage extends GetView<InformationController> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: MediaQuery.of(context).size.height * 0.01,
-                    right: 10.0,
-                    child:  _buildIconButton(context: context, iconData: Icons.camera_alt, profileEnums: ProfileEnums.camera),
-                  )
+                  // Positioned(
+                  //   top: MediaQuery.of(context).size.height * 0.01,
+                  //   right: 10.0,
+                  //   child:  _buildIconButton(context: context, iconData: Icons.camera_alt, profileEnums: ProfileEnums.camera),
+                  // )
                 ],
               ),
               _buildTab(context)

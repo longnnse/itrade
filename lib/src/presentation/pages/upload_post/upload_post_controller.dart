@@ -183,6 +183,7 @@ class UploadPostController extends GetxController {
 
   void deleteImage(int index){
     mediaModels.call().removeAt(index);
+    mediaModels.refresh();
   }
 
   Future mediaSelection({required int index, required BuildContext context}) async {
@@ -377,6 +378,7 @@ class UploadPostController extends GetxController {
         isShow: true,
         uint8list: Uint8List.fromList(utf8.encode(pathFile))
       ));
+      mediaModels.refresh();
       // medias[index] = medias.elementAt(index).copyWith(
       //     pathFile: pathFile,
       //     typeFile: typeFile,
