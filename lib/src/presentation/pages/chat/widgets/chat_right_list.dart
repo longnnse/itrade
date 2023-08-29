@@ -6,6 +6,8 @@ import 'package:i_trade/core/initialize/core_url.dart';
 import 'package:i_trade/src/domain/entities/msg_content.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/initialize/theme.dart';
+
 Widget ChatRightList(Msgcontent item) {
   return Container(
       padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 20.w),
@@ -22,7 +24,7 @@ Widget ChatRightList(Msgcontent item) {
                 Container(
                     decoration: BoxDecoration(
                         color: item.type == "Text"
-                            ? AppColors.primaryElement
+                            ? kPrimaryLightColor
                             : Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5.w))),
                     padding: item.type == "Text"

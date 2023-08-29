@@ -22,20 +22,11 @@ class ProductListPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: controller.idCate.value, isPostCateLst: true);
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
           context: context,
           title: controller.title.value,
           isUseOnlyBack: false,
-          actionRights: [
-            IconButton(
-              onPressed: (){},
-              icon: const Icon(
-                Icons.filter_alt,
-                color: Colors.white,
-                size: 25.0,
-              )
-            )
-          ],
           actionLefts: [
             IconButton(
                 onPressed: (){

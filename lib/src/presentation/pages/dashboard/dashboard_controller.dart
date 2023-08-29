@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:i_trade/core/initialize/theme.dart';
 
 import 'package:i_trade/src/presentation/pages/home/home_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/manage_page.dart';
@@ -14,6 +15,7 @@ class DashboardController extends GetxController {
   RxString appBarTitle = 'Trang chủ'.obs;
   RxString lastSelected = 'TAB: 0'.obs;
   RxDouble itemCount = 20.0.obs;
+  DateTime currentBackPressTime = DateTime.now();
   Rx<Icon> icon = const Icon(
     Icons.home,
     size: 30.0,
@@ -21,6 +23,16 @@ class DashboardController extends GetxController {
   Rx<RangeValues> currentRangeValues = const RangeValues(0, 30000000).obs;
   var formatNum =
       NumberFormat.simpleCurrency(locale: 'vi-VN', decimalDigits: 0);
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Get.snackbar('Thông báo', 'Nhấn back lần nữa để thoát ứng dụng', backgroundColor: kSecondaryRed, colorText: kTextColor);
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
 
   void selectedTab(int index) {
     lastSelected.call('TAB: $index');

@@ -164,7 +164,7 @@ class InformationPage extends GetView<InformationController> {
                         ),
                       ),
                       Positioned(
-                        top: MediaQuery.of(context).size.height * 0.14,
+                        top: MediaQuery.of(context).size.height * 0.125,
                         right: 40.0,
                         child: Container(
                           padding: const EdgeInsets.all(8.0),

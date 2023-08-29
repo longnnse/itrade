@@ -18,6 +18,7 @@ class LoginPage extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: kBackgroundBottomBar,
         body: Stack(
           children: [

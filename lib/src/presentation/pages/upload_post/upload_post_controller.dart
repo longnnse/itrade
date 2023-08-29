@@ -108,6 +108,7 @@ class UploadPostController extends GetxController {
           priceController.clear();
           addressController.clear();
           mediaModels.clear();
+          lstFiles.clear();
           isLoading.call(false);
           Navigator.pop(context, true);
         },

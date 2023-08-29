@@ -14,7 +14,7 @@ import 'package:i_trade/src/presentation/pages/information/widgets/bao_cao_vi_ph
 import 'package:i_trade/src/presentation/pages/information/widgets/my_feedback_page.dart';
 import 'package:i_trade/src/presentation/pages/information/widgets/vi_cua_toi_page.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:momo_vn/momo_vn.dart';
+// import 'package:momo_vn/momo_vn.dart';
 
 import '../../../../core/initialize/core_images.dart';
 import '../../../../core/initialize/core_url.dart';
@@ -25,6 +25,7 @@ import '../../../domain/models/request_post_result_model.dart';
 import '../../../domain/models/request_result_model.dart';
 import '../../../domain/models/update_ava_result_model.dart';
 import '../../../domain/services/manage_service.dart';
+import '../dashboard/dashboard_controller.dart';
 import '../edit_profile/edit_profile_page.dart';
 import '../home/home_controller.dart';
 import '../upload_post/upload_post_page.dart';
@@ -52,10 +53,10 @@ class InformationController extends GetxController {
   final Rxn<RequestPostResultModel> requestReceivedLst = Rxn<RequestPostResultModel>();
   final Rxn<RequestResultModel> responseReport = Rxn<RequestResultModel>();
   final TextEditingController reportController = TextEditingController();
-  late MomoVn momoPay;
+  // late MomoVn momoPay;
   final ImagePicker picker = ImagePicker();
   Rxn<File> file = Rxn<File>();
-  late PaymentResponse momoPaymentResult;
+  // late PaymentResponse momoPaymentResult;
   RxString paymentStatus = ''.obs;
   RxString postID = ''.obs;
   @override
@@ -63,32 +64,32 @@ class InformationController extends GetxController {
     super.onInit();
   }
 
-  void setStatusValue() {
-    paymentStatus.call('Đã chuyển thanh toán');
-    if (momoPaymentResult.isSuccess == true) {
-      paymentStatus.value += "\nTình trạng: Thành công.";
-      paymentStatus.value += "\nSố điện thoại: ${momoPaymentResult.phoneNumber}";
-      paymentStatus.value += "\nExtra: ${momoPaymentResult.extra!}";
-      paymentStatus.value += "\nToken: ${momoPaymentResult.token}";
-    }
-    else {
-      paymentStatus.value += "\nTình trạng: Thất bại.";
-      paymentStatus.value += "\nExtra: ${momoPaymentResult.extra}";
-      paymentStatus.value += "\nMã lỗi: ${momoPaymentResult.status}";
-    }
-  }
+  // void setStatusValue() {
+  //   paymentStatus.call('Đã chuyển thanh toán');
+  //   if (momoPaymentResult.isSuccess == true) {
+  //     paymentStatus.value += "\nTình trạng: Thành công.";
+  //     paymentStatus.value += "\nSố điện thoại: ${momoPaymentResult.phoneNumber}";
+  //     paymentStatus.value += "\nExtra: ${momoPaymentResult.extra!}";
+  //     paymentStatus.value += "\nToken: ${momoPaymentResult.token}";
+  //   }
+  //   else {
+  //     paymentStatus.value += "\nTình trạng: Thất bại.";
+  //     paymentStatus.value += "\nExtra: ${momoPaymentResult.extra}";
+  //     paymentStatus.value += "\nMã lỗi: ${momoPaymentResult.status}";
+  //   }
+  // }
 
-  void handlePaymentSuccess(PaymentResponse response) {
-    momoPaymentResult = response;
-    setStatusValue();
-    Get.snackbar('Thông báo', "THÀNH CÔNG: ${response.phoneNumber}", backgroundColor: kSecondaryGreen, colorText: kTextColor);
-  }
-
-  void handlePaymentError(PaymentResponse response) {
-    momoPaymentResult = response;
-    setStatusValue();
-    Get.snackbar('Thông báo', "THẤT BẠI: ${response.message}", backgroundColor: kSecondaryRed, colorText: kTextColor);
-  }
+  // void handlePaymentSuccess(PaymentResponse response) {
+  //   momoPaymentResult = response;
+  //   setStatusValue();
+  //   Get.snackbar('Thông báo', "THÀNH CÔNG: ${response.phoneNumber}", backgroundColor: kSecondaryGreen, colorText: kTextColor);
+  // }
+  //
+  // void handlePaymentError(PaymentResponse response) {
+  //   momoPaymentResult = response;
+  //   setStatusValue();
+  //   Get.snackbar('Thông báo', "THẤT BẠI: ${response.message}", backgroundColor: kSecondaryRed, colorText: kTextColor);
+  // }
 
   Future<void> getPersonalPosts() async {
     //TODO use test
@@ -181,6 +182,8 @@ class InformationController extends GetxController {
     ctl.selectedMyProductList.clear();
     ctl.selectedMyProductIDs.clear();
     AppSettings.clearAllSharePref();
+    DashboardController ctlDB = Get.find();
+    ctlDB.selectedTab(0);
     Get.offNamedUntil('LoginPage', (route) => false);
     // final result = Get.toNamed(LoginPage.routeName);
     // if(result == true){

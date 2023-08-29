@@ -72,6 +72,7 @@ class HomeController extends GetxController {
     firebaseMessageSetup();
   }
 
+
   firebaseMessageSetup() async {
     String? fcmToken = await FirebaseMessaging.instance.getToken();
     print("...my device token is $fcmToken");

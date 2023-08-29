@@ -22,6 +22,7 @@ class ManageGroupPersonalPage extends GetView<ManageController> {
   Widget build(BuildContext context) {
     controller.getGroupPersonal(pageIndex: 1, pageSize: 50);
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
           context: context,
           title: 'Nhóm sản phẩm trao đổi của tôi',

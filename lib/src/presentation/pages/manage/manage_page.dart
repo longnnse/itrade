@@ -27,6 +27,7 @@ class ManagePage extends GetView<ManageController> {
     Get.put(ManageController());
     controller.getPersonalPosts();
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: kBackground,
         body: RefreshIndicator(
           onRefresh: controller.refreshPageQuanLy,

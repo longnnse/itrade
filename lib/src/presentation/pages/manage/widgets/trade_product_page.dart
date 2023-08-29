@@ -23,6 +23,7 @@ class TradeProductPage extends GetView<ManageController> {
   Widget build(BuildContext context) {
     controller.getPersonalPosts();
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
             context: context,
             title: 'Danh sách sản phẩm trao đổi',
@@ -84,8 +85,11 @@ class TradeProductPage extends GetView<ManageController> {
                     if(controller.productList.value!.isNotEmpty) {
                       return Column(
                         children: [
-                          for(var cont in controller.productList.value!)
-                            _buildItem(context: context, model: cont)
+                          for(var cont in controller.productList.value!)...[
+                            if(cont.isConfirmed == false)
+                              _buildItem(context: context, model: cont)
+                          ]
+
                         ],
                       );
                     } else {

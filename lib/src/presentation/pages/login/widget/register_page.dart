@@ -17,6 +17,7 @@ class RegisterPage extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
           context: context,
           title: 'Đăng ký',

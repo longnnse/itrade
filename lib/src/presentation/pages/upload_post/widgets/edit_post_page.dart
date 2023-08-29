@@ -30,6 +30,7 @@ class EditPostPage extends GetView<UploadPostController> {
     }
 
     return Scaffold(
+        resizeToAvoidBottomInset: true,
       appBar: AppbarCustomize.buildAppbar(
         context: context,
         title: 'Chỉnh sửa bài đăng bài',

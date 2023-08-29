@@ -22,6 +22,7 @@ class MultiCartProductPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     controller.getPersonalPosts();
     return Scaffold(
+      resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
             context: context,
             title: 'Danh sách sản phẩm muốn trao đổi',

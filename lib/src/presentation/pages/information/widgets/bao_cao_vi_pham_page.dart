@@ -16,6 +16,7 @@ class BaoCaoViPhamPage extends GetView<InformationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
           context: context,
           title: 'Báo cáo bài đăng',

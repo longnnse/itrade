@@ -26,6 +26,7 @@ class UploadPostPage extends GetView<UploadPostController> {
     }
 
     return Scaffold(
+        resizeToAvoidBottomInset: true,
       appBar: AppbarCustomize.buildAppbar(
         context: context,
         title: controller.isPostToTrade.value == false ? 'Đăng bài' : 'Đăng bài trao đổi',

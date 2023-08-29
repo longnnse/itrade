@@ -64,7 +64,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                       if(controller.tabInt.value == 0)...[
                         if(controller.requestReceivedLst.value!.data.isNotEmpty)...[
                           for(var cont in controller.requestReceivedLst.value!.data)
-                            _buildHistoryRequestItem(context: context, dataRequest: cont)
+                            _buildHistoryRequestItem(context: context, dataRequest: cont, idReq: cont.id)
                         ]else...[
                           Center(
                               child: Text(
@@ -286,7 +286,7 @@ class ManageHistoryPage extends GetView<ManageController> {
     );
   }
 
-  Widget _buildHistoryRequestItem({required BuildContext context, required RequestResultModel dataRequest}){
+  Widget _buildHistoryRequestItem({required BuildContext context, required RequestResultModel dataRequest, required String idReq}){
     return Container(
       margin: const EdgeInsets.only(top: 15.0),
       decoration: BoxDecoration(
@@ -325,6 +325,53 @@ class ManageHistoryPage extends GetView<ManageController> {
             ),
           ),
           const SizedBox(height: 10.0,),
+          if(dataRequest.status != 'Accept')
+            Container(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              width: Get.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () => controller.postAcceptRequest(tradeID: idReq, context: context),
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: kSecondaryGreen,
+                              width: 2.0
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: kSecondaryGreen
+                      ),
+                      child: Text(
+                        'Đồng ý',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10.0,),
+                  GestureDetector(
+                    onTap: () => controller.postDenyRequest(tradeID: idReq, context: context),
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: kSecondaryRed,
+                              width: 2.0
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: kSecondaryRed
+                      ),
+                      child: Text(
+                        'Từ chối',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
         ],
       ),
     );

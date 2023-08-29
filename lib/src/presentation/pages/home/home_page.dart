@@ -163,7 +163,7 @@ class HomePage extends GetView<HomeController> {
           Container(
             width: MediaQuery.of(context).size.width * 0.2,
             height: MediaQuery.of(context).size.width * 0.2,
-            margin: const EdgeInsets.only(bottom: 10.0),
+            margin: const EdgeInsets.only(bottom: 5.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
@@ -267,6 +267,8 @@ class HomePage extends GetView<HomeController> {
                       child: Text(
                         '${cont.user!.lastName} ${cont.user!.firstName}',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                     SizedBox(

@@ -24,6 +24,7 @@ class SearchPage extends GetView<SearchControllerCustom> {
     controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
     controller.getCategories(pageIndex: 1, pageSize: 10);
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: kBackground,
         body: RefreshIndicator(
           onRefresh: controller.refreshPage,
@@ -78,63 +79,63 @@ class SearchPage extends GetView<SearchControllerCustom> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
+          // Row(
+          //   children: [
+          //     const Icon(
+          //       Icons.location_on,
+          //       size: 25.0,
+          //     ),
+          //     const SizedBox(width: 10.0,),
+          //     Text(
+          //       'Khu vực:',
+          //       style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2),
+          //     ),
+          //     const SizedBox(width: 10.0,),
+          //     Row(
+          //       children: [
+          //         Text(
+          //           'Tp Hồ Chí Minh',
+          //           style: Theme.of(context).textTheme.titleMedium,
+          //         ),
+          //         const Icon(
+          //           Icons.arrow_drop_down,
+          //           size: 20.0,
+          //         )
+          //       ],
+          //     )
+          //   ],
+          // ),
+          // const SizedBox(height: 5.0,),
           Row(
             children: [
-              const Icon(
-                Icons.location_on,
-                size: 25.0,
-              ),
-              const SizedBox(width: 10.0,),
-              Text(
-                'Khu vực:',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2),
-              ),
-              const SizedBox(width: 10.0,),
-              Row(
-                children: [
-                  Text(
-                    'Tp Hồ Chí Minh',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const Icon(
-                    Icons.arrow_drop_down,
-                    size: 20.0,
-                  )
-                ],
-              )
-            ],
-          ),
-          const SizedBox(height: 5.0,),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () => _buildModelBottomFilter(context, lstCate),
-                child: Obx(() => Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: controller.cateName.value == '' ? kBackground : kPrimaryLightColor,
-                          width: 1.5
-                      ),
-                      color: controller.cateName.value == '' ? kBackgroundBottomBar : kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(5.0)
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.filter_alt_outlined,
-                        size: 20.0,
-                        color: controller.cateName.value == '' ? Colors.black : Colors.white,
-                      ),
-                      Text(
-                        'Lọc',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: controller.cateName.value == '' ? Colors.black : Colors.white),
-                      ),
-                    ],
-                  ),
-                )),
-              ),
-              const SizedBox(width: 10.0,),
+              // GestureDetector(
+              //   onTap: () => _buildModelBottomFilter(context, lstCate),
+              //   child: Obx(() => Container(
+              //     padding: const EdgeInsets.all(10.0),
+              //     decoration: BoxDecoration(
+              //         border: Border.all(
+              //             color: controller.cateName.value == '' ? kBackground : kPrimaryLightColor,
+              //             width: 1.5
+              //         ),
+              //         color: controller.cateName.value == '' ? kBackgroundBottomBar : kPrimaryLightColor,
+              //         borderRadius: BorderRadius.circular(5.0)
+              //     ),
+              //     child: Row(
+              //       children: [
+              //         Icon(
+              //           Icons.filter_alt_outlined,
+              //           size: 20.0,
+              //           color: controller.cateName.value == '' ? Colors.black : Colors.white,
+              //         ),
+              //         Text(
+              //           'Lọc',
+              //           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: controller.cateName.value == '' ? Colors.black : Colors.white),
+              //         ),
+              //       ],
+              //     ),
+              //   )),
+              // ),
+              // const SizedBox(width: 10.0,),
               GestureDetector(
                 onTap: () => controller.showSelectDanhMuc(context),
                 child: Container(

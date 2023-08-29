@@ -34,10 +34,10 @@ class EditProfileController extends GetxController {
     isLoadingUpdate.call(true);
     final Either<ErrorObject, UpdateUserResultModel> res = await _loginService.putUser(
       id: AppSettings.getValue(KeyAppSetting.userId),
-      firstName: firstNameController.text,
-      lastName: lastNameController.text,
+      firstName: '${firstNameController.text != '' ? firstNameController.text : AppSettings.getValue(KeyAppSetting.fullName).split(' ').first} ',
+      lastName: '${lastNameController.text != '' ? lastNameController.text : AppSettings.getValue(KeyAppSetting.fullName).split(' ').first} ',
       address: addressController.text,
-      phoneNumber: phoneController.text,
+      phoneNumber: phoneController.text != '' ? phoneController.text : AppSettings.getValue(KeyAppSetting.phoneNumber),
       age: '22',
     );
 
@@ -48,8 +48,14 @@ class EditProfileController extends GetxController {
       },
           (value) async {
         Get.snackbar('Thông báo', 'Chỉnh sửa thông tin thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
-        AppSettings.setValue(KeyAppSetting.fullName, '${firstNameController.text} ${lastNameController.text}');
-        AppSettings.setValue(KeyAppSetting.phoneNumber, phoneController.text);
+        if(firstNameController.text != '' || lastNameController.text != ''){
+          AppSettings.setValue(KeyAppSetting.fullName, '${firstNameController.text} ${lastNameController.text}');
+        }
+
+        if(phoneController.text != ''){
+          AppSettings.setValue(KeyAppSetting.phoneNumber, phoneController.text);
+        }
+
         firstNameController.clear();
         lastNameController.clear();
         phoneController.clear();

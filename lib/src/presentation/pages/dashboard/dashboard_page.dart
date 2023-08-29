@@ -23,102 +23,105 @@ class DashboardPage extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     HomeController ctrler = Get.find();
-    return Obx(() => Scaffold(
-      appBar: controller.lastSelected.value != 'TAB: 4' ? AppbarCustomize.buildAppbar(
-        context: context,
-        title: controller.appBarTitle.value,
-        isUseOnlyBack: false,
-        actionRights: [
-          // if(controller.lastSelected.value == 'TAB: 0')
-          //   IconButton(
-          //       onPressed: () => Get.toNamed(UploadPostPage.routeName),
-          //       icon: const Icon(
-          //         Icons.upload,
-          //         color: Colors.white,
-          //         size: 25.0,
-          //       )
-          //   ),
-          Stack(
-            children: [
-              IconButton(
-                  onPressed: () => Get.toNamed(MultiCartProductPage.routeName),
-                  icon: const Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.white,
-                    size: 25.0,
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: Obx(() => Scaffold(
+        appBar: controller.lastSelected.value != 'TAB: 4' ? AppbarCustomize.buildAppbar(
+          context: context,
+          title: controller.appBarTitle.value,
+          isUseOnlyBack: false,
+          actionRights: [
+            // if(controller.lastSelected.value == 'TAB: 0')
+            //   IconButton(
+            //       onPressed: () => Get.toNamed(UploadPostPage.routeName),
+            //       icon: const Icon(
+            //         Icons.upload,
+            //         color: Colors.white,
+            //         size: 25.0,
+            //       )
+            //   ),
+            Stack(
+              children: [
+                IconButton(
+                    onPressed: () => Get.toNamed(MultiCartProductPage.routeName),
+                    icon: const Icon(
+                      Icons.add_shopping_cart,
+                      color: Colors.white,
+                      size: 25.0,
+                    )
+                ),
+                Positioned(
+                  right: 0.0,
+                  child: Container(
+                    width: 20.0,
+                    height: 20.0,
+                    padding: const EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40.0),
+                      color: kSecondaryRed
+                    ),
+                    child: Text(
+                      '${ctrler.selectedProductList.length}',
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   )
-              ),
-              Positioned(
-                right: 0.0,
-                child: Container(
-                  width: 20.0,
-                  height: 20.0,
-                  padding: const EdgeInsets.all(3.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40.0),
-                    color: kSecondaryRed
-                  ),
-                  child: Text(
-                    '${ctrler.selectedProductList.length}',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
                 )
-              )
-            ],
-          ),
-          if(controller.lastSelected.value == 'TAB: 0' || controller.lastSelected.value == 'TAB: 1')
-            IconButton(
-                onPressed: () => _buildModelBottomFilter(context),
-                icon: const Icon(
-                  Icons.filter_alt,
-                  color: Colors.white,
-                  size: 25.0,
-                )
+              ],
             ),
-          IconButton(
-            onPressed: () => Get.toNamed(NotiPage.routeName),
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.white,
-              size: 25.0,
+            // if(controller.lastSelected.value == 'TAB: 0' || controller.lastSelected.value == 'TAB: 1')
+            //   IconButton(
+            //       onPressed: () => _buildModelBottomFilter(context),
+            //       icon: const Icon(
+            //         Icons.filter_alt,
+            //         color: Colors.white,
+            //         size: 25.0,
+            //       )
+            //   ),
+            IconButton(
+              onPressed: () => Get.toNamed(NotiPage.routeName),
+              icon: const Icon(
+                Icons.notifications,
+                color: Colors.white,
+                size: 25.0,
+              )
             )
-          )
-        ]
-      ) : null,
-      floatingActionButtonLocation: CenterDockedFloatingActionButtonLocation(controller.itemCount.value),
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn1",
-        onPressed: () {},
-        child: Container(
-          width: 60,
-          height: 60,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: kDefaultGradient,
+          ]
+        ) : null,
+        floatingActionButtonLocation: CenterDockedFloatingActionButtonLocation(controller.itemCount.value),
+        floatingActionButton: FloatingActionButton(
+          heroTag: "btn1",
+          onPressed: () {},
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: kDefaultGradient,
+            ),
+            child: controller.icon.value,
           ),
-          child: controller.icon.value,
         ),
-      ),
-      backgroundColor: kBackground,
-      bottomNavigationBar: FABBottomAppBar(
-          items: [
-            FABBottomAppBarItem(iconData: Icons.home, text: 'Trang chủ'),
-            FABBottomAppBarItem(iconData: Icons.dashboard, text: 'Quản lý'),
-            FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Trao đổi'),
-            FABBottomAppBarItem(iconData: Icons.search, text: 'Tìm kiếm'),
-            FABBottomAppBarItem(iconData: Icons.person, text: 'Cá nhân'),
-          ],
-          backgroundColor: kBackgroundBottomBar,
-          color: kPrimaryLightColor,
-          selectedColor: kPrimaryLightColor,
-          notchedShape: const CircularNotchedRectangle(),
-          onTabSelected: controller.selectedTab
-      ),
-      body: Obx(
-          () => controller.changePage()
-      ),
-    ));
+        backgroundColor: kBackground,
+        bottomNavigationBar: FABBottomAppBar(
+            items: [
+              FABBottomAppBarItem(iconData: Icons.home, text: 'Trang chủ'),
+              FABBottomAppBarItem(iconData: Icons.dashboard, text: 'Quản lý'),
+              FABBottomAppBarItem(iconData: Icons.list_alt, text: 'Trao đổi'),
+              FABBottomAppBarItem(iconData: Icons.search, text: 'Tìm kiếm'),
+              FABBottomAppBarItem(iconData: Icons.person, text: 'Cá nhân'),
+            ],
+            backgroundColor: kBackgroundBottomBar,
+            color: kPrimaryLightColor,
+            selectedColor: kPrimaryLightColor,
+            notchedShape: const CircularNotchedRectangle(),
+            onTabSelected: controller.selectedTab
+        ),
+        body: Obx(
+            () => controller.changePage()
+        ),
+      )),
+    );
   }
 
 

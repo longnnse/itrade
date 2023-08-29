@@ -34,8 +34,8 @@ class ManageTradeListPage extends GetView<ManageController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildTab(context,
-                          controller.tradingReceivedLst.value!.length,
-                          controller.tradingSentLst.value!.length
+                          controller.tradingReceivedLst.value != null ? controller.tradingReceivedLst.value!.length : 0,
+                          controller.tradingSentLst.value != null ? controller.tradingSentLst.value!.length : 0
                       ),
                       if(controller.tabIntTD.value == 0)...[
                         Obx(() {
@@ -48,7 +48,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                             return Column(
                               children: [
                                 for(var cont in controller.tradingReceivedLst.value!)
-                                  _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!)
+                                  _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!, isGuiTraoDoi: true)
                               ],
                             );
                           } else {
@@ -148,7 +148,7 @@ class ManageTradeListPage extends GetView<ManageController> {
     ));
   }
 
-  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost}){
+  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost, bool isGuiTraoDoi = false}){
     return Container(
       margin: const EdgeInsets.only(top: 15.0),
       decoration: BoxDecoration(
@@ -325,48 +325,48 @@ class ManageTradeListPage extends GetView<ManageController> {
                         ),
                       )
                     ]else...[
-                      // if(dataTrade.status != 'Accept')
-                      //   Row(
-                      //     children: [
-                      //       GestureDetector(
-                      //         onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
-                      //         child: Container(
-                      //           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                      //           decoration: BoxDecoration(
-                      //               border: Border.all(
-                      //                   color: kSecondaryGreen,
-                      //                   width: 2.0
-                      //               ),
-                      //               borderRadius: BorderRadius.circular(5.0),
-                      //               color: kSecondaryGreen
-                      //           ),
-                      //           child: Text(
-                      //             'Đồng ý',
-                      //             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       const SizedBox(width: 10.0,),
-                      //       GestureDetector(
-                      //         onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
-                      //         child: Container(
-                      //           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                      //           decoration: BoxDecoration(
-                      //               border: Border.all(
-                      //                   color: kSecondaryRed,
-                      //                   width: 2.0
-                      //               ),
-                      //               borderRadius: BorderRadius.circular(5.0),
-                      //               color: kSecondaryRed
-                      //           ),
-                      //           child: Text(
-                      //             'Từ chối',
-                      //             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                      //           ),
-                      //         ),
-                      //       )
-                      //     ],
-                      //   )
+                      if(dataTrade.status != 'Accept' && isGuiTraoDoi == true)
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: kSecondaryGreen,
+                                        width: 2.0
+                                    ),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    color: kSecondaryGreen
+                                ),
+                                child: Text(
+                                  'Đồng ý',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10.0,),
+                            GestureDetector(
+                              onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: kSecondaryRed,
+                                        width: 2.0
+                                    ),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    color: kSecondaryRed
+                                ),
+                                child: Text(
+                                  'Từ chối',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
                     ]
                   ],
                 ),

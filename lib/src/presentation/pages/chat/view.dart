@@ -15,6 +15,7 @@ class ChatPage extends GetView<ChatController> {
   const ChatPage({super.key});
 
   AppBar _buildAppBar() {
+
     return AppBar(
       title: Obx(() {
         return Container(
@@ -77,6 +78,7 @@ class ChatPage extends GetView<ChatController> {
   Widget build(BuildContext context) {
     ManageController ctl = Get.find();
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: _buildAppBar(),
         body: Obx(() => SafeArea(
                 child: Stack(
@@ -106,12 +108,12 @@ class ChatPage extends GetView<ChatController> {
                             children: [
                               Container(
                                 width: 220.w,
-                                child: TextField(
+                                child: TextFormField(
                                   controller: controller.myInputController,
                                   keyboardType: TextInputType.multiline,
-                                  autofocus: false,
+                                  autofocus: true,
                                   decoration: InputDecoration(
-                                      hintText: "Message....",
+                                      hintText: "Nhập tin nhắn....",
                                       contentPadding: EdgeInsets.only(
                                           left: 15.w, top: 0, bottom: 0),
                                       border: const OutlineInputBorder(
