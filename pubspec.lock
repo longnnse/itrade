@@ -94,7 +94,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "2e71ad1ff71ed8212efc320548c199486dcf847c"
+      resolved-ref: "70d9908c16a20fd07e85d8dd5b51ef3fa02f4569"
       url: "https://github.com/longnnse/httpcore"
     source: git
     version: "0.0.1"
