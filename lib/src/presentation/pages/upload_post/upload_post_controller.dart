@@ -99,6 +99,7 @@ class UploadPostController extends GetxController {
             (value) async {
           if(isPostToTrade.value == true){
             final ManageController manageController = Get.find();
+
             await manageController.postTrading(fromPostId: value.id, toPostId: toPostID.value);
           }
           Get.snackbar('Thông báo', 'Đăng bài thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
@@ -106,6 +107,7 @@ class UploadPostController extends GetxController {
           contentController.clear();
           priceController.clear();
           addressController.clear();
+          mediaModels.clear();
           isLoading.call(false);
           Navigator.pop(context, true);
         },

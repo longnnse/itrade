@@ -28,6 +28,7 @@ import '../upload_post/upload_post_page.dart';
 final RxString groupID = ''.obs;
 class ManageController extends GetxController {
   RxInt tabInt = 0.obs;
+  RxInt tabIntTD = 0.obs;
   final ManageService _manageService = Get.find();
   final RxBool isLoading = false.obs;
   final RxBool isLoadingDelete = false.obs;
@@ -78,6 +79,17 @@ class ManageController extends GetxController {
     super.onInit();
   }
 
+  Future<void> refreshPage() async {
+    getGroup(pageIndex: 1, pageSize: 50);
+  }
+  Future<void> refreshPageQuanLy() async {
+    getPersonalPosts();
+  }
+  Future<void> refreshPageTraoDoi() async {
+    getTradingReceived();
+    getTradingSent();
+  }
+
   void goGoCreatePost() async {
     Get.put<UploadProductService>(UploadProdcutRepositories());
     Get.put(UploadPostController());
@@ -114,6 +126,16 @@ class ManageController extends GetxController {
     if (tabInt.value == 1) {
       getPostRequestedReceived();
     } else {
+      getTradingSent();
+    }
+  }
+
+  void updateStatusTraoDoi(int countTab) {
+    tabIntTD.call(countTab);
+    if (tabIntTD.value == 0) {
+      getTradingReceived();
+    }
+    else {
       getTradingSent();
     }
   }

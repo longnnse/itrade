@@ -27,116 +27,119 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     controller.getCategories(pageIndex: 1, pageSize: 10);
-    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
+    controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
     return Scaffold(
         backgroundColor: kBackgroundBottomBar,
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Khám phá danh mục',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Column(
+        body: RefreshIndicator(
+          onRefresh: controller.refreshPage,
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Khám phá danh mục',
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Column(
+                            children: [
+                              Obx(() {
+                                if (controller.isLoading.value) {
+                                  return const HomeCategoryShimmerWidget(
+                                    columnCount: 3,
+                                  );
+                                }
+                                if(controller.categoryList.value!.isNotEmpty) {
+                                  return GridView.count(
+                                      shrinkWrap: true,
+                                      primary: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 0,
+                                      mainAxisSpacing: 0,
+                                      children: List.generate(controller.categoryList.value!.length, (index) {
+                                        return _buildItemButton(context: context, title: controller.categoryList.value![index].name, cont: controller.categoryList.value![index]);
+                                      }));
+                                } else {
+                                  return Center(
+                                      child: Text(
+                                        'Không có dữ liệu',
+                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                                      )
+                                  );
+                                }
+                              }),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Obx(() {
-                              if (controller.isLoading.value) {
-                                return const HomeCategoryShimmerWidget(
-                                  columnCount: 3,
-                                );
-                              }
-                              if(controller.categoryList.value!.isNotEmpty) {
-                                return GridView.count(
-                                    shrinkWrap: true,
-                                    primary: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 0,
-                                    mainAxisSpacing: 0,
-                                    children: List.generate(controller.categoryList.value!.length, (index) {
-                                      return _buildItemButton(context: context, title: controller.categoryList.value![index].name, cont: controller.categoryList.value![index]);
-                                    }));
-                              } else {
-                                return Center(
-                                    child: Text(
-                                      'Không có dữ liệu',
-                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
-                                    )
-                                );
-                              }
-                            }),
+                            Text(
+                              'Nổi bật',
+                              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            GestureDetector(
+                              onTap: () =>  Get.toNamed(ManageGroupPage.routeName),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Nhóm bài đăng trao đổi',
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600,color: kPrimaryLightColor),
+                                  ),
+                                 const Icon(
+                                    Icons.arrow_right,
+                                    size: 25.0,
+                                    color: kPrimaryLightColor,
+                                  )
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Nổi bật',
-                            style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          GestureDetector(
-                            onTap: () =>  Get.toNamed(ManageGroupPage.routeName),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Nhóm bài đăng trao đổi',
-                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600,color: kPrimaryLightColor),
-                                ),
-                               const Icon(
-                                  Icons.arrow_right,
-                                  size: 25.0,
-                                  color: kPrimaryLightColor,
+                        const SizedBox(height: 10.0,),
+                        Obx(() {
+                          if (controller.isLoadingProduct.value) {
+                            return const HomeProductShimmerWidget(
+                              columnCount: 2,
+                            );
+                          }
+                          if(controller.productModel.value != null) {
+                            return _buildItemGridView(context: context, productModel: controller.productModel.value!);
+                          } else {
+                            return Center(
+                                child: Text(
+                                  'Không có dữ liệu',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
                                 )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10.0,),
-                      Obx(() {
-                        if (controller.isLoadingProduct.value) {
-                          return const HomeProductShimmerWidget(
-                            columnCount: 2,
-                          );
-                        }
-                        if(controller.productModel.value != null) {
-                          return _buildItemGridView(context: context, productModel: controller.productModel.value!);
-                        } else {
-                          return Center(
-                              child: Text(
-                                'Không có dữ liệu',
-                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
-                              )
-                          );
-                        }
-                      }),
+                            );
+                          }
+                        }),
 
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    topLeft: Radius.circular(10.0)
-                ),
-                color: kBackground,
+                )
               ),
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10.0),
+                      topLeft: Radius.circular(10.0)
+                  ),
+                  color: kBackground,
+                ),
 
-              height: 5.0,
-            )
-          ],
+                height: 5.0,
+              )
+            ],
+          ),
         ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed(UploadPostPage.routeName),

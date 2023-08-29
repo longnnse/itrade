@@ -30,7 +30,7 @@ class ProductDetailPage extends GetView<HomeController> {
     }else{
       controller.getPersonalPostsByID(controller.idOwner.value);
     }
-    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
+    controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
             context: context,
@@ -413,6 +413,7 @@ class ProductDetailPage extends GetView<HomeController> {
                     maxLines: controller.isMore.value == false ? 2 : 20,
                   ),
                 )),
+                if(content.user!.phoneNumber != '')
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Text(
@@ -586,6 +587,7 @@ class ProductDetailPage extends GetView<HomeController> {
   }
 
   Widget _buildProfile(BuildContext context, Data content){
+    print('zxvzxv' + CoreUrl.baseAvaURL + content.user!.userAva!);
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -607,10 +609,10 @@ class ProductDetailPage extends GetView<HomeController> {
                 borderRadius: BorderRadius.circular(60.0),
                 boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black.withOpacity(0.25), spreadRadius: 2, offset: const Offset(0, 4))],
               ),
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 radius: 60.0,
                 backgroundImage:
-                NetworkImage('https://kpopping.com/documents/1a/3/YongYong-fullBodyPicture.webp?v=7c2a3'),
+                NetworkImage(content.user!.userAva != ''? (CoreUrl.baseAvaURL + content.user!.userAva!) : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDK4gXyt3wzCyT9ekbDsR-thEKFtWuQoFraQ&usqp=CAU'),
                 backgroundColor: Colors.transparent,
               ),
             ),
@@ -672,26 +674,26 @@ class ProductDetailPage extends GetView<HomeController> {
 
                   ],
                 ),
-                const SizedBox(height: 5.0,),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    for(int i = 0; i < 5; i++)
-                      const Icon(
-                        Icons.star,
-                        size: 25.0,
-                        color: kSecondaryYellow,
-                      ),
-                    Text(
-                      '5.0',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      ' (4 đánh giá)',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400, color: kPrimaryLightColor),
-                    ),
-                  ],
-                ),
+                // const SizedBox(height: 5.0,),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     for(int i = 0; i < 5; i++)
+                //       const Icon(
+                //         Icons.star,
+                //         size: 25.0,
+                //         color: kSecondaryYellow,
+                //       ),
+                //     Text(
+                //       '5.0',
+                //       style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400),
+                //     ),
+                //     Text(
+                //       ' (4 đánh giá)',
+                //       style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w400, color: kPrimaryLightColor),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -717,9 +719,13 @@ class ProductDetailPage extends GetView<HomeController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        isSimilar == false ? 'Tin khác của $name' : 'Tin đăng tương tự',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+                      Expanded(
+                        child: Text(
+                          isSimilar == false ? 'Tin khác của $name' : 'Tin đăng tương tự',
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
                       ),
                       Row(
                         children: [
@@ -751,7 +757,12 @@ class ProductDetailPage extends GetView<HomeController> {
                             children: [
                               for(var cont in controller.personalProductList.value!)
                                 GestureDetector(
-                                  onTap: () => Get.toNamed(ProductDetailPage.routeName),
+                                  onTap: () {
+                                    controller.countImage.call(0);
+                                    controller.getPostByID(id: cont.id);
+                                    controller.getPersonalPostsByID(cont.user!.id);
+                                    controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
+                                  },
                                   child: Container(
                                     margin: const EdgeInsets.only(right: 10.0, top: 10.0),
                                     child: Column(
@@ -879,7 +890,14 @@ class ProductDetailPage extends GetView<HomeController> {
                         for(var cont in controller.productModel.value!.data)...[
                           if(cont.isConfirmed == true)...[
                             GestureDetector(
-                              onTap: () => Get.toNamed(ProductDetailPage.routeName),
+                              onTap: () {
+                                controller.countImage.call(0);
+                                controller.getPostByID(id: cont.id);
+                                // controller.getPersonalPosts();
+                                controller.getPersonalPostsByID(cont.user!.id);
+
+                                controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
+                              },
                               child: Container(
                                 margin: const EdgeInsets.only(right: 10.0, top: 10.0),
                                 child: Column(

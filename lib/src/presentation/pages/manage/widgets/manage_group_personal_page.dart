@@ -20,7 +20,7 @@ class ManageGroupPersonalPage extends GetView<ManageController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getGroupPersonal(pageIndex: 1, pageSize: 20);
+    controller.getGroupPersonal(pageIndex: 1, pageSize: 50);
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,

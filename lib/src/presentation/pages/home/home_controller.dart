@@ -84,6 +84,11 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> refreshPage() async {
+    getCategories(pageIndex: 1, pageSize: 10);
+    getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
+  }
+
   void nextImage(int count) {
     countImage.call(count);
   }

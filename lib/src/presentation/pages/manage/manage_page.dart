@@ -12,9 +12,6 @@ import 'package:i_trade/src/presentation/pages/upload_post/widgets/edit_post_pag
 import '../../../../core/initialize/core_url.dart';
 import '../../../../core/initialize/theme.dart';
 import '../../../../core/utils/app_settings.dart';
-import '../../../domain/models/trading_sent_model.dart';
-import '../../../domain/services/upload_product_service.dart';
-import '../../../infrastructure/repositories/upload_product_repository.dart';
 
 
 class ManagePage extends GetView<ManageController> {
@@ -31,94 +28,106 @@ class ManagePage extends GetView<ManageController> {
     controller.getPersonalPosts();
     return Scaffold(
         backgroundColor: kBackground,
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            color: kBackgroundBottomBar,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                                  child: Text(
-                                    AppSettings.getValue(KeyAppSetting.fullName),
-                                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                Row(
+        body: RefreshIndicator(
+          onRefresh: controller.refreshPageQuanLy,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              color: kBackgroundBottomBar,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () => Get.toNamed(ManageHistoryPage.routeName),
-                                      child: Container(
-                                        margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
-                                        padding: const EdgeInsets.all(8.0),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            border: Border.all(
-                                                color: kPrimaryLightColor,
-                                                width: 2.0
-                                            )
-                                        ),
-                                        child: Text(
-                                          'Lịch sử',
-                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor),
-                                        ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                                      child: Text(
+                                        AppSettings.getValue(KeyAppSetting.fullName),
+                                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
                                       ),
                                     ),
-                                    Obx(() {
-                                      if(controller.selectedProductIDs.isNotEmpty){
-                                        return GestureDetector(
-                                          onTap: () => controller.postGroup2(description: '', lstPostID: controller.selectedProductIDs),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => Get.toNamed(ManageHistoryPage.routeName),
                                           child: Container(
                                             margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                                             padding: const EdgeInsets.all(8.0),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5.0),
-                                              border: Border.all(
-                                                  color: kPrimaryLightColor,
-                                                  width: 2.0
-                                              ),
-                                              color: kPrimaryLightColor,
-                                              boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+                                                borderRadius: BorderRadius.circular(5.0),
+                                                border: Border.all(
+                                                    color: kPrimaryLightColor,
+                                                    width: 2.0
+                                                )
                                             ),
                                             child: Text(
-                                              'Gom bài đăng',
-                                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
+                                              'Lịch sử',
+                                              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor),
                                             ),
                                           ),
-                                        );
-                                      }else{
-                                        return const SizedBox();
-                                      }
+                                        ),
+                                        Obx(() {
+                                          if(controller.selectedProductIDs.isNotEmpty){
+                                            return GestureDetector(
+                                              onTap: () => controller.postGroup2(description: '', lstPostID: controller.selectedProductIDs),
+                                              child: Container(
+                                                margin: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                                                padding: const EdgeInsets.all(8.0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                  border: Border.all(
+                                                      color: kPrimaryLightColor,
+                                                      width: 2.0
+                                                  ),
+                                                  color: kPrimaryLightColor,
+                                                  boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black.withOpacity(0.25), spreadRadius: 1, offset: const Offset(2, 3))],
+                                                ),
+                                                child: Text(
+                                                  'Gom bài đăng',
+                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white),
+                                                ),
+                                              ),
+                                            );
+                                          }else{
+                                            return const SizedBox();
+                                          }
 
-                                    })
+                                        })
 
+                                      ],
+                                    )
                                   ],
-                                )
-                              ],
+                                ),
+                              ),
                             ),
-                          ),
-                          _buildSearch(context: context),
-                          Obx(() {
-                            if (controller.isLoading.value) {
-                              return const ManageProductShimmerWidget(
-                                columnCount: 1,
-                              );
-                            }
-                            if(controller.productList.value!.isNotEmpty) {
-                              return Column(
-                                children: [
-                                  for(var cont in controller.productList.value!)...[
-                                    if(controller.searchStr.value != '')...[
-                                      if(cont.title.contains(controller.searchStr.value))...[
+                            _buildSearch(context: context),
+                            Obx(() {
+                              if (controller.isLoading.value) {
+                                return const ManageProductShimmerWidget(
+                                  columnCount: 1,
+                                );
+                              }
+                              if(controller.productList.value!.isNotEmpty) {
+                                return Column(
+                                  children: [
+                                    for(var cont in controller.productList.value!)...[
+                                      if(controller.searchStr.value != '')...[
+                                        if(cont.title.contains(controller.searchStr.value))...[
+                                          if(controller.lstHide.value.isNotEmpty)...[
+                                            if(!controller.lstHide.contains(cont.id))
+                                              _buildItem(context: context, model: cont)
+                                          ]else...[
+                                            _buildItem(context: context, model: cont)
+                                          ]
+                                        ]
+                                      ]else...[
                                         if(controller.lstHide.value.isNotEmpty)...[
                                           if(!controller.lstHide.contains(cont.id))
                                             _buildItem(context: context, model: cont)
@@ -126,53 +135,46 @@ class ManagePage extends GetView<ManageController> {
                                           _buildItem(context: context, model: cont)
                                         ]
                                       ]
-                                    ]else...[
-                                      if(controller.lstHide.value.isNotEmpty)...[
-                                        if(!controller.lstHide.contains(cont.id))
-                                          _buildItem(context: context, model: cont)
-                                      ]else...[
-                                        _buildItem(context: context, model: cont)
-                                      ]
                                     ]
-                                  ]
-                                ],
-                              );
-                            } else {
-                              return Center(
-                                  child: Text(
-                                    'Không có dữ liệu',
-                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
-                                  )
-                              );
-                            }
+                                  ],
+                                );
+                              } else {
+                                return Center(
+                                    child: Text(
+                                      'Không có dữ liệu',
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                                    )
+                                );
+                              }
 
-                          })
+                            })
 
-                        ],
-                      ),
-                    )
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10.0),
-                        topLeft: Radius.circular(10.0)
-                    ),
-                    color: kBackground,
+                          ],
+                        ),
+                      )
                   ),
-                  height: 5.0,
-                )
-              ],
-            ),
-            Obx(() => controller.isLoadingDelete.value == true ?
-            Positioned(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  color: kBackground.withOpacity(0.5),
-                  child: const Center(child: CircularProgressIndicator()),
-                )) : const SizedBox())
-          ],
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10.0),
+                          topLeft: Radius.circular(10.0)
+                      ),
+                      color: kBackground,
+                    ),
+                    height: 5.0,
+                  )
+                ],
+              ),
+              Obx(() => controller.isLoadingDelete.value == true ?
+              Positioned(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: kBackground.withOpacity(0.5),
+                    child: const Center(child: CircularProgressIndicator()),
+                  )) : const SizedBox())
+            ],
+          ),
         )
     );
   }

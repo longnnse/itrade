@@ -48,11 +48,11 @@ class InformationPage extends GetView<InformationController> {
                                     controller.fullName.value,
                                     style: Theme.of(context).textTheme.titleLarge!.copyWith(color: kTextFieldLightColor),
                                   ),
-                                  const SizedBox(height: 5.0,),
-                                  Text(
-                                      controller.aud.value,
-                                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: kTextFieldLightColor),
-                                  ),
+                                  // const SizedBox(height: 5.0,),
+                                  // Text(
+                                  //     AppSettings.getValue(KeyAppSetting.userId).toString(),
+                                  //   style: Theme.of(context).textTheme.titleSmall!.copyWith(color: kTextFieldLightColor),
+                                  // ),
                                   const SizedBox(height: 10.0,),
                                   Row(
                                     children: [
@@ -81,7 +81,7 @@ class InformationPage extends GetView<InformationController> {
                         ),
                       ),
                       Positioned(
-                        top: MediaQuery.of(context).size.height * 0.2,
+                        top: MediaQuery.of(context).size.height * 0.18,
                         left: 20.0,
                         right: 20.0,
                         child: GestureDetector(

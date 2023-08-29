@@ -27,6 +27,11 @@ class SearchControllerCustom extends GetxController {
     super.onInit();
   }
 
+  Future<void> refreshPage() async {
+    getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
+    getCategories(pageIndex: 1, pageSize: 10);
+  }
+
   void goDetail({required String id}){
     final HomeController homeController = Get.find();
     homeController.idPost.call(id);

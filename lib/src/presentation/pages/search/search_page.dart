@@ -21,49 +21,52 @@ class SearchPage extends GetView<SearchControllerCustom> {
   @override
   Widget build(BuildContext context) {
     Get.put(SearchControllerCustom());
-    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
+    controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '');
     controller.getCategories(pageIndex: 1, pageSize: 10);
     return Scaffold(
         backgroundColor: kBackground,
-        body: Column(
-          children: [
-            Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(() {
-                      if (controller.isLoadingFilter.value) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      if(controller.categoryList.value != null) {
-                        return _buildHeaderFilter(context, controller.categoryList.value!);
-                      } else {
-                        return Center(
-                            child: Text(
-                              'Không có dữ liệu',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
-                            )
-                        );
-                      }
-                    }),
+        body: RefreshIndicator(
+          onRefresh: controller.refreshPage,
+          child: Column(
+            children: [
+              Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(() {
+                        if (controller.isLoadingFilter.value) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        if(controller.categoryList.value != null) {
+                          return _buildHeaderFilter(context, controller.categoryList.value!);
+                        } else {
+                          return Center(
+                              child: Text(
+                                'Không có dữ liệu',
+                                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                              )
+                          );
+                        }
+                      }),
 
-                    _buildSearch(context: context),
-                    Expanded(child: _buildItemList(context: context))
-                  ],
-                )
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    topLeft: Radius.circular(10.0)
-                ),
-                color: kBackground,
+                      _buildSearch(context: context),
+                      Expanded(child: _buildItemList(context: context))
+                    ],
+                  )
               ),
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10.0),
+                      topLeft: Radius.circular(10.0)
+                  ),
+                  color: kBackground,
+                ),
 
-              height: 5.0,
-            )
-          ],
+                height: 5.0,
+              )
+            ],
+          ),
         )
     );
   }
@@ -193,7 +196,7 @@ class SearchPage extends GetView<SearchControllerCustom> {
                 .textTheme
                 .titleMedium!
                 .copyWith(color: kTextColorGrey)),
-        onChanged: (value) => controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '', searchValue: value),
+        onChanged: (value) => controller.getPosts(pageIndex: 1, pageSize: 50, categoryIds: '', searchValue: value),
         onFieldSubmitted: (value) {},
       ),
     );

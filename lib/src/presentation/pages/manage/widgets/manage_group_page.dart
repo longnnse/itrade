@@ -22,7 +22,7 @@ class ManageGroupPage extends GetView<ManageController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getGroup(pageIndex: 1, pageSize: 20);
+    controller.getGroup(pageIndex: 1, pageSize: 50);
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
           context: context,
@@ -30,41 +30,44 @@ class ManageGroupPage extends GetView<ManageController> {
           isUseOnlyBack: true,
         ),
         backgroundColor: kBackground,
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildSearch(context: context),
-                        Expanded(child: _buildItemList(context: context))
-                      ],
-                    )
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10.0),
-                        topLeft: Radius.circular(10.0)
-                    ),
-                    color: kBackground,
+        body: RefreshIndicator(
+          onRefresh: controller.refreshPage,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSearch(context: context),
+                          Expanded(child: _buildItemList(context: context))
+                        ],
+                      )
                   ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10.0),
+                          topLeft: Radius.circular(10.0)
+                      ),
+                      color: kBackground,
+                    ),
 
-                  height: 5.0,
-                )
-              ],
-            ),
-            Obx(() => controller.isLoadingGroup.value == true ?
-            Positioned(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  color: kBackground.withOpacity(0.5),
-                  child: const Center(child: CircularProgressIndicator()),
-                )) : const SizedBox())
-          ],
+                    height: 5.0,
+                  )
+                ],
+              ),
+              Obx(() => controller.isLoadingGroup.value == true ?
+              Positioned(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: kBackground.withOpacity(0.5),
+                    child: const Center(child: CircularProgressIndicator()),
+                  )) : const SizedBox())
+            ],
+          ),
         )
     );
   }
@@ -96,7 +99,7 @@ class ManageGroupPage extends GetView<ManageController> {
                 .textTheme
                 .titleMedium!
                 .copyWith(color: kTextColorGrey)),
-        onChanged: (value) => controller.getGroup(pageIndex: 1, pageSize: 20, searchValue: value),
+        onChanged: (value) => controller.getGroup(pageIndex: 1, pageSize: 50, searchValue: value),
         onFieldSubmitted: (value) {},
       ),
     );

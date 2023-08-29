@@ -21,54 +21,131 @@ class ManageTradeListPage extends GetView<ManageController> {
   Widget build(BuildContext context) {
     Get.put(ManageController());
     controller.getTradingReceived();
+    controller.getTradingSent();
     return Scaffold(
         backgroundColor: kBackground,
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(() {
-                      if (controller.isLoadingTradingReceived.value) {
-                        return const ManageProductShimmerWidget(
-                          columnCount: 1,
-                        );
-                      }
-                      if(controller.tradingReceivedLst.value!.isNotEmpty) {
-                        return Column(
-                          children: [
-                            for(var cont in controller.tradingReceivedLst.value!)
-                              _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!)
-                          ],
-                        );
-                      } else {
-                        return Center(
-                            child: Text(
-                              'Không có dữ liệu',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
-                            )
-                        );
-                      }
-                    })
-
-                  ],
-                ),
-              )
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    topLeft: Radius.circular(10.0)
-                ),
-                color: kBackground,
+        body: RefreshIndicator(
+          onRefresh: controller.refreshPageTraoDoi,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Obx(() => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTab(context,
+                          controller.tradingReceivedLst.value!.length,
+                          controller.tradingSentLst.value!.length
+                      ),
+                      if(controller.tabIntTD.value == 0)...[
+                        Obx(() {
+                          if (controller.isLoadingTradingReceived.value) {
+                            return const ManageProductShimmerWidget(
+                              columnCount: 1,
+                            );
+                          }
+                          if(controller.tradingReceivedLst.value!.isNotEmpty) {
+                            return Column(
+                              children: [
+                                for(var cont in controller.tradingReceivedLst.value!)
+                                  _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!)
+                              ],
+                            );
+                          } else {
+                            return Center(
+                                child: Text(
+                                  'Không có dữ liệu',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                                )
+                            );
+                          }
+                        })
+                      ]else...[
+                        Obx(() {
+                          if (controller.isLoadingTradingSent.value) {
+                            return const ManageProductShimmerWidget(
+                              columnCount: 1,
+                            );
+                          }
+                          if(controller.tradingSentLst.value!.isNotEmpty) {
+                            return Column(
+                              children: [
+                                for(var cont in controller.tradingSentLst.value!)
+                                  _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!)
+                              ],
+                            );
+                          } else {
+                            return Center(
+                                child: Text(
+                                  'Không có dữ liệu',
+                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600, color: kSecondaryRed),
+                                )
+                            );
+                          }
+                        })
+                      ]
+                    ],
+                  )),
+                )
               ),
-              height: 5.0,
-            )
-          ],
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10.0),
+                      topLeft: Radius.circular(10.0)
+                  ),
+                  color: kBackground,
+                ),
+                height: 5.0,
+              )
+            ],
+          ),
         ));
+  }
+
+  Widget _buildTab(BuildContext context, int slRequest, int slSent){
+    return Obx(() => Container(
+      color: kBackgroundBottomBar,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => controller.updateStatusTraoDoi(0),
+            child: Container(
+              //width: MediaQuery.of(context).size.width * 0.4,
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+              decoration: BoxDecoration(
+                gradient: controller.tabIntTD.value == 0 ? kDefaultGradient : null,
+              ),
+              child: Text(
+                'Danh sách trao đổi ($slRequest)',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
+                    color: controller.tabIntTD.value == 0 ? Colors.white : Colors.black),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => controller.updateStatusTraoDoi(1),
+              child: Container(
+                //width: MediaQuery.of(context).size.width * 0.4,
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+                decoration: BoxDecoration(
+                  gradient: controller.tabIntTD.value == 1 ? kDefaultGradient : null,
+                ),
+                child: Text(
+                  'Đã gửi trao đổi ($slSent)',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
+                      color: controller.tabIntTD.value == 1 ? Colors.white : Colors.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 
   Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost}){
@@ -248,52 +325,53 @@ class ManageTradeListPage extends GetView<ManageController> {
                         ),
                       )
                     ]else...[
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: kSecondaryGreen,
-                                      width: 2.0
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  color: kSecondaryGreen
-                              ),
-                              child: Text(
-                                'Đồng ý',
-                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10.0,),
-                          GestureDetector(
-                            onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: kSecondaryRed,
-                                      width: 2.0
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  color: kSecondaryRed
-                              ),
-                              child: Text(
-                                'Từ chối',
-                                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
+                      // if(dataTrade.status != 'Accept')
+                      //   Row(
+                      //     children: [
+                      //       GestureDetector(
+                      //         onTap: () => controller.postAcceptTrade(tradeID: idPost, context: context, isManagePage: true),
+                      //         child: Container(
+                      //           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                      //           decoration: BoxDecoration(
+                      //               border: Border.all(
+                      //                   color: kSecondaryGreen,
+                      //                   width: 2.0
+                      //               ),
+                      //               borderRadius: BorderRadius.circular(5.0),
+                      //               color: kSecondaryGreen
+                      //           ),
+                      //           child: Text(
+                      //             'Đồng ý',
+                      //             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       const SizedBox(width: 10.0,),
+                      //       GestureDetector(
+                      //         onTap: () => controller.postDenyTrade(tradeID: idPost, context: context, isManagePage: true),
+                      //         child: Container(
+                      //           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                      //           decoration: BoxDecoration(
+                      //               border: Border.all(
+                      //                   color: kSecondaryRed,
+                      //                   width: 2.0
+                      //               ),
+                      //               borderRadius: BorderRadius.circular(5.0),
+                      //               color: kSecondaryRed
+                      //           ),
+                      //           child: Text(
+                      //             'Từ chối',
+                      //             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     ],
+                      //   )
                     ]
                   ],
                 ),
                 const SizedBox(width: 10.0,),
-                if(dataTrade.status != 'Deny')
+                if(dataTrade.status != 'Deny' && dataTrade.status != 'Finish')
                   GestureDetector(
                     onTap: () => controller.gochat(dataTrade),
                     child: Container(
