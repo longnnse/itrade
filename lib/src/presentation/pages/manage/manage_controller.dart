@@ -608,7 +608,7 @@ class ManageController extends GetxController {
                 tradingItem.fromGroup!.user!.id
             ? tradingItem.toGroup!.groupPosts![0].post!.user!.userAva!
             : tradingItem.fromGroup!.user!.userAva!,
-        "to_name": '${tradingItem.toGroup!.user!.firstName} ${tradingItem.toGroup!.user!.lastName}'
+        "to_name": '${tradingItem.toGroup!.groupPosts![0].post!.user!.firstName} ${tradingItem.toGroup!.groupPosts![0].post!.user!.lastName}'
       });
     }
   }
