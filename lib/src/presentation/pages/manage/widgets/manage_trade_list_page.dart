@@ -48,7 +48,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                             return Column(
                               children: [
                                 for(var cont in controller.tradingReceivedLst.value!)
-                                  _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!, isGuiTraoDoi: true)
+                                  _buildHistoryTradeItem(context: context, dataTrade: cont, idPost: cont.id!, isGuiTraoDoi: true, isList: true)
                               ],
                             );
                           } else {
@@ -148,7 +148,7 @@ class ManageTradeListPage extends GetView<ManageController> {
     ));
   }
 
-  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost, bool isGuiTraoDoi = false}){
+  Widget _buildHistoryTradeItem({required BuildContext context, required TradingSentResultModel dataTrade, required String idPost, bool isGuiTraoDoi = false, bool isList = false}){
     return Container(
       margin: const EdgeInsets.only(top: 15.0),
       decoration: BoxDecoration(
@@ -165,6 +165,50 @@ class ManageTradeListPage extends GetView<ManageController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if(isList == false)...[
+                      Text(
+                        'Danh sách sản phẩm đăng của bạn',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                      ),
+                      if(dataTrade.toGroup != null)...[
+                        if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
+                          Stack(
+                            children: [
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                                      _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
+                                    ]
+                                  ],
+                                ),
+                              ),
+                              if(dataTrade.toGroup!.groupPosts!.length > 1)
+                                Positioned(
+                                    left: 0.0,
+                                    top: 40.0,
+                                    child: Icon(
+                                      Icons.arrow_circle_left,
+                                      size: 25.0,
+                                      color: Colors.black.withOpacity(0.4),
+                                    )
+                                ),
+                              if(dataTrade.toGroup!.groupPosts!.length > 1)
+                                Positioned(
+                                    right: 0.0,
+                                    top: 40.0,
+                                    child: Icon(
+                                      Icons.arrow_circle_right,
+                                      size: 25.0,
+                                      color: Colors.black.withOpacity(0.4),
+                                    )
+                                )
+                            ],
+                          )
+                        ]
+                      ]
+                    ],
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -227,48 +271,51 @@ class ManageTradeListPage extends GetView<ManageController> {
                         )
                       ]
                     ],
-                    Text(
-                      'Danh sách sản phẩm đăng của bạn',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
-                    ),
-                    if(dataTrade.toGroup != null)...[
-                      if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
-                        Stack(
-                          children: [
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  for(var cont in dataTrade.toGroup!.groupPosts!)...[
-                                    _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
-                                  ]
-                                ],
+                    if(isList == true)...[
+                      Text(
+                        'Danh sách sản phẩm đăng của bạn',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+                      ),
+                      if(dataTrade.toGroup != null)...[
+                        if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
+                          Stack(
+                            children: [
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                                      _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
+                                    ]
+                                  ],
+                                ),
                               ),
-                            ),
-                            if(dataTrade.toGroup!.groupPosts!.length > 1)
-                              Positioned(
-                                  left: 0.0,
-                                  top: 40.0,
-                                  child: Icon(
-                                    Icons.arrow_circle_left,
-                                    size: 25.0,
-                                    color: Colors.black.withOpacity(0.4),
-                                  )
-                              ),
-                            if(dataTrade.toGroup!.groupPosts!.length > 1)
-                              Positioned(
-                                  right: 0.0,
-                                  top: 40.0,
-                                  child: Icon(
-                                    Icons.arrow_circle_right,
-                                    size: 25.0,
-                                    color: Colors.black.withOpacity(0.4),
-                                  )
-                              )
-                          ],
-                        )
+                              if(dataTrade.toGroup!.groupPosts!.length > 1)
+                                Positioned(
+                                    left: 0.0,
+                                    top: 40.0,
+                                    child: Icon(
+                                      Icons.arrow_circle_left,
+                                      size: 25.0,
+                                      color: Colors.black.withOpacity(0.4),
+                                    )
+                                ),
+                              if(dataTrade.toGroup!.groupPosts!.length > 1)
+                                Positioned(
+                                    right: 0.0,
+                                    top: 40.0,
+                                    child: Icon(
+                                      Icons.arrow_circle_right,
+                                      size: 25.0,
+                                      color: Colors.black.withOpacity(0.4),
+                                    )
+                                )
+                            ],
+                          )
+                        ]
                       ]
-                    ]
+                    ],
+
 
                   ],
                 ),

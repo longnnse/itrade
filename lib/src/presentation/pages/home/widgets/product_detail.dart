@@ -237,6 +237,7 @@ class ProductDetailPage extends GetView<HomeController> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
+                if( content.isCompleted == false)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
