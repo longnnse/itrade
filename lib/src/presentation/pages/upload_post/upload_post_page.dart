@@ -750,9 +750,15 @@ class UploadPostPage extends GetView<UploadPostController> {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
+            labelText: '$title *',
+            floatingLabelBehavior:FloatingLabelBehavior.always,
+            labelStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: kSecondaryRed),
             contentPadding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
             disabledBorder: InputBorder.none,
-            hintText: '$title...',
+            hintText: 'Nhập ${title.toLowerCase()}...',
             hintStyle: Theme.of(context)
                 .textTheme
                 .titleMedium!

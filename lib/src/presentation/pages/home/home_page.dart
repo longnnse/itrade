@@ -294,6 +294,14 @@ class HomePage extends GetView<HomeController> {
                         ],
                       ),
                     ),
+                    if(cont.isCompleted == true)
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Text(
+                          'Đã được trao đổi',
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kSecondaryRed),
+                        ),
+                      )
                   ],
                 ),
               ),

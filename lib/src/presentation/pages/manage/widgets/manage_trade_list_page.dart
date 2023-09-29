@@ -118,7 +118,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                 gradient: controller.tabIntTD.value == 0 ? kDefaultGradient : null,
               ),
               child: Text(
-                'Danh sách trao đổi ($slRequest)',
+                'Danh sách trao đổi\n ($slRequest)',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                     color: controller.tabIntTD.value == 0 ? Colors.white : Colors.black),
                 textAlign: TextAlign.center,
@@ -135,7 +135,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                   gradient: controller.tabIntTD.value == 1 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã gửi trao đổi ($slSent)',
+                  'Đã gửi trao đổi\n ($slSent)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabIntTD.value == 1 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -166,48 +166,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if(isList == false)...[
-                      Text(
-                        'Danh sách sản phẩm đăng của bạn',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
-                      ),
-                      if(dataTrade.toGroup != null)...[
-                        if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
-                          Stack(
-                            children: [
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for(var cont in dataTrade.toGroup!.groupPosts!)...[
-                                      _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
-                                    ]
-                                  ],
-                                ),
-                              ),
-                              if(dataTrade.toGroup!.groupPosts!.length > 1)
-                                Positioned(
-                                    left: 0.0,
-                                    top: 40.0,
-                                    child: Icon(
-                                      Icons.arrow_circle_left,
-                                      size: 25.0,
-                                      color: Colors.black.withOpacity(0.4),
-                                    )
-                                ),
-                              if(dataTrade.toGroup!.groupPosts!.length > 1)
-                                Positioned(
-                                    right: 0.0,
-                                    top: 40.0,
-                                    child: Icon(
-                                      Icons.arrow_circle_right,
-                                      size: 25.0,
-                                      color: Colors.black.withOpacity(0.4),
-                                    )
-                                )
-                            ],
-                          )
-                        ]
-                      ]
+                      _buildListProduct(context, dataTrade)
                     ],
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,48 +231,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                       ]
                     ],
                     if(isList == true)...[
-                      Text(
-                        'Danh sách sản phẩm đăng của bạn',
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
-                      ),
-                      if(dataTrade.toGroup != null)...[
-                        if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
-                          Stack(
-                            children: [
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for(var cont in dataTrade.toGroup!.groupPosts!)...[
-                                      _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
-                                    ]
-                                  ],
-                                ),
-                              ),
-                              if(dataTrade.toGroup!.groupPosts!.length > 1)
-                                Positioned(
-                                    left: 0.0,
-                                    top: 40.0,
-                                    child: Icon(
-                                      Icons.arrow_circle_left,
-                                      size: 25.0,
-                                      color: Colors.black.withOpacity(0.4),
-                                    )
-                                ),
-                              if(dataTrade.toGroup!.groupPosts!.length > 1)
-                                Positioned(
-                                    right: 0.0,
-                                    top: 40.0,
-                                    child: Icon(
-                                      Icons.arrow_circle_right,
-                                      size: 25.0,
-                                      color: Colors.black.withOpacity(0.4),
-                                    )
-                                )
-                            ],
-                          )
-                        ]
-                      ]
+                      _buildListProduct(context, dataTrade)
                     ],
 
 
@@ -443,6 +361,56 @@ class ManageTradeListPage extends GetView<ManageController> {
           const SizedBox(height: 10.0,),
         ],
       ),
+    );
+  }
+
+  Widget _buildListProduct(BuildContext context, TradingSentResultModel dataTrade){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Danh sách sản phẩm đăng của bạn',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
+        ),
+        if(dataTrade.toGroup != null)...[
+          if(dataTrade.toGroup!.groupPosts!.isNotEmpty)...[
+            Stack(
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for(var cont in dataTrade.toGroup!.groupPosts!)...[
+                        _buildItemTrade(context: context, model: cont, idTraoDoi: cont.id!),
+                      ]
+                    ],
+                  ),
+                ),
+                if(dataTrade.toGroup!.groupPosts!.length > 1)
+                  Positioned(
+                      left: 0.0,
+                      top: 40.0,
+                      child: Icon(
+                        Icons.arrow_circle_left,
+                        size: 25.0,
+                        color: Colors.black.withOpacity(0.4),
+                      )
+                  ),
+                if(dataTrade.toGroup!.groupPosts!.length > 1)
+                  Positioned(
+                      right: 0.0,
+                      top: 40.0,
+                      child: Icon(
+                        Icons.arrow_circle_right,
+                        size: 25.0,
+                        color: Colors.black.withOpacity(0.4),
+                      )
+                  )
+              ],
+            )
+          ]
+        ]
+      ],
     );
   }
 
