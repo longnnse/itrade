@@ -25,7 +25,9 @@ import '../../../infrastructure/repositories/upload_product_repository.dart';
 import '../home/home_controller.dart';
 import '../home/widgets/product_detail.dart';
 import '../upload_post/upload_post_page.dart';
+
 final RxString groupID = ''.obs;
+
 class ManageController extends GetxController {
   RxInt tabInt = 0.obs;
   RxInt tabIntTD = 0.obs;
@@ -56,7 +58,7 @@ class ManageController extends GetxController {
   final Rxn<ManagePersonalGroupModel> managePersonalGroup =
       Rxn<ManagePersonalGroupModel>();
   final Rxn<ManagePersonalGroupModel> managePersonal =
-  Rxn<ManagePersonalGroupModel>();
+      Rxn<ManagePersonalGroupModel>();
   final Rxn<RequestPostResultModel> requestReceivedLst =
       Rxn<RequestPostResultModel>();
   final Rxn<PostRequestedResultModel> postRequestedLst =
@@ -82,9 +84,11 @@ class ManageController extends GetxController {
   Future<void> refreshPage() async {
     getGroup(pageIndex: 1, pageSize: 50);
   }
+
   Future<void> refreshPageQuanLy() async {
     getPersonalPosts();
   }
+
   Future<void> refreshPageTraoDoi() async {
     getTradingReceived();
     getTradingSent();
@@ -134,8 +138,7 @@ class ManageController extends GetxController {
     tabIntTD.call(countTab);
     if (tabIntTD.value == 0) {
       getTradingReceived();
-    }
-    else {
+    } else {
       getTradingSent();
     }
   }
@@ -162,16 +165,16 @@ class ManageController extends GetxController {
     final Either<ErrorObject, GroupPostResultModel> res = await _manageService
         .postGroup(description: description, lstPostID: lstPostID);
     res.fold(
-          (failure) {
-            Get.snackbar('Thông báo', 'Nhóm bài đăng thất bại',
-                backgroundColor: kSecondaryRed, colorText: kTextColor);
-          },
-          (value) async {
-            groupID.call(value.id);
-            selectedProductIDs.clear();
-            selectedProductList.clear();
-            Get.snackbar('Thông báo', 'Nhóm bài đăng thành công',
-                backgroundColor: kSecondaryGreen, colorText: kTextColor);
+      (failure) {
+        Get.snackbar('Thông báo', 'Nhóm bài đăng thất bại',
+            backgroundColor: kSecondaryRed, colorText: kTextColor);
+      },
+      (value) async {
+        groupID.call(value.id);
+        selectedProductIDs.clear();
+        selectedProductList.clear();
+        Get.snackbar('Thông báo', 'Nhóm bài đăng thành công',
+            backgroundColor: kSecondaryGreen, colorText: kTextColor);
       },
     );
   }
@@ -303,15 +306,15 @@ class ManageController extends GetxController {
     //TODO use test
     isLoadingDelete.call(true);
     final Either<ErrorObject, String> res =
-    await _manageService.deletePost(postId: postID);
+        await _manageService.deletePost(postId: postID);
 
     res.fold(
-          (failure) {
-            Get.snackbar('Thông báo', 'Ẩn bài đăng thất bại',
-                backgroundColor: kSecondaryRed, colorText: kTextColor);
-            isLoadingDelete.call(false);
+      (failure) {
+        Get.snackbar('Thông báo', 'Ẩn bài đăng thất bại',
+            backgroundColor: kSecondaryRed, colorText: kTextColor);
+        isLoadingDelete.call(false);
       },
-          (value) async {
+      (value) async {
         Get.snackbar('Thông báo', 'Ẩn thành công',
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
         isLoadingDelete.call(false);
@@ -434,20 +437,20 @@ class ManageController extends GetxController {
 
   Future<void> getGroup(
       {required int pageIndex,
-        required int pageSize,
-        String searchValue = ''}) async {
+      required int pageSize,
+      String searchValue = ''}) async {
     //TODO use test
     isLoadingGroupList.call(true);
 
     final Either<ErrorObject, ManagePersonalGroupModel> res =
-    await _manageService.getGroup(
-        pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue);
+        await _manageService.getGroup(
+            pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue);
 
     res.fold(
-          (failure) {
-            isLoadingGroupList.call(false);
+      (failure) {
+        isLoadingGroupList.call(false);
       },
-          (value) async {
+      (value) async {
         managePersonal.call(value);
         isLoadingGroupList.call(false);
       },
@@ -602,13 +605,17 @@ class ManageController extends GetxController {
         await ExchangeAPI.create_trading_user_chat(tradingItem.id!);
     // ignore: unnecessary_null_comparison
     if (tradingUserChat != null) {
+      var toName = AppSettings.getValue(KeyAppSetting.userId) ==
+              tradingItem.fromGroup!.user!.id
+          ? '${tradingItem.toGroup!.groupPosts![0].post!.user!.firstName} ${tradingItem.toGroup!.groupPosts![0].post!.user!.lastName}'
+          : '${tradingItem.fromGroup!.user!.firstName} ${tradingItem.fromGroup!.user!.lastName}';
       Get.toNamed(ChatPage.routeName, parameters: {
         "trading_id": tradingItem.id!,
         "to_avatar": AppSettings.getValue(KeyAppSetting.userId) ==
                 tradingItem.fromGroup!.user!.id
             ? tradingItem.toGroup!.groupPosts![0].post!.user!.userAva!
             : tradingItem.fromGroup!.user!.userAva!,
-        "to_name": '${tradingItem.toGroup!.groupPosts![0].post!.user!.firstName} ${tradingItem.toGroup!.groupPosts![0].post!.user!.lastName}'
+        "to_name": toName
       });
     }
   }
