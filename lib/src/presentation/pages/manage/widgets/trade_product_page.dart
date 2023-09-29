@@ -86,7 +86,7 @@ class TradeProductPage extends GetView<ManageController> {
                       return Column(
                         children: [
                           for(var cont in controller.productList.value!)...[
-                            if(cont.isCompleted == false)
+                            if(cont.isCompleted == true && cont.isConfirmed == false)
                               _buildItem(context: context, model: cont)
                           ]
 

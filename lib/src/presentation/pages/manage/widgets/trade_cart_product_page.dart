@@ -72,7 +72,6 @@ class TradeCartProductPage extends GetView<ManageController> {
       margin: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: Column(
         children: [
-
           GestureDetector(
             onTap: () => controller.tradeGroup(context),
             child: Container(

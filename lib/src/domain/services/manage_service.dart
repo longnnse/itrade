@@ -22,7 +22,7 @@ abstract class ManageService {
 
   Future<Either<ErrorObject, DataTrade>> postDenyTrade({required String tradeID});
 
-  Future<Either<ErrorObject, TradeResultModel>> postTrading({required String fromPostId, required String toPostId});
+  Future<Either<ErrorObject, TradeResultModel>> postTrading({required String fromPostId, required String toPostId, required String content});
 
   Future<Either<ErrorObject, List<RequestResultModel>>> getRequestByID({required String postID});
 

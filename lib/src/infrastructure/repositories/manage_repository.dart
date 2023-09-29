@@ -172,13 +172,14 @@ class ManageRepositories implements ManageService {
   }
 
   @override
-  Future<Either<ErrorObject, TradeResultModel>> postTrading({required String fromPostId, required String toPostId}) async {
+  Future<Either<ErrorObject, TradeResultModel>> postTrading({required String fromPostId, required String toPostId, required String content}) async {
     try {
       const url = '${CoreUrl.baseURL}/Trading';
 
       final Map<String, dynamic> queryParameters = {
         'fromGroupId': fromPostId,
         'toGroupId': toPostId,
+        'content': content
       };
 
 

@@ -165,14 +165,11 @@ class ManageTradeListPage extends GetView<ManageController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if(isList == false)...[
-                      _buildListProduct(context, dataTrade, isList)
-                    ],
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          isList == false ? 'Danh sách sản phẩm đăng của bạn' : 'Danh sách gửi yêu cầu',
+                          isList == false ? 'Sản phẩm của bạn' : 'Danh sách gửi yêu cầu',
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                         ),
                         GestureDetector(
@@ -230,10 +227,23 @@ class ManageTradeListPage extends GetView<ManageController> {
                         )
                       ]
                     ],
-                    if(isList == true)...[
-                      _buildListProduct(context, dataTrade, isList)
-                    ],
+                    _buildListProduct(context, dataTrade, isList),
 
+                    if(dataTrade.content != '' && dataTrade.content != null)
+                      RichText(
+                        text: TextSpan(
+                          text: 'Lời nhắn: ',
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: dataTrade.content ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700)),
+                          ],
+                        ),
+                      ),
 
                   ],
                 ),
@@ -369,7 +379,7 @@ class ManageTradeListPage extends GetView<ManageController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          isList == false ? 'Danh sách gửi yêu cầu' : 'Danh sách sản phẩm đăng của bạn',
+          isList == false ? 'Sản phẩm bạn trao đổi' : 'Sản phẩm của bạn',
           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
         ),
         if(dataTrade.toGroup != null)...[
@@ -476,6 +486,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                     ),
                   ],
                 ),
+
                 const SizedBox(width: 10.0,),
                 Expanded(
                   child: SizedBox(
@@ -489,10 +500,6 @@ class ManageTradeListPage extends GetView<ManageController> {
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(height: 5.0,),
-                        // Text(
-                        //   '${model.price.toString().split('.').first} đ',
-                        //   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                        // ),
                         const SizedBox(height: 5.0,),
                         Expanded(
                           child: Text(

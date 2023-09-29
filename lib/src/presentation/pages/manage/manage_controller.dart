@@ -65,6 +65,7 @@ class ManageController extends GetxController {
       Rxn<PostRequestedResultModel>();
   final TextEditingController searchController = TextEditingController();
   final TextEditingController descController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
   RxString searchStr = ''.obs;
   // final RxString idFromPost = ''.obs;
   final RxString productID = ''.obs;
@@ -194,62 +195,223 @@ class ManageController extends GetxController {
     return valueReturn;
   }
 
+
+
   void tradeMultiGroup(BuildContext context, String fromGroupID) async {
-    isLoadingGroup.call(true);
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nội dung trao đổi',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.w500)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.25),
+                          spreadRadius: 1,
+                          offset: const Offset(2, 3))
+                    ],
+                  ),
+                  child: TextFormField(
+                    //initialValue: number.toString(),
+                    controller: contentController,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                        suffixIcon: null,
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        contentPadding:
+                        const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        disabledBorder: InputBorder.none,
+                        hintText: 'Cho mình trao đổi với bạn được không...',
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: kTextColorGrey)),
+                    onChanged: (value) {},
+                    onFieldSubmitted: (value) {},
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Đồng ý',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500, color: kSecondaryGreen),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                isLoadingGroup.call(true);
 
-    if (groupID.value != '') {
-      await postTrading(fromPostId: fromGroupID, toPostId: productID.value);
+                if (groupID.value != '') {
+                  await postTrading(fromPostId: fromGroupID, toPostId: productID.value, content: contentController.text);
 
-      isLoadingGroup.call(false);
-      if (tradeResult.value != null) {
-        descController.clear();
-        selectedProductIDs.clear();
-        Get.snackbar('Thông báo', 'Trao đổi thành công',
-            backgroundColor: kSecondaryGreen, colorText: kTextColor);
-        Navigator.pop(context);
-      } else {
-        Get.snackbar('Thông báo', 'Không thể trao đổi',
-            backgroundColor: kSecondaryRed, colorText: kTextColor);
-      }
-    } else {
-      isLoadingGroup.call(false);
-      Get.snackbar('Thông báo',
-          'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
-          backgroundColor: kSecondaryRed, colorText: kTextColor);
-    }
+                  isLoadingGroup.call(false);
+                  if (tradeResult.value != null) {
+                    descController.clear();
+                    selectedProductIDs.clear();
+                    Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
+                        backgroundColor: kSecondaryGreen, colorText: kTextColor);
+                    contentController.clear();
+                    Navigator.pop(context);
+                  } else {
+                    Get.snackbar('Thông báo', 'Không thể trao đổi',
+                        backgroundColor: kSecondaryRed, colorText: kTextColor);
+                  }
+                } else {
+                  isLoadingGroup.call(false);
+                  Get.snackbar('Thông báo',
+                      'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
+                      backgroundColor: kSecondaryRed, colorText: kTextColor);
+                }
+
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Hủy',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500, color: kSecondaryRed),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                contentController.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void tradeGroup(BuildContext context) async {
-    isLoadingGroup.call(true);
-    List<String> lstOwnerPost = [];
-    lstOwnerPost.add(ownerPostID.value);
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nội dung trao đổi',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.w500)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.25),
+                          spreadRadius: 1,
+                          offset: const Offset(2, 3))
+                    ],
+                  ),
+                  child: TextFormField(
+                    //initialValue: number.toString(),
+                    controller: contentController,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                        suffixIcon: null,
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        contentPadding:
+                        const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        disabledBorder: InputBorder.none,
+                        hintText: 'Cho mình trao đổi với bạn được không...',
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: kTextColorGrey)),
+                    onChanged: (value) {},
+                    onFieldSubmitted: (value) {},
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Đồng ý',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500, color: kSecondaryGreen),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                isLoadingGroup.call(true);
+                List<String> lstOwnerPost = [];
+                lstOwnerPost.add(ownerPostID.value);
 
-    String fromPostId = await postGroup(
-        description: descController.text, lstPostID: selectedProductIDs);
-    String toPostId = await postGroup(description: '', lstPostID: lstOwnerPost);
-    if (fromPostId != '' && toPostId != '') {
-      await postTrading(fromPostId: fromPostId, toPostId: toPostId);
+                String fromPostId = await postGroup(
+                    description: descController.text, lstPostID: selectedProductIDs);
+                String toPostId = await postGroup(description: '', lstPostID: lstOwnerPost);
+                if (fromPostId != '' && toPostId != '') {
+                  await postTrading(fromPostId: fromPostId, toPostId: toPostId, content: contentController.text);
 
-      isLoadingGroup.call(false);
-      if (tradeResult.value != null) {
-        descController.clear();
-        selectedProductIDs.clear();
-        selectedProductList.clear();
-        Get.snackbar('Thông báo', 'Trao đổi thành công',
-            backgroundColor: kSecondaryGreen, colorText: kTextColor);
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
-      } else {
-        Get.snackbar('Thông báo', 'Không thể trao đổi',
-            backgroundColor: kSecondaryRed, colorText: kTextColor);
-      }
-    } else {
-      isLoadingGroup.call(false);
-      Get.snackbar('Thông báo',
-          'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
-          backgroundColor: kSecondaryRed, colorText: kTextColor);
-    }
+                  isLoadingGroup.call(false);
+                  if (tradeResult.value != null) {
+                    descController.clear();
+                    selectedProductIDs.clear();
+                    selectedProductList.clear();
+                    Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
+                        backgroundColor: kSecondaryGreen, colorText: kTextColor);
+                    contentController.clear();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  } else {
+                    Get.snackbar('Thông báo', 'Không thể trao đổi',
+                        backgroundColor: kSecondaryRed, colorText: kTextColor);
+                  }
+                } else {
+                  isLoadingGroup.call(false);
+                  Get.snackbar('Thông báo',
+                      'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
+                      backgroundColor: kSecondaryRed, colorText: kTextColor);
+                }
+
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Hủy',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500, color: kSecondaryRed),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                contentController.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
+
   }
 
   void tradeGroupMultiMulti(
@@ -257,32 +419,111 @@ class ManageController extends GetxController {
       required String desc,
       required List<String> lstFromPostID,
       required List<String> lstToPostID}) async {
-    isLoadingGroup.call(true);
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nội dung trao đổi',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.w500)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.25),
+                          spreadRadius: 1,
+                          offset: const Offset(2, 3))
+                    ],
+                  ),
+                  child: TextFormField(
+                    //initialValue: number.toString(),
+                    controller: contentController,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                        suffixIcon: null,
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        contentPadding:
+                        const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        disabledBorder: InputBorder.none,
+                        hintText: 'Cho mình trao đổi với bạn được không...',
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: kTextColorGrey)),
+                    onChanged: (value) {},
+                    onFieldSubmitted: (value) {},
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Đồng ý',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500, color: kSecondaryGreen),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                isLoadingGroup.call(true);
 
-    String fromPostId =
-        await postGroup(description: desc, lstPostID: lstFromPostID);
-    String toPostId = await postGroup(description: '', lstPostID: lstToPostID);
-    if (fromPostId != '' && toPostId != '') {
-      await postTrading(fromPostId: fromPostId, toPostId: toPostId);
-      isLoadingGroup.call(false);
-      if (tradeResult.value != null) {
-        Get.snackbar('Thông báo', 'Trao đổi thành công',
-            backgroundColor: kSecondaryGreen, colorText: kTextColor);
-        HomeController ctl = Get.find();
-        ctl.selectedProductList.clear();
-        ctl.selectedMyProductList.clear();
-        ctl.selectedMyProductIDs.clear();
-        Navigator.pop(context);
-      } else {
-        Get.snackbar('Thông báo', 'Không thể trao đổi',
-            backgroundColor: kSecondaryRed, colorText: kTextColor);
-      }
-    } else {
-      isLoadingGroup.call(false);
-      Get.snackbar('Thông báo',
-          'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
-          backgroundColor: kSecondaryRed, colorText: kTextColor);
-    }
+                String fromPostId =
+                await postGroup(description: desc, lstPostID: lstFromPostID);
+                String toPostId = await postGroup(description: '', lstPostID: lstToPostID);
+                if (fromPostId != '' && toPostId != '') {
+                  await postTrading(fromPostId: fromPostId, toPostId: toPostId, content: contentController.text);
+                  isLoadingGroup.call(false);
+                  if (tradeResult.value != null) {
+                    Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
+                        backgroundColor: kSecondaryGreen, colorText: kTextColor);
+                    HomeController ctl = Get.find();
+                    ctl.selectedProductList.clear();
+                    ctl.selectedMyProductList.clear();
+                    ctl.selectedMyProductIDs.clear();
+                    contentController.clear();
+                    Navigator.pop(context);
+                  } else {
+                    Get.snackbar('Thông báo', 'Không thể trao đổi',
+                        backgroundColor: kSecondaryRed, colorText: kTextColor);
+                  }
+                } else {
+                  isLoadingGroup.call(false);
+                  Get.snackbar('Thông báo',
+                      'Không thể nhóm các bài post lại do không cùng chủ sở hữu',
+                      backgroundColor: kSecondaryRed, colorText: kTextColor);
+                }
+
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Hủy',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500, color: kSecondaryRed),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                contentController.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> getPersonalPosts() async {
@@ -391,11 +632,11 @@ class ManageController extends GetxController {
   }
 
   Future<void> postTrading(
-      {required String fromPostId, required String toPostId}) async {
+      {required String fromPostId, required String toPostId, required String content}) async {
     //TODO use test
     isLoadingRequestTrade.call(true);
     final Either<ErrorObject, TradeResultModel> res = await _manageService
-        .postTrading(fromPostId: fromPostId, toPostId: toPostId);
+        .postTrading(fromPostId: fromPostId, toPostId: toPostId, content: content);
 
     res.fold(
       (failure) {
@@ -404,7 +645,7 @@ class ManageController extends GetxController {
         isLoadingRequestTrade.call(false);
       },
       (value) async {
-        Get.snackbar('Thông báo', 'Trao đổi thành công',
+        Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
         tradeResult.call(value);
         // idFromPost.call(value.fromPostId);
@@ -515,7 +756,7 @@ class ManageController extends GetxController {
             backgroundColor: kSecondaryRed, colorText: kTextColor);
       },
       (value) async {
-        Get.snackbar('Thông báo', 'Trao đổi thành công',
+        Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
             backgroundColor: kSecondaryGreen, colorText: kTextColor);
         isLoadingConfirmTrade.call(false);
         if (isManagePage == false) {

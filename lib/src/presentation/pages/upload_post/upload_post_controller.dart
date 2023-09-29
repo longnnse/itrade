@@ -100,7 +100,7 @@ class UploadPostController extends GetxController {
           if(isPostToTrade.value == true){
             final ManageController manageController = Get.find();
 
-            await manageController.postTrading(fromPostId: value.id, toPostId: toPostID.value);
+            await manageController.postTrading(fromPostId: value.id, toPostId: toPostID.value, content: contentController.text);
           }
           Get.snackbar('Thông báo', 'Đăng bài thành công', backgroundColor: kSecondaryGreen, colorText: kTextColor);
           titleController.clear();

@@ -340,6 +340,24 @@ class ManageTradePage extends GetView<ManageController> {
             ],
           ),
 
+          if(dataTrade.content != '' && dataTrade.content != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 11.0),
+              child: RichText(
+                text: TextSpan(
+                  text: 'Lời nhắn: ',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kTextColorGrey2, fontWeight: FontWeight.w400),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: dataTrade.content ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
