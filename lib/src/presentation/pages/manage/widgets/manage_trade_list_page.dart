@@ -166,13 +166,13 @@ class ManageTradeListPage extends GetView<ManageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if(isList == false)...[
-                      _buildListProduct(context, dataTrade)
+                      _buildListProduct(context, dataTrade, isList)
                     ],
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Danh sách gửi yêu cầu',
+                          isList == false ? 'Danh sách sản phẩm đăng của bạn' : 'Danh sách gửi yêu cầu',
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
                         ),
                         GestureDetector(
@@ -231,7 +231,7 @@ class ManageTradeListPage extends GetView<ManageController> {
                       ]
                     ],
                     if(isList == true)...[
-                      _buildListProduct(context, dataTrade)
+                      _buildListProduct(context, dataTrade, isList)
                     ],
 
 
@@ -364,12 +364,12 @@ class ManageTradeListPage extends GetView<ManageController> {
     );
   }
 
-  Widget _buildListProduct(BuildContext context, TradingSentResultModel dataTrade){
+  Widget _buildListProduct(BuildContext context, TradingSentResultModel dataTrade, bool isList){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Danh sách sản phẩm đăng của bạn',
+          isList == false ? 'Danh sách gửi yêu cầu' : 'Danh sách sản phẩm đăng của bạn',
           style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kPrimaryLightColor, fontWeight: FontWeight.w700),
         ),
         if(dataTrade.toGroup != null)...[
