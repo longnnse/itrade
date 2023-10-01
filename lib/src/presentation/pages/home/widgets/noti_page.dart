@@ -20,7 +20,7 @@ class NotiPage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     Get.put(ManageController());
-    controller.getNoti(pageIndex: 1, pageSize: 999);
+    controller.getNoti(pageIndex: 1, pageSize: 99);
     return Scaffold(
         appBar: AppbarCustomize.buildAppbar(
             context: context,

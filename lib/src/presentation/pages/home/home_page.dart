@@ -153,10 +153,15 @@ class HomePage extends GetView<HomeController> {
 
   Widget _buildItemButton({required BuildContext context, required String title, required CategoryModel cont}){
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         controller.title.call(title);
         controller.idCate.call(cont.id);
-        Get.toNamed(ProductListPage.routeName);
+        var result = await Get.toNamed(ProductListPage.routeName);
+        if(result == true){
+          controller.idCate.call('');
+          controller.getCategories(pageIndex: 1, pageSize: 10);
+          controller.getPosts(pageIndex: 1, pageSize: 99, categoryIds: '', searchValue: '');
+        }
       },
       child: Column(
         children: [

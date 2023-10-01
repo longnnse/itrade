@@ -54,7 +54,7 @@ class SearchControllerCustom extends GetxController {
                       cateName.call(cont.name);
                       cateID.call(cont.id);
                       Navigator.pop(context);
-                      getPosts(pageIndex: 1, pageSize: 999, categoryIds: cont.id);
+                      getPosts(pageIndex: 1, pageSize: 99, categoryIds: cont.id);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10.0),
