@@ -20,7 +20,7 @@ class ProductListPage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: controller.idCate.value, isPostCateLst: true);
+    controller.getPosts(pageIndex: 1, pageSize: 999, categoryIds: controller.idCate.value, isPostCateLst: true);
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppbarCustomize.buildAppbar(
@@ -31,7 +31,7 @@ class ProductListPage extends GetView<HomeController> {
             IconButton(
                 onPressed: (){
                   Navigator.pop(context);
-                  controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: '');
+                  controller.getPosts(pageIndex: 1, pageSize: 999, categoryIds: '');
                 },
                 icon: const Icon(
                   Icons.arrow_back_ios,
@@ -97,7 +97,7 @@ class ProductListPage extends GetView<HomeController> {
                 .textTheme
                 .titleMedium!
                 .copyWith(color: kTextColorGrey)),
-        onChanged: (value) => controller.getPosts(pageIndex: 1, pageSize: 20, categoryIds: controller.idCate.value, isPostCateLst: true, searchValue: value),
+        onChanged: (value) => controller.getPosts(pageIndex: 1, pageSize: 999, categoryIds: controller.idCate.value, isPostCateLst: true, searchValue: value),
         onFieldSubmitted: (value) {},
       ),
     );

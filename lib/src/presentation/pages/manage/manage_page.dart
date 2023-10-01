@@ -295,18 +295,20 @@ class ManagePage extends GetView<ManageController> {
                           model.title,
                           style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500),
                         ),
-                        const SizedBox(height: 5.0,),
-                        // Text(
-                        //   '${model.price.toString().split('.').first} đ',
-                        //   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
-                        // ),
+
                         const SizedBox(height: 5.0,),
                         Expanded(
                           child: Text(
                             'Đã đăng ${FormatDateTime.getHourFormat(model.dateUpdated)} ${FormatDateTime.getDateFormat(model.dateUpdated)}',
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kTextColorGrey),
                           ),
-                        )
+                        ),
+                        const SizedBox(height: 5.0,),
+                        if(model.isCompleted == true)
+                          Text(
+                            'Đã trao đổi',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: kSecondaryRed, fontWeight: FontWeight.w700),
+                          ),
                       ],
                     ),
                   ),
@@ -342,7 +344,12 @@ class ManagePage extends GetView<ManageController> {
                         }
                       }
                     },
-                    items: controller.lstDropdown.map<DropdownMenuItem<String>>((String value) {
+                    items: model.isCompleted == false ? controller.lstDropdown.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList() : controller.lstDropdownIsComplete.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),

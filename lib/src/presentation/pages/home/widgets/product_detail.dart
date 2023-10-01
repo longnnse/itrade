@@ -37,22 +37,19 @@ class ProductDetailPage extends GetView<HomeController> {
             title: 'Chi tiết sản phẩm',
             isUseOnlyBack: true,
             actionRights: [
-              Stack(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Get.put(InformationController());
-                        InformationController ctl = Get.find();
-                        ctl.postID.call(controller.idPost.value);
-                        Get.toNamed(BaoCaoViPhamPage.routeName);
-                      },
-                      icon: const Icon(
-                        Icons.report,
-                        color: Colors.white,
-                        size: 25.0,
-                      )
-                  ),
-                ],
+              if(controller.idOwner.value != AppSettings.getValue(KeyAppSetting.userId))
+              IconButton(
+                  onPressed: () {
+                    Get.put(InformationController());
+                    InformationController ctl = Get.find();
+                    ctl.postID.call(controller.idPost.value);
+                    Get.toNamed(BaoCaoViPhamPage.routeName);
+                  },
+                  icon: const Icon(
+                    Icons.report,
+                    color: Colors.white,
+                    size: 25.0,
+                  )
               ),
               IconButton(
                   onPressed: () => controller.goGoCreatePost(),

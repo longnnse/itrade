@@ -31,7 +31,21 @@ class ManageHistoryPage extends GetView<ManageController> {
         appBar: AppbarCustomize.buildAppbar(
           context: context,
           title: 'Lịch sử',
-          isUseOnlyBack: true,
+          isUseOnlyBack: false,
+          actionLefts: [
+            IconButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                  controller.tabInt.call(0);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 25.0,
+                )
+            )
+          ],
+
           actionRights: [
             IconButton(
                 onPressed: () => Get.toNamed(BaoCaoViPhamPage.routeName),
@@ -61,7 +75,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                         controller.postRequestedLst.value!.data.length,
                         controller.tradingSentLst.value!.length
                       ),
-                      if(controller.tabInt.value == 0)...[
+                      if(controller.tabInt.value == 1)...[
                         if(controller.requestReceivedLst.value!.data.isNotEmpty)...[
                           for(var cont in controller.requestReceivedLst.value!.data)
                             _buildHistoryRequestItem(context: context, dataRequest: cont, idReq: cont.id)
@@ -74,7 +88,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                           )
                         ]
 
-                      ]else if(controller.tabInt.value == 1)...[
+                      ]else if(controller.tabInt.value == 2)...[
                         if(controller.postRequestedLst.value!.data.isNotEmpty)...[
                           for(var cont in controller.postRequestedLst.value!.data)
                             _buildPostRequestedItem(context: context, dataRequest: cont)
@@ -134,7 +148,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 0 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã cho ($slRequest)',
+                  'Đã gửi trao đổi ($slSent)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 0 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -150,7 +164,7 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 1 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã xin ($slPost)',
+                  'Đã cho ($slRequest)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 1 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
@@ -166,13 +180,14 @@ class ManageHistoryPage extends GetView<ManageController> {
                   gradient: controller.tabInt.value == 2 ? kDefaultGradient : null,
                 ),
                 child: Text(
-                  'Đã gửi trao đổi ($slSent)',
+                  'Đã xin ($slPost)',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500,
                       color: controller.tabInt.value == 2 ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
+
           ],
         ),
       ),

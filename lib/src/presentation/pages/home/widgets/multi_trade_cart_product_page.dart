@@ -58,6 +58,7 @@ class MultiCartProductPage extends GetView<HomeController> {
                                 child: Row(
                                   children: [
                                     for(var cont in controller.personalProductList.value!)...[
+                                      if(cont.isCompleted == false)
                                       if(controller.searchStr.value != '')...[
                                         if(cont.title.contains(controller.searchStr.value))...[
                                           GestureDetector(

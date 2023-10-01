@@ -13,6 +13,7 @@ import 'package:i_trade/src/domain/models/trade_model.dart';
 import 'package:i_trade/src/domain/models/trade_result_model.dart';
 import 'package:i_trade/src/domain/services/manage_service.dart';
 import 'package:i_trade/src/presentation/pages/chat/index.dart';
+import 'package:i_trade/src/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_group_personal_page.dart';
 import 'package:i_trade/src/presentation/pages/manage/widgets/manage_trade_page.dart';
@@ -76,6 +77,7 @@ class ManageController extends GetxController {
   final RxBool isTrade = false.obs;
   final RxBool isTradeLst = false.obs;
   final List<String> lstDropdown = ['Ẩn', 'Chỉnh sửa', 'Thêm nhóm'];
+  final List<String> lstDropdownIsComplete = ['Ẩn', 'Chỉnh sửa'];
   RxList<String> lstHide = RxList<String>();
   @override
   void onInit() {
@@ -257,7 +259,7 @@ class ManageController extends GetxController {
                     fontWeight: FontWeight.w500, color: kSecondaryGreen),
               ),
               onPressed: () async {
-                Navigator.pop(context);
+
                 isLoadingGroup.call(true);
 
                 if (groupID.value != '') {
@@ -270,6 +272,8 @@ class ManageController extends GetxController {
                     Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
                         backgroundColor: kSecondaryGreen, colorText: kTextColor);
                     contentController.clear();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   } else {
                     Get.snackbar('Thông báo', 'Không thể trao đổi',
@@ -361,7 +365,7 @@ class ManageController extends GetxController {
                     fontWeight: FontWeight.w500, color: kSecondaryGreen),
               ),
               onPressed: () async {
-                Navigator.pop(context);
+
                 isLoadingGroup.call(true);
                 List<String> lstOwnerPost = [];
                 lstOwnerPost.add(ownerPostID.value);
@@ -380,6 +384,7 @@ class ManageController extends GetxController {
                     Get.snackbar('Thông báo', 'Đã gửi trao đổi thành công',
                         backgroundColor: kSecondaryGreen, colorText: kTextColor);
                     contentController.clear();
+                    Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -478,7 +483,7 @@ class ManageController extends GetxController {
                     fontWeight: FontWeight.w500, color: kSecondaryGreen),
               ),
               onPressed: () async {
-                Navigator.pop(context);
+
                 isLoadingGroup.call(true);
 
                 String fromPostId =
@@ -495,6 +500,7 @@ class ManageController extends GetxController {
                     ctl.selectedMyProductList.clear();
                     ctl.selectedMyProductIDs.clear();
                     contentController.clear();
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   } else {
                     Get.snackbar('Thông báo', 'Không thể trao đổi',
